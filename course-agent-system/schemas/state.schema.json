@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state.schema.json",
+  "title": "Course Pipeline State",
+  "type": "object",
+  "required": ["course_id", "stage", "created_at", "updated_at"],
+  "properties": {
+    "course_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "stage": {
+      "enum": [
+        "research",
+        "scored",
+        "topic_chosen",
+        "outlined",
+        "outline_approved",
+        "lessons_drafting",
+        "lessons_qa",
+        "lessons_approved",
+        "assets_drafting",
+        "marketing_drafting",
+        "packaging",
+        "launch_ready",
+        "live",
+        "optimizing",
+        "failed"
+      ]
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "topic_id": { "type": "string" },
+    "human_checkpoints": {
+      "type": "object",
+      "properties": {
+        "topic_chosen":     { "type": "object", "properties": { "approved": { "type": "boolean" }, "approved_at": { "type": ["string", "null"] }, "approver": { "type": ["string", "null"] } } },
+        "outline_approved": { "type": "object", "properties": { "approved": { "type": "boolean" }, "approved_at": { "type": ["string", "null"] }, "approver": { "type": ["string", "null"] } } },
+        "lessons_approved": { "type": "object", "properties": { "approved": { "type": "boolean" }, "approved_at": { "type": ["string", "null"] }, "approver": { "type": ["string", "null"] } } },
+        "launch_ready":     { "type": "object", "properties": { "approved": { "type": "boolean" }, "approved_at": { "type": ["string", "null"] }, "approver": { "type": ["string", "null"] } } }
+      }
+    },
+    "agent_runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "started_at", "status"],
+        "properties": {
+          "agent_id": { "type": "string" },
+          "started_at": { "type": "string", "format": "date-time" },
+          "finished_at": { "type": ["string", "null"], "format": "date-time" },
+          "status": { "enum": ["running", "succeeded", "failed", "qa_blocked"] },
+          "attempt": { "type": "integer", "minimum": 1 },
+          "output_path": { "type": ["string", "null"] },
+          "error": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "modules": { "type": "integer" },
+        "lessons_per_module": { "type": "integer" },
+        "target_hours": { "type": "number" },
+        "voice_reference": { "type": "string" },
+        "qa_strictness": { "enum": ["lenient", "normal", "strict"] }
+      }
+    }
+  }
+}

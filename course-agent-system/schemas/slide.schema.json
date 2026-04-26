@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "slide.schema.json",
+  "title": "Slide Deck",
+  "type": "object",
+  "required": ["lesson_id", "slides"],
+  "properties": {
+    "lesson_id": { "type": "string" },
+    "slides": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["index", "title", "bullets", "speaker_notes", "visual"],
+        "properties": {
+          "index": { "type": "integer", "minimum": 1 },
+          "title": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "bullets": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": { "type": "string", "maxLength": 60 }
+          },
+          "speaker_notes": { "type": "string" },
+          "visual": { "type": "string" }
+        }
+      }
+    }
+  }
+}

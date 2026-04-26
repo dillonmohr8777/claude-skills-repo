@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scored_topic.schema.json",
+  "title": "Scored Course Topic",
+  "type": "object",
+  "required": ["id", "scores", "weighted_total", "recommendation"],
+  "properties": {
+    "id": { "type": "string" },
+    "scores": {
+      "type": "object",
+      "required": ["demand", "competition", "monetization", "evergreen", "ease_of_production", "pay_willingness"],
+      "properties": {
+        "demand": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "competition": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "monetization": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "evergreen": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "ease_of_production": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "pay_willingness": { "type": "integer", "minimum": 0, "maximum": 10 }
+      }
+    },
+    "weighted_total": { "type": "number", "minimum": 0, "maximum": 10 },
+    "one_line_justification": { "type": "string", "maxLength": 240 },
+    "recommendation": { "enum": ["build_now", "watchlist", "skip"] }
+  }
+}
