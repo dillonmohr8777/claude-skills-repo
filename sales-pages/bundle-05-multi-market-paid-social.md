@@ -1,93 +1,122 @@
-# Multi-Market Paid Social Pack — 5 Claude Skills
+﻿# 3,100 Tickets Sold Across Multiple Cities In 14 Days
 
-**3,100 tickets sold across multi-city Meta campaigns in a 14-day window. Same offer, 5 cities, simultaneous launch.**
+For event marketers, local agencies, and multi-location operators who need paid social to scale by city without turning the account into a mess.
 
 ---
 
-## What's inside
+## The problem
 
-5 Claude Skills for scaling paid social across multiple geographic markets:
+One-city paid social is manageable.
 
-1. **local-event-paid-social-playbook** — End-to-end paid-social system for local ticketed events (bar crawls, festivals, food tours, concerts). 3-phase ticket sale curve (Awareness → Conversion → Urgency Push) with budget pacing, creative rotation, and CAPI setup. Powered Bar Crawl USA's 3,100-ticket Taco & Tequila result.
+Five cities at once is where the system usually breaks.
 
-2. **multi-market-meta-campaign-launcher** — Naming conventions, geo + audience structure, CBO logic, and per-market reporting for same-offer-multi-city campaigns. Avoids the classic mistake of separate-campaigns-per-market.
+Budgets get split too early. Naming becomes useless. Creative refreshes happen late. The winning city starves while the weak city gets equal spend. The ticketing page leaks buyers after the click.
 
-3. **event-ticketing-funnel-builder** — Post-click optimization: landing page → ticketing platform → confirmation upsells → pre-event engagement sequence. Reduces cart abandonment 25-40% and adds $8/ticket via post-purchase upsells.
+Then the team says multi-market Meta does not work.
 
-4. **instagram-reels-promo-script-writer** — 15-30 second Reels scripts with beat-by-beat shot lists, captions, and music guidance. Hook in the first second, payoff by second 5. Built for sound-off mobile viewing.
-
-5. **tiktok-ads-strategist** — TikTok-specific strategy (Spark Ads, creator partnerships, the differences from Meta that most marketers miss). Avoids the #1 failure mode: copying the Meta playbook to TikTok.
+Usually, the structure was wrong before the campaign launched.
 
 ---
 
 ## The receipt
 
-**3,100 tickets sold across Bar Crawl USA's multi-city Taco & Tequila campaigns** — April 11–25, 2026. Multiple cities running in parallel with shared CBO budget logic. The system that produced this is the system in this bundle.
+**Bar Crawl USA** sold **3,100 tickets** across multi-city Taco & Tequila campaigns from **April 11 to April 25, 2026**.
+
+Same event concept. Multiple cities. Parallel launch. Shared operating logic.
+
+This pack turns that multi-market paid-social workflow into Claude Skills.
 
 ---
 
-## Who this is for
+## Why this works
 
-- **Event organizers** running paid social for local events (festivals, crawls, concerts, food tours)
-- **Multi-location franchises** running consistent campaigns across cities
-- **Local marketing agencies** standardizing multi-market client work
-- **Real estate / lending operations** running same-offer campaigns in multiple service areas
-- **D2C brands** scaling paid social geographically
+Multi-market paid social needs a different operating rhythm.
 
-If you've ever had a single-market Meta campaign and wondered "how do I do this in 5 cities without it becoming a nightmare," this is the answer.
+You need to decide:
 
----
+- which cities share budget
+- which cities need separate reporting
+- when creative rotates
+- how urgency changes near event day
+- how the ticketing page handles drop-off
+- what gets adapted for TikTok instead of copied from Meta
 
-## What you'll need
-
-- Claude Code (free)
-- Anthropic API key
-- Meta Ads account with pixel + CAPI configured
-- Ticketing platform (if event use case): Eventbrite, Tixr, Ticketleap, or similar
-- Optional: TikTok Ads account
-
-Setup: ~15 minutes per INSTALL.md.
+These skills make Claude build the launch plan before the money starts moving.
 
 ---
 
-## What you get
+## What's inside
 
-- 5 SKILL.md files
-- INSTALL.md walking through Meta MCP + CAPI configuration
-- ABOUT-THE-AUTHOR.pdf
-- Single-operator commercial license (unlimited client accounts / events)
-- 12 months free updates
+1. **local-event-paid-social-playbook** - Builds a 3-phase event campaign for awareness, conversion, and urgency, with budget pacing and creative rotation.
 
----
+2. **multi-market-meta-campaign-launcher** - Creates geo structure, naming, CBO logic, reporting, and per-market controls for same-offer campaigns.
 
-## Pricing
+3. **event-ticketing-funnel-builder** - Maps landing page, ticketing platform, confirmation upsells, and pre-event follow-up.
 
-**$179 for the bundle.** $29-39 each à la carte. Bundle saves $26-66.
+4. **instagram-reels-promo-script-writer** - Writes 15 to 30 second Reels scripts with shot lists, captions, hooks, and mobile-first pacing.
 
-Or grab the [Marketing Operator's Mega-Pack](mega-pack.md) — all 30 skills, $497.
+5. **tiktok-ads-strategist** - Builds TikTok strategy, Spark Ads ideas, creator angles, and channel-specific creative direction.
 
 ---
 
-## Built by
+## Who should buy it
 
-Dillon Mohr — runs paid social for Bar Crawl USA (multi-city event series), Buzz Bull (6 clients), Momentum 360 (10+ clients), Align HCM, and Secure Lending Inc. The 3,100-ticket Bar Crawl USA result was in April 2026 using the system in this bundle.
+Buy this if you run paid social for events, local campaigns, or same-offer launches across multiple regions.
 
----
+It is built for:
 
-## FAQ
+- bar crawls, festivals, food tours, concerts, and ticketed events
+- multi-location franchises
+- local marketing agencies
+- real estate and lending teams with multiple service areas
+- D2C brands testing city-by-city demand
 
-**Will this work for non-event paid social (e.g., D2C product launches in multiple cities)?**
-Yes. The multi-market structure transfers directly. The local-event-specific patterns (3-phase ticket curve, post-purchase upsells) might not all apply, but the campaign architecture does.
-
-**Do I need TikTok experience to use the TikTok skill?**
-No — but it helps. The skill produces strategy + creative briefs you'd execute via TikTok Ads Manager (no MCP support yet for TikTok at scale).
-
-**Is CAPI setup hard?**
-Most ticketing platforms (Eventbrite, Tixr) have native CAPI integrations now — toggle on, paste tokens. For custom sites, expect 1-2 hours via Stape or GTM Server-Side. INSTALL.md covers it.
-
-**Refund?**
-14-day no-questions-asked.
+If you have ever asked, "How do we launch this in 5 cities without rebuilding everything 5 times?" this pack is for that moment.
 
 ---
 
-**Get the bundle: $179**
+## What you need
+
+- Claude Code
+- Claude Pro or an Anthropic API key
+- Meta Ads access
+- Pixel and CAPI setup for best results
+- A ticketing platform if you sell event tickets
+- Optional TikTok Ads account
+
+Manual mode works from pasted campaign briefs, event details, and ticketing-page notes.
+
+---
+
+## The offer
+
+**Multi-Market Paid Social Pack: $179**
+
+You get:
+
+- 5 production-ready `SKILL.md` files
+- `INSTALL.md` for Windows PowerShell and macOS setup
+- `ABOUT-THE-AUTHOR.md`
+- `LICENSE.md`
+- Single-operator commercial use on unlimited client accounts or events
+- 12 months of updates
+
+The event playbook hero skill is $39 by itself. The full pack gives you Meta structure, event funnel, Reels, TikTok, and multi-market launch planning together.
+
+The full **Marketing Operator's Mega-Pack** is $497 and includes all 30 skills.
+
+---
+
+## Guarantee
+
+Run the pack for 14 days.
+
+If it does not give you a cleaner multi-city launch plan, better reporting structure, or stronger creative brief, ask for a refund through Gumroad.
+
+---
+
+## Get the pack
+
+If your next paid-social launch has more than one city, build the structure before the spend goes live.
+
+**Get the Multi-Market Paid Social Pack: $179**

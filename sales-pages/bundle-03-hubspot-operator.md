@@ -1,102 +1,128 @@
-# HubSpot Operator Pack — 5 Claude Skills
+﻿# 25 HubSpot Blog Optimizations In Under One Hour
 
-**The HubSpot agent that optimized 25 blogs in under an hour and drove +17.2% organic traffic at Align HCM in 30 days.**
+For HubSpot operators who need more traffic, cleaner workflows, and sales systems that do not depend on memory.
 
 ---
 
-## What's inside
+## The problem
 
-5 Claude Skills that plug into HubSpot via the official HubSpot MCP server (legacy private app token):
+HubSpot gets expensive when it becomes a storage closet.
 
-1. **hubspot-blog-optimizer** — Reads existing HubSpot blog posts, audits each against 7 SEO levers (meta structure, keyword length vs. competitors, AI Overview readiness, schema, internal linking), and rewrites in place as drafts. The agent that drove the Align HCM traffic lift.
+The blog is full but underperforming. Workflows fire twice or not at all. Lead scoring is a debate instead of a model. Pipelines reflect how someone wished sales worked two years ago.
 
-2. **hubspot-workflow-designer** — Production-ready HubSpot workflow design: trigger conditions, branching, action sequencing, exit criteria, re-enrollment rules. Avoids the common gotchas (firing twice, not firing, 3am sends).
+You can spend a whole week cleaning one portal and still miss the pattern.
 
-3. **hubspot-lead-scoring-builder** — Two-axis lead scoring (Fit + Behavior) calibrated against your closed-won data. Includes score decay logic and tiered MQL/SQL/Hot thresholds with sales-handoff workflows.
-
-4. **hubspot-pipeline-architect** — Deal pipelines that match how sales actually works. State-based stages, required-field gates, realistic probabilities, stage-age alerts. Multi-pipeline strategy for distinct motions.
-
-5. **hubspot-email-sequencer** — Authors complete email sequences for both Sales Sequences (1:1) and Marketing Workflows (1:many). Subject lines, opening lines, body, branching by engagement, A/B variants.
+This pack gives Claude the operating rules for fixing the portal work that usually sits between marketing, sales, and RevOps.
 
 ---
 
 ## The receipt
 
-**Align HCM, January 2026 → April 2026:** took over the marketing operation in January. Within 30 days of deploying these HubSpot agents:
+At **Align HCM**, the HubSpot blog agent optimized **25 existing blog posts in under one hour**.
 
-- **+17.2% organic traffic** (in 30 days)
+Within 30 days, the operation produced:
+
+- **+17.2% organic traffic**
 - **SEMrush Authority Score +4 points**
 - **3 existing blogs ranking #1**
 - **2 blogs pulled into Google AI Overview**
 - **$255 of attributed AI Overview traffic value in 11 days**
-- **25 blog posts optimized in under one hour**
 
-This is the actual agent operating on a live $1M+ ARR HubSpot portal.
-
----
-
-## Who this is for
-
-- **Marketing operators** running HubSpot for clients or in-house and tired of doing manual blog edits
-- **HubSpot consultants** wanting to standardize implementation patterns across portals
-- **B2B marketers** with 50+ existing blog posts that aren't ranking
-- **Sales operations leads** rebuilding pipelines and lead scoring
-- **Lifecycle marketing teams** standardizing nurture sequences
-
-If you're paying for HubSpot Marketing Hub Pro or higher ($800+/mo), this bundle ROI is measured in a single optimization run.
+This was not a demo portal. It was a live B2B HubSpot operation.
 
 ---
 
-## What you'll need
+## Why this works
 
-- Claude Code (free)
-- Anthropic API key
-- HubSpot account (Marketing Hub Free works for blog optimization; Pro+ recommended for workflows + lead scoring)
-- HubSpot Private App access token with `content`, `automation`, `crm.objects.*` scopes
-- Optional: SEMrush API key (the blog optimizer + workflow designer use SEMrush MCP for competitor data)
+HubSpot work fails when every task is treated as a blank page.
 
-Setup time: ~15 minutes per the included INSTALL.md (Windows PowerShell + macOS).
+A good operator has patterns:
 
----
+- blog audit criteria
+- internal-link rules
+- workflow trigger checks
+- re-enrollment standards
+- lead-score decay logic
+- deal-stage gates
+- sequence branching rules
 
-## What you get
+These skills turn those patterns into repeatable Claude runs.
 
-- 5 SKILL.md files
-- INSTALL.md walking through HubSpot MCP setup
-- ABOUT-THE-AUTHOR.pdf
-- Single-operator commercial license (unlimited client portals)
-- 12 months free updates
+That means you can move faster without letting the portal turn sloppy.
 
 ---
 
-## Pricing
+## What's inside
 
-**$179 for the bundle.** $49 for the hero (`hubspot-blog-optimizer`), $29 for the rest, à la carte. Bundle saves $66.
+1. **hubspot-blog-optimizer** - Audits and rewrites HubSpot posts against SEO, AI Overview, schema, internal-link, and metadata criteria.
 
-Or grab the [Marketing Operator's Mega-Pack](mega-pack.md) — all 30 skills, $497.
+2. **hubspot-workflow-designer** - Designs triggers, branches, actions, exits, re-enrollment, and failure checks for production workflows.
 
----
+3. **hubspot-lead-scoring-builder** - Builds Fit plus Behavior scoring with decay, thresholds, and sales handoff logic.
 
-## Built by
+4. **hubspot-pipeline-architect** - Creates deal stages, required fields, realistic probabilities, stage-age alerts, and multi-pipeline strategy.
 
-Dillon Mohr — currently running HubSpot operations for 16+ active accounts including Align HCM (Digital Marketing Manager full-time role), Momentum 360 (10+ clients), and Buzz Bull (6 clients). The HubSpot blog optimizer is the live agent that produced the +17.2% organic traffic in 30 days at Align HCM.
-
----
-
-## FAQ
-
-**Will this work on HubSpot Free?**
-Blog optimizer works on Free. Workflow Designer needs Marketing Hub Starter+ for workflows. Lead scoring needs Pro+. Pipeline Architect works on all tiers (deal pipelines).
-
-**Can it accidentally break my live blog?**
-No. The blog optimizer always saves changes as DRAFTS in HubSpot. You review and approve before publishing. Same pattern across all five skills — anything that modifies your portal saves to draft state for human approval first.
-
-**Do I need to be technical to set up the HubSpot MCP?**
-No. The setup is one JSON config file. Step-by-step instructions in INSTALL.md.
-
-**Refund?**
-14-day no-questions-asked.
+5. **hubspot-email-sequencer** - Writes Sales Sequence and Marketing Workflow emails with subject lines, branching, and A/B variants.
 
 ---
 
-**Get the bundle: $179**
+## Who should buy it
+
+Buy this if you run HubSpot for clients, own HubSpot in-house, or consult on lifecycle, RevOps, content, or sales systems.
+
+It is especially useful when the portal has:
+
+- 50 or more old blog posts
+- Marketing Hub Pro or higher
+- workflows nobody trusts
+- sales stages that no longer match the business
+- a lead score the sales team ignores
+
+If HubSpot costs you $800 per month or more, one serious cleanup run can justify the pack.
+
+---
+
+## What you need
+
+- Claude Code
+- Claude Pro or an Anthropic API key
+- HubSpot access
+- Optional HubSpot MCP setup with a private app token
+- Optional SEMrush access for deeper content and competitor work
+
+The skills can save output as drafts when connected, or work manually from pasted exports and page copy.
+
+---
+
+## The offer
+
+**HubSpot Operator Pack: $179**
+
+You get:
+
+- 5 production-ready `SKILL.md` files
+- `INSTALL.md` for Windows PowerShell and macOS setup
+- `ABOUT-THE-AUTHOR.md`
+- `LICENSE.md`
+- Single-operator commercial use on unlimited client portals
+- 12 months of updates
+
+The hero skill is $49 by itself. The full pack gives you blog optimization, workflows, scoring, pipelines, and sequences together.
+
+The full **Marketing Operator's Mega-Pack** is $497 and includes all 30 skills.
+
+---
+
+## Guarantee
+
+Run the pack for 14 days.
+
+If it does not make one HubSpot portal clearer, faster, or easier to operate, ask for a refund through Gumroad.
+
+---
+
+## Get the pack
+
+If HubSpot is where your marketing work piles up, this gives Claude a real operating system for the portal.
+
+**Get the HubSpot Operator Pack: $179**

@@ -1,101 +1,128 @@
-# Conversion + Analytics Pack — 5 Claude Skills
+﻿# Find The Funnel Leaks Before You Buy More Traffic
 
-**Optimize the part of marketing most operators ignore: where the traffic goes after the click.**
+For marketers, consultants, and founders who need conversion decisions backed by GA4, attribution, and real test plans.
+
+---
+
+## The problem
+
+Traffic hides bad measurement.
+
+A landing page underconverts, but nobody knows which section is causing friction. GA4 records events, but the important ones are missing. Paid platforms claim credit for the same sale. A/B tests start with excitement and end with a sample size too small to trust.
+
+So the team buys more clicks.
+
+This pack helps Claude find the leaks before the next budget increase.
+
+---
+
+## The receipts
+
+The same operating approach supports work across Secure Lending, Align HCM, and Bar Crawl USA.
+
+- **Secure Lending Inc.** produced **314x ROAS** from the paid funnel behind $1.7M in closed deals.
+- **Align HCM** grew organic traffic **+17.2% in 30 days** after disciplined content, link, and measurement work.
+- **Bar Crawl USA** sold **3,100 tickets** across multi-city campaigns where post-click and post-purchase flow mattered.
+
+This pack focuses on the part of those wins most people do last: measurement, leakage, page friction, testing, and attribution.
+
+---
+
+## Why this works
+
+Conversion work is not one audit.
+
+It is a loop:
+
+- map the funnel
+- find the largest leak
+- inspect the page or step causing it
+- design a test that can actually prove something
+- fix the event tracking
+- choose attribution rules that fit the buying path
+
+If GA4 is wrong, your test is suspect.
+
+If attribution is wrong, your budget shift is suspect.
+
+If the landing page is weak, every channel looks worse than it is.
+
+These skills keep those decisions connected.
 
 ---
 
 ## What's inside
 
-5 Claude Skills for end-to-end conversion optimization + analytics:
+1. **landing-page-auditor** - Reviews clarity, friction, proof, mobile UX, speed, and CTA hierarchy, then ranks fixes by likely lift.
 
-1. **landing-page-auditor** — 12-criterion CRO audit of any landing page. Hero clarity, friction, social proof, mobile UX, page speed, CTA hierarchy. Outputs prioritized fix list with estimated lift per fix.
+2. **ab-test-designer** - Builds hypotheses, sample-size plans, win criteria, stop rules, and analysis notes.
 
-2. **ab-test-designer** — Statistically-sound A/B test plans. Hypothesis, sample size calculation, win criteria, stop-loss rules, analysis plan. Avoids the underpowered / peeking / multiple-comparison traps.
+3. **funnel-leakage-mapper** - Maps conversion from impression to close and ranks leaks by revenue impact and effort.
 
-3. **funnel-leakage-mapper** — Maps end-to-end conversion funnels (impression → close) across channels. Quantifies revenue impact per leak. Prioritizes fixes by impact-per-effort.
+4. **ga4-setup-architect** - Creates event plans, conversion events, custom dimensions, audiences, and dashboard structure.
 
-4. **ga4-setup-architect** — Complete GA4 implementation: event tracking plan, custom dimensions, conversion events, audiences, Looker Studio dashboard. Includes iOS 14.5+ adjustments.
-
-5. **attribution-model-picker** — Picks the right attribution model (last-click vs DDA vs position-based vs time-decay) with rationale and platform-specific implementation. Includes CAPI + enhanced-conversions setup for the iOS attribution gap.
+5. **attribution-model-picker** - Recommends last-click, data-driven, position-based, or time-decay models with platform setup notes.
 
 ---
 
-## Who this is for
+## Who should buy it
 
-- **Solo marketing consultants** doing CRO + analytics work for multiple clients
-- **In-house marketers** with ad budget but no dedicated analytics resource
-- **Conversion-optimization specialists** standardizing audits across accounts
-- **Agency owners** wanting reproducible CRO + analytics deliverables
-- **Founders running their own funnel** without a senior data hire
+Buy this if you spend money or time driving traffic and still do not fully trust what happens after the click.
 
-If you're spending $5K+/mo on paid traffic and don't have a clean attribution model + reliable GA4 setup, your reporting is lying to you. This bundle fixes that.
+It is built for:
 
----
+- paid-media consultants
+- CRO specialists
+- in-house marketers
+- agency owners
+- founders running their own funnel
 
-## Why these go together
-
-CRO + analytics + attribution form a single loop:
-
-1. **Funnel mapping** identifies where you're losing conversions
-2. **Landing page audit** specifies the fixes for the highest-leakage stage
-3. **A/B test design** validates the fixes statistically
-4. **GA4 setup** provides the measurement that makes any of this trustworthy
-5. **Attribution model picking** ensures the channel-mix decisions are based on real data, not platform self-reporting
-
-You can buy them individually, but they reinforce each other. Most teams that "fix" CRO without fixing analytics first end up making decisions on bad data.
+It is most useful once you spend **$5,000 per month or more** on paid traffic, or when one landing page supports a meaningful revenue target.
 
 ---
 
-## What you'll need
+## What you need
 
-- Claude Code (free)
-- Anthropic API key
-- GA4 property (free)
-- Optional: Google Tag Manager
-- Optional: HubSpot or other CRM (for funnel-leakage analysis below the form-fill)
+- Claude Code
+- Claude Pro or an Anthropic API key
+- GA4 access
+- Optional Google Tag Manager
+- Optional CRM access for below-form funnel work
+- Optional testing tool such as VWO, Convert, or Optimizely
 
-Setup: ~15 minutes per INSTALL.md.
-
----
-
-## What you get
-
-- 5 SKILL.md files
-- INSTALL.md (GA4 MCP + GTM setup, CAPI walkthrough)
-- ABOUT-THE-AUTHOR.pdf
-- Single-operator commercial license
-- 12 months free updates
+Manual mode works with screenshots, URLs, GA4 exports, CRM snapshots, and funnel notes.
 
 ---
 
-## Pricing
+## The offer
 
-**$179 for the bundle.** $29 each à la carte. Bundle saves $66.
+**Conversion + Analytics Pack: $179**
 
-Or grab the [Marketing Operator's Mega-Pack](mega-pack.md) — all 30 skills, $497.
+You get:
 
----
+- 5 production-ready `SKILL.md` files
+- `INSTALL.md` for Windows PowerShell and macOS setup
+- `ABOUT-THE-AUTHOR.md`
+- `LICENSE.md`
+- Single-operator commercial use
+- 12 months of updates
 
-## Built by
+Individual skills are $29. The full pack gives you landing-page audit, A/B testing, funnel mapping, GA4, and attribution together.
 
-Dillon Mohr — manages funnel + analytics work across 16+ active client accounts. Recent CRO/analytics receipts: Align HCM funnel optimization (+17.2% organic with proper internal-link audit), Secure Lending Inc. landing page that converted at 6%+ for cold paid (driving the 314x ROAS), Bar Crawl USA event funnel with 25%+ post-purchase upsell take rate.
-
----
-
-## FAQ
-
-**Do I need GA4 experience to use these?**
-The GA4 skill walks through implementation from blank-slate. If you have a half-broken existing GA4, the skill audits and fixes it.
-
-**Can I run these without paid ads?**
-Yes — landing-page-auditor, ab-test-designer, and funnel-leakage-mapper apply to organic + email + referral traffic equally. Attribution-model-picker is most relevant for multi-channel paid operations.
-
-**Will A/B test designer work without a dedicated testing tool?**
-Yes for design + planning. For execution, you'll need VWO, Convert, Optimizely, or a similar tool. The skill is tool-agnostic on the methodology.
-
-**Refund?**
-14-day no-questions-asked.
+The full **Marketing Operator's Mega-Pack** is $497 and includes all 30 skills.
 
 ---
 
-**Get the bundle: $179**
+## Guarantee
+
+Run the pack for 14 days.
+
+If it does not give you a clearer leak map, better measurement plan, or more defensible test, ask for a refund through Gumroad.
+
+---
+
+## Get the pack
+
+If the traffic is real but the numbers are muddy, fix the measurement and conversion loop first.
+
+**Get the Conversion + Analytics Pack: $179**

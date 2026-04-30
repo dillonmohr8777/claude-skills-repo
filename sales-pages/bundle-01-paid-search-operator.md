@@ -1,106 +1,121 @@
-# Paid Search Operator Pack — 5 Claude Skills
+﻿# 314x ROAS From A Google Ads System You Can Actually Run
 
-**Run a Google Ads account like the operators who don't post about Google Ads on LinkedIn. The ones quietly putting up 200x ROAS in regulated verticals.**
+For paid-search consultants, agency owners, and in-house marketers who need Claude to make sharper Google Ads decisions, not just write prettier ads.
+
+---
+
+## The problem
+
+You can open Google Ads and click around all day.
+
+That is not the hard part.
+
+The hard part is knowing when an ad group is too broad, when a keyword belongs in exact match, when a landing page is killing Quality Score, and which search terms should be cut before they eat another week of budget.
+
+That is where small accounts bleed money.
+
+It is also where good operators quietly win.
+
+---
+
+## The receipt
+
+Secure Lending Inc. closed **$1.7M in real estate deals from $5,400 in ad spend**.
+
+That is **314x ROAS in 67 days**.
+
+This pack is built from the same paid-search decision logic behind that result.
+
+Not a UI tutorial. Not a beginner checklist. A working operator system for campaign architecture, Quality Score repair, keyword strategy, negative mining, and ad testing.
+
+---
+
+## Why this works
+
+Google Ads rewards clean structure.
+
+Clean structure comes from decisions like these:
+
+- which campaigns deserve separate budgets
+- which keywords need tighter match types
+- which negatives belong at ad group, campaign, or account level
+- which ad copy angles deserve a real test
+- which Quality Score fixes will lower CPC first
+
+Most teams make those calls from memory.
+
+These skills make Claude ask the same questions every time, in the same order, with the same operator-grade standards.
 
 ---
 
 ## What's inside
 
-5 production-ready Claude Skills that plug into Claude Code via the Google Ads MCP server:
+1. **google-ads-campaign-architect** - Turns a one-page brief into campaign type, ad-group structure, match types, budget pacing, geo, device, audience layers, and conversion setup.
 
-1. **google-ads-campaign-architect** — Turns a one-page brief into a complete campaign skeleton (campaign type, ad-group structure, match-type strategy, budget pacing, geo + device + audience layering, conversion-action setup). Maps directly to Google Ads Editor.
+2. **google-ads-quality-score-fixer** - Diagnoses Expected CTR, Ad Relevance, and Landing Page Experience, then returns a ranked repair plan with estimated CPC savings.
 
-2. **google-ads-quality-score-fixer** — Diagnoses Quality Score problems systematically across all three components (Expected CTR, Ad Relevance, Landing Page Experience). Outputs a prioritized fix list with estimated CPC savings.
+3. **google-ads-keyword-strategist** - Builds 50 to 200 keywords you can defend, grouped by intent with pre-launch negatives included.
 
-3. **google-ads-keyword-strategist** — Builds the keyword set with proper intent-based grouping, match-type strategy, and pre-launch negatives. No more 5,000-row CSV dumps. 50–200 keywords you'll actually believe in.
+4. **negative-keyword-mining** - Reads search-term waste and recommends negatives at the right scope.
 
-4. **negative-keyword-mining** — Mines wasted spend from your search-term report weekly. Identifies query patterns that match but never convert. Recommends ad-group vs. campaign vs. account-level negatives. Pays for itself the first time you run it.
-
-5. **google-ads-ad-copy-tester** — Generates 10+ Responsive Search Ad variants per ad group using proven direct-response frameworks (PAS, AIDA, BAB, FAB, Specificity Bomb). Includes A/B test plan with sample-size math.
+5. **google-ads-ad-copy-tester** - Creates responsive search ad variants with a test plan, sample-size logic, and a reason for each angle.
 
 ---
 
-## Why this bundle works
+## Who should buy it
 
-**$1.7M in closed real estate deals on $5,400 of ad spend in 67 days. 314x ROAS.**
+Buy this if you manage Google Ads for clients, run paid search in-house, or own a real estate, mortgage, insurance, or local-service account where wasted clicks hurt.
 
-That's the receipt for Secure Lending Inc. — the campaign these exact skills powered.
+It is a strong fit once spend is at least **$1,000 per month**.
 
-Most "Google Ads courses" teach you the platform's UI. These skills teach Claude how to make the *decisions* that move CPCs, conversion rates, and ROAS. The platform UI is the easy part. Knowing whether to split an ad group, when to switch from Maximize Conversions to tCPA, which negatives to add at which scope — that's where the money is.
+It is an obvious fit once spend is **$5,000 per month or more**.
 
----
-
-## Who this is for
-
-- **Solo paid-search consultants** managing 5+ accounts and tired of doing the same audits manually
-- **In-house marketers** at SMB/mid-market who've been told to "make Google Ads work" without a senior PPC hire
-- **Agency owners** wanting to standardize how junior media buyers structure accounts
-- **Real estate / mortgage / insurance brokers** running their own paid search
-
-If you're already doing $50K+/mo in paid search, this bundle pays for itself the first week through Quality Score lift + negative keyword mining.
+One clean negative-keyword pass or one Quality Score repair can cover the price.
 
 ---
 
-## What you'll need to run them
+## What you need
 
-- Claude Code (free CLI install — instructions in `INSTALL.md`)
-- An Anthropic API key OR Claude Pro subscription
-- A Google Ads Developer Token + OAuth refresh token (for the MCP server) — most teams already have this
+- Claude Code
+- Claude Pro or an Anthropic API key
+- Google Ads access
+- Optional Google Ads MCP setup for account-connected workflows
 
-Setup: ~15 minutes. After that, you're invoking real campaign-architecture work from your terminal.
-
----
-
-## What you get
-
-- 5 SKILL.md files (production-grade Claude skills with full prompts, decision trees, and MCP integration)
-- A 4-page INSTALL.md walking through Claude Code + Google Ads MCP setup on Windows (PowerShell) and macOS
-- ABOUT-THE-AUTHOR.pdf with the full track record
-- Single-operator commercial license (use on unlimited client accounts)
-- 12 months of free updates
+You can also run the skills manually by pasting exports and briefs into Claude.
 
 ---
 
-## Pricing
+## The offer
 
-**$179 for the bundle.** $25 each à la carte. Bundle saves $51.
+**Paid Search Operator Pack: $179**
 
-Or grab the [Marketing Operator's Mega-Pack](mega-pack.md) — all 30 skills across all 6 bundles for $497 (saves $577 vs. à la carte).
+You get:
 
----
+- 5 production-ready `SKILL.md` files
+- `INSTALL.md` for Windows PowerShell and macOS setup
+- `ABOUT-THE-AUTHOR.md`
+- `LICENSE.md`
+- Single-operator commercial use on unlimited client accounts
+- 12 months of updates
 
-## Built by
+Individual skills are $29 to $49. The bundle gives you the full paid-search system in one zip.
 
-**Dillon Mohr** — MS in Integrated Marketing Communications (West Virginia University), doctoral candidate in Strategic Media (Liberty University).
-
-Recent receipts:
-- **$1.7M in closed real estate deals on $5,400 of ad spend** for Secure Lending Inc. (314x ROAS, 67 days)
-- Datastrike SEMrush Authority Score: **2 → 24 in under a year**
-- 3,100 tickets sold across Bar Crawl USA's multi-city Taco & Tequila campaigns
-- Currently driving a **+17.2% organic traffic lift in 30 days** at Align HCM using these exact agents
-- Running paid media + SEO across **16+ active client accounts** simultaneously while serving as Digital Marketing Manager at Align HCM
-
-These aren't theoretical templates. They're the live agents I run on my own clients every day.
+The full **Marketing Operator's Mega-Pack** is $497 and includes all 30 skills across all 6 bundles.
 
 ---
 
-## FAQ
+## Guarantee
 
-**Do I need to be technical?**
-You need to install Claude Code (one command) and configure one MCP server (one JSON file). That's it. After that you describe what you want in plain English.
+Run the pack for 14 days.
 
-**Will this work on a $500/mo Google Ads spend?**
-Yes — and it'll save you a meaningful % of that. The Quality Score fixer + negative keyword miner have the highest ROI on smaller accounts because the inefficiency rate is usually higher.
+If it does not give you a clearer account structure, a sharper negative list, or a better next test, ask for a refund through Gumroad.
 
-**Can I use these on multiple client accounts?**
-Yes. The license covers unlimited client accounts under one operator (you).
-
-**What if I don't have a Google Ads Developer Token?**
-You can still use the skills without the MCP — they'll output strategy docs you can manually implement. The MCP just lets Claude read/write to your account directly.
-
-**Refund policy?**
-14-day no-questions-asked. Email or message via Gumroad.
+No long form. No argument.
 
 ---
 
-**Get the bundle: $179**
+## Get the pack
+
+If paid search is your job and the account still depends on guesswork, this is the pack to install first.
+
+**Get the Paid Search Operator Pack: $179**
