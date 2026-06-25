@@ -146,7 +146,7 @@ export const SerpStack3D: React.FC<{delay?: number}> = ({delay = 0}) => {
         highlight
         lines={[
           {text: 'Your Local Service Ad', color: '#0B1220', font: `800 60px ${POPPINS}`},
-          {text: 'Google Guaranteed · Top spot', color: C.green, font: `700 38px ${POPPINS}`},
+          {text: 'Google Verified · Top spot', color: C.green, font: `700 38px ${POPPINS}`},
         ]}
       />
       <CardFace y={-0.1} delay={delay + 12} lines={[{text: 'Standard Google Ad', color: '#cdd6e6', font: `600 48px ${POPPINS}`}]} />

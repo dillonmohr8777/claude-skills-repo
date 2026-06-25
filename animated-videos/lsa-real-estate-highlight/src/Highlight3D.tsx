@@ -185,7 +185,7 @@ const SceneSerp: React.FC = () => (
 );
 
 const SceneTrust: React.FC = () => {
-  const items = ['Verified & Google Guaranteed', 'Pay per lead, not per click', 'Calls from ready-to-act buyers'];
+  const items = ['Get Google Verified', 'Pay per lead, not per click', 'Calls from ready-to-act buyers'];
   return (
     <AbsoluteFill>
       <MeshBg tint={C.yellow} />
@@ -259,7 +259,7 @@ const SceneNumbers: React.FC = () => {
 };
 
 const ScenePlaybook: React.FC = () => {
-  const steps = ['Claim & verify your Google Guaranteed profile', 'Run LSAs to capture high-intent calls now', 'Invest in local SEO for lasting reach'];
+  const steps = ['Get Google Verified to build instant trust', 'Run LSAs to capture high-intent calls now', 'Invest in local SEO for lasting reach'];
   return (
     <AbsoluteFill>
       <MeshBg tint={C.green} />
@@ -355,7 +355,7 @@ const SceneOutro: React.FC = () => {
             fontFamily: POPPINS,
           }}
         >
-          Momentum Digital · Mac Frederick
+          Momentum Digital
         </div>
       </Overlay>
     </AbsoluteFill>

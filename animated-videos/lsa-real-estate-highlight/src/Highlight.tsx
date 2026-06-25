@@ -213,7 +213,7 @@ const SerpRow: React.FC<{top: number; delay: number; label: string; highlight?: 
         </div>
         {highlight && (
           <div style={{color: C.green, fontSize: 25, fontWeight: 700, marginTop: 4, fontFamily: INTER}}>
-            Google Guaranteed · Top of page
+            Google Verified · Top of page
           </div>
         )}
       </div>
@@ -303,7 +303,7 @@ const SceneValue: React.FC = () => (
         <KineticHeadline text="Pay per {lead}, not click" size={58} delay={6} accent={C.yellow} />
       </div>
       <div style={{display: 'flex', flexDirection: 'column', gap: 30, marginTop: 200}}>
-        <Pill delay={26} icon="✅" title="Google Guaranteed" body="Verified & licensed — instant credibility up top." accent={C.green} />
+        <Pill delay={26} icon="✅" title="Get Google Verified" body="Verified & licensed — instant credibility up top." accent={C.green} />
         <Pill delay={42} icon="💸" title="Only pay for real leads" body="Charged per call, not per click on your ad." accent={C.yellow} />
         <Pill delay={58} icon="📞" title="Calls from ready buyers" body="High commercial intent — people acting now." accent={C.blue} />
       </div>
@@ -403,7 +403,7 @@ const ScenePlaybook: React.FC = () => (
         <KineticHeadline text="3 moves to {win}" size={66} delay={6} accent={C.green} />
       </div>
       <div style={{display: 'flex', flexDirection: 'column', gap: 34, marginTop: 200}}>
-        <Step delay={28} n={1} text="Claim & verify your Google Guaranteed profile" />
+        <Step delay={28} n={1} text="Get Google Verified to build instant trust" />
         <Step delay={46} n={2} text="Run LSAs to capture high-intent calls now" />
         <Step delay={64} n={3} text="Invest in local SEO for lasting reach" />
       </div>
@@ -443,7 +443,7 @@ const SceneOutro: React.FC = () => {
             fontFamily: POPPINS,
           }}
         >
-          Momentum Digital · Mac Frederick
+          Momentum Digital
         </div>
       </Frame>
     </AbsoluteFill>
