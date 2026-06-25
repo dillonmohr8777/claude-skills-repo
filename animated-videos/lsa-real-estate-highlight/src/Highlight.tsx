@@ -1,107 +1,35 @@
 import React from 'react';
 import {
   AbsoluteFill,
-  Sequence,
-  interpolate,
-  spring,
   useCurrentFrame,
   useVideoConfig,
+  spring,
+  interpolate,
+  Easing,
 } from 'remotion';
+import {TransitionSeries, linearTiming} from '@remotion/transitions';
+import {slide} from '@remotion/transitions/slide';
+import {wipe} from '@remotion/transitions/wipe';
+import {fade} from '@remotion/transitions/fade';
+import {clockWipe} from '@remotion/transitions/clock-wipe';
+import {Star, Triangle} from '@remotion/shapes';
+import {MeshBg, FloatingDots} from './Background';
+import {KineticHeadline, DrawUnderline, CountUp, CheckBadge} from './Kinetic';
+import {C, POPPINS, INTER, glass} from './theme';
 
-/* ------------------------------------------------------------------ */
-/* Palette + shared helpers                                            */
-/* ------------------------------------------------------------------ */
+const W = 1080;
+const H = 1920;
 
-const COLORS = {
-  blue: '#4285F4',
-  red: '#EA4335',
-  yellow: '#FBBC05',
-  green: '#34A853',
-  ink: '#0B1220',
-  ink2: '#111c30',
-  white: '#FFFFFF',
-  mute: 'rgba(255,255,255,0.62)',
-};
-
-const FONT = 'Inter, Helvetica, Arial, sans-serif';
-
-/** Eased fade + upward slide that settles by `settle` frames in. */
 const useReveal = (delay = 0, settle = 18) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const s = spring({frame: frame - delay, fps, config: {damping: 200}, durationInFrames: settle});
-  return {
-    opacity: interpolate(s, [0, 1], [0, 1]),
-    transform: `translateY(${interpolate(s, [0, 1], [40, 0])}px)`,
-  };
+  return {opacity: s, transform: `translateY(${interpolate(s, [0, 1], [36, 0])}px)`};
 };
 
-const Bg: React.FC<{tint?: string}> = ({tint = COLORS.blue}) => {
-  const frame = useCurrentFrame();
-  const drift = interpolate(frame, [0, 300], [0, 30], {extrapolateRight: 'extend'});
-  return (
-    <AbsoluteFill style={{background: COLORS.ink}}>
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(900px 900px at ${50 + Math.sin(drift / 18) * 12}% ${
-            22 + Math.cos(drift / 22) * 8
-          }%, ${tint}33, transparent 60%)`,
-        }}
-      />
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(700px 700px at ${30 + Math.cos(drift / 16) * 14}% 85%, ${COLORS.green}22, transparent 60%)`,
-        }}
-      />
-    </AbsoluteFill>
-  );
-};
-
-const Dots: React.FC = () => {
-  const frame = useCurrentFrame();
-  return (
-    <AbsoluteFill style={{opacity: 0.18}}>
-      {Array.from({length: 14}).map((_, i) => {
-        const x = (i * 137) % 1080;
-        const y = (i * 311) % 1920;
-        const float = Math.sin((frame + i * 40) / 30) * 14;
-        const c = [COLORS.blue, COLORS.red, COLORS.yellow, COLORS.green][i % 4];
-        return (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: x,
-              top: y + float,
-              width: 10 + (i % 3) * 6,
-              height: 10 + (i % 3) * 6,
-              borderRadius: '50%',
-              background: c,
-            }}
-          />
-        );
-      })}
-    </AbsoluteFill>
-  );
-};
-
-const Center: React.FC<{children: React.ReactNode; pad?: number}> = ({children, pad = 90}) => (
-  <AbsoluteFill
-    style={{
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: pad,
-      textAlign: 'center',
-      fontFamily: FONT,
-    }}
-  >
-    {children}
-  </AbsoluteFill>
-);
-
-const Kicker: React.FC<{children: React.ReactNode; color?: string; delay?: number}> = ({
+const Kicker: React.FC<{children: React.ReactNode; color: string; delay?: number}> = ({
   children,
-  color = COLORS.yellow,
+  color,
   delay = 0,
 }) => {
   const r = useReveal(delay);
@@ -109,186 +37,182 @@ const Kicker: React.FC<{children: React.ReactNode; color?: string; delay?: numbe
     <div
       style={{
         ...r,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 12,
         color,
-        fontWeight: 800,
-        letterSpacing: 4,
-        fontSize: 30,
+        fontFamily: INTER,
+        fontWeight: 700,
+        letterSpacing: 6,
+        fontSize: 26,
         textTransform: 'uppercase',
-        marginBottom: 28,
+        padding: '12px 24px',
+        borderRadius: 100,
+        border: `1px solid ${color}55`,
+        background: `${color}14`,
       }}
     >
+      <span style={{width: 10, height: 10, borderRadius: '50%', background: color, boxShadow: `0 0 14px ${color}`}} />
       {children}
     </div>
   );
 };
 
-/* ------------------------------------------------------------------ */
-/* Scene 1 — Intro                                                     */
-/* ------------------------------------------------------------------ */
+const Frame: React.FC<{children: React.ReactNode}> = ({children}) => (
+  <AbsoluteFill
+    style={{
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 80,
+      textAlign: 'center',
+      fontFamily: INTER,
+    }}
+  >
+    {children}
+  </AbsoluteFill>
+);
 
+const SlowSpin: React.FC<{children: React.ReactNode; speed?: number}> = ({children, speed = 1}) => {
+  const frame = useCurrentFrame();
+  return <div style={{transform: `rotate(${frame * speed}deg)`}}>{children}</div>;
+};
+
+/* ----------------------------- Scene 1: Intro ----------------------------- */
 const SceneIntro: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const pop = spring({frame, fps, config: {damping: 12, mass: 0.8}});
-  const t1 = useReveal(20);
-  const t2 = useReveal(34);
-  const by = useReveal(54);
+  const pop = spring({frame, fps, config: {damping: 10, mass: 0.8}});
+  const sub = useReveal(46);
   return (
     <AbsoluteFill>
-      <Bg tint={COLORS.blue} />
-      <Dots />
-      <Center>
+      <MeshBg tint={C.blue} />
+      <FloatingDots />
+      <Frame>
+        <div style={{position: 'absolute', top: 360, opacity: 0.5}}>
+          <SlowSpin speed={0.2}>
+            <Star points={5} innerRadius={120} outerRadius={250} fill="none" stroke={C.blue} strokeWidth={2} />
+          </SlowSpin>
+        </div>
         <div
           style={{
-            transform: `scale(${pop})`,
-            width: 150,
-            height: 150,
-            borderRadius: 40,
-            background: `linear-gradient(135deg, ${COLORS.blue}, ${COLORS.green})`,
+            transform: `scale(${pop}) rotate(${interpolate(pop, [0, 1], [-12, 0])}deg)`,
+            width: 170,
+            height: 170,
+            borderRadius: 44,
+            background: `linear-gradient(135deg, ${C.blue}, ${C.green})`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 30px 80px rgba(66,133,244,0.45)',
-            marginBottom: 50,
+            boxShadow: `0 30px 90px ${C.blue}66`,
+            marginBottom: 54,
           }}
         >
-          <span style={{fontSize: 84}}>📍</span>
+          <span style={{fontSize: 92}}>📍</span>
         </div>
-        <div style={{...t1, color: COLORS.white, fontSize: 78, fontWeight: 900, lineHeight: 1.05}}>
-          Local Service Ads
-        </div>
-        <div style={{...t2, color: COLORS.blue, fontSize: 78, fontWeight: 900, lineHeight: 1.05}}>
-          + SEO for Realtors
-        </div>
-        <div style={{...by, color: COLORS.mute, fontSize: 34, marginTop: 40, fontWeight: 600}}>
+        <KineticHeadline text="Local Service Ads" size={84} delay={14} accent={C.blue} />
+        <div style={{height: 8}} />
+        <KineticHeadline text="{+} SEO for {Realtors}" size={84} delay={26} accent={C.blue} />
+        <div style={{...sub, color: C.mute, fontSize: 34, marginTop: 40, fontWeight: 500}}>
           How top agents get found on Google
         </div>
-      </Center>
+      </Frame>
     </AbsoluteFill>
   );
 };
 
-/* ------------------------------------------------------------------ */
-/* Scene 2 — The hook / problem                                        */
-/* ------------------------------------------------------------------ */
-
+/* ----------------------------- Scene 2: Hook ------------------------------ */
 const SceneHook: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const barW = spring({frame: frame - 30, fps, config: {damping: 200}, durationInFrames: 30});
-  const k = useReveal(0);
-  const q = useReveal(14);
-  const sub = useReveal(70);
+  const barIn = spring({frame: frame - 36, fps, config: {damping: 13}});
+  const caret = Math.floor(frame / 8) % 2;
+  const sub = useReveal(78);
   return (
     <AbsoluteFill>
-      <Bg tint={COLORS.red} />
-      <Center>
-        <Kicker color={COLORS.red}>High-intent searches</Kicker>
-        <div style={{...q, color: COLORS.white, fontSize: 64, fontWeight: 900, lineHeight: 1.1}}>
-          “Realtor near me”
+      <MeshBg tint={C.red} />
+      <Frame>
+        <div style={{marginBottom: 40}}>
+          <Kicker color={C.red}>High-intent search</Kicker>
         </div>
-        {/* search bar */}
+        <KineticHeadline text="“Realtor {near me}”" size={70} delay={8} accent={C.red} />
         <div
           style={{
-            marginTop: 46,
-            width: 760,
-            height: 96,
-            borderRadius: 48,
-            background: COLORS.white,
+            marginTop: 54,
+            width: 800,
+            height: 104,
+            borderRadius: 52,
+            background: C.white,
             display: 'flex',
             alignItems: 'center',
-            padding: '0 36px',
-            gap: 18,
-            boxShadow: '0 24px 60px rgba(0,0,0,0.4)',
+            padding: '0 40px',
+            gap: 20,
+            transform: `scale(${interpolate(barIn, [0, 1], [0.8, 1])})`,
+            opacity: barIn,
+            boxShadow: '0 30px 70px rgba(0,0,0,0.5)',
           }}
         >
-          <span style={{fontSize: 40}}>🔍</span>
-          <div style={{height: 36, overflow: 'hidden', flex: 1, textAlign: 'left'}}>
-            <span style={{color: COLORS.ink, fontSize: 36, fontWeight: 600}}>
-              realtor near me
-            </span>
-          </div>
-          <div
-            style={{
-              width: `${interpolate(barW, [0, 1], [0, 100])}%`,
-              maxWidth: 4,
-              height: 44,
-              background: COLORS.blue,
-            }}
-          />
+          <span style={{fontSize: 42}}>🔍</span>
+          <span style={{color: C.ink, fontSize: 38, fontWeight: 600, fontFamily: INTER}}>
+            realtor near me
+            <span style={{opacity: caret, color: C.blue}}>|</span>
+          </span>
         </div>
-        <div style={{...sub, color: COLORS.mute, fontSize: 36, marginTop: 50, fontWeight: 600}}>
-          Buyers ready to act. The question is —<br />
-          <span style={{color: COLORS.white, fontWeight: 800}}>are you the one they see?</span>
+        <div style={{...sub, color: C.mute, fontSize: 36, marginTop: 56, fontWeight: 500, lineHeight: 1.35}}>
+          Buyers ready to act.{' '}
+          <span style={{color: C.white, fontWeight: 800, fontFamily: POPPINS}}>
+            Are you the one they see?
+          </span>
         </div>
-      </Center>
+      </Frame>
     </AbsoluteFill>
   );
 };
 
-/* ------------------------------------------------------------------ */
-/* Scene 3 — LSA sits at the very top                                  */
-/* ------------------------------------------------------------------ */
-
-const SerpRow: React.FC<{
-  top: number;
-  delay: number;
-  label: string;
-  highlight?: boolean;
-}> = ({top, delay, label, highlight}) => {
+/* -------------------------- Scene 3: Why LSAs win ------------------------- */
+const SerpRow: React.FC<{top: number; delay: number; label: string; highlight?: boolean}> = ({
+  top,
+  delay,
+  label,
+  highlight,
+}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const s = spring({frame: frame - delay, fps, config: {damping: 200}, durationInFrames: 18});
+  const s = spring({frame: frame - delay, fps, config: {damping: 16}, durationInFrames: 20});
+  const glow = highlight ? interpolate(Math.sin(frame / 12), [-1, 1], [0.4, 0.8]) : 0;
   return (
     <div
       style={{
         position: 'absolute',
         top,
         left: '50%',
-        transform: `translateX(-50%) translateY(${interpolate(s, [0, 1], [30, 0])}px)`,
+        transform: `translateX(-50%) translateY(${interpolate(s, [0, 1], [40, 0])}px)`,
         opacity: s,
-        width: 820,
-        height: highlight ? 150 : 110,
-        borderRadius: 24,
-        background: highlight ? COLORS.white : 'rgba(255,255,255,0.08)',
-        border: highlight ? `none` : '1px solid rgba(255,255,255,0.12)',
-        boxShadow: highlight ? '0 24px 70px rgba(52,168,83,0.5)' : 'none',
+        width: 840,
+        height: highlight ? 156 : 104,
+        borderRadius: 28,
+        ...(highlight
+          ? {background: C.white, boxShadow: `0 24px 70px ${C.green}${Math.round(glow * 99).toString(16)}`}
+          : glass(C.white)),
         display: 'flex',
         alignItems: 'center',
-        padding: '0 34px',
+        padding: '0 36px',
         gap: 22,
       }}
     >
-      {highlight && (
-        <div
-          style={{
-            width: 64,
-            height: 64,
-            borderRadius: '50%',
-            background: COLORS.green,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: COLORS.white,
-            fontSize: 40,
-            fontWeight: 900,
-          }}
-        >
-          ✓
-        </div>
-      )}
+      {highlight && <CheckBadge delay={delay + 6} size={70} color={C.green} />}
       <div style={{textAlign: 'left'}}>
         <div
           style={{
-            color: highlight ? COLORS.ink : COLORS.mute,
-            fontSize: highlight ? 36 : 30,
-            fontWeight: highlight ? 900 : 600,
+            color: highlight ? C.ink : C.mute,
+            fontSize: highlight ? 38 : 30,
+            fontWeight: highlight ? 800 : 600,
+            fontFamily: highlight ? POPPINS : INTER,
           }}
         >
           {label}
         </div>
         {highlight && (
-          <div style={{color: COLORS.green, fontSize: 26, fontWeight: 800, marginTop: 4}}>
+          <div style={{color: C.green, fontSize: 25, fontWeight: 700, marginTop: 4, fontFamily: INTER}}>
             Google Guaranteed · Top of page
           </div>
         )}
@@ -297,51 +221,47 @@ const SerpRow: React.FC<{
   );
 };
 
-const SceneSerp: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Bg tint={COLORS.green} />
-      <Center pad={60}>
-        <div style={{position: 'absolute', top: 150, width: '100%'}}>
-          <Kicker color={COLORS.green}>Why LSAs win</Kicker>
-          <div style={{color: COLORS.white, fontSize: 58, fontWeight: 900, lineHeight: 1.1}}>
-            They show up <span style={{color: COLORS.green}}>above</span><br /> everything else
-          </div>
+const SceneSerp: React.FC = () => (
+  <AbsoluteFill>
+    <MeshBg tint={C.green} />
+    <Frame>
+      <div style={{position: 'absolute', top: 170, width: '100%'}}>
+        <div style={{marginBottom: 28}}>
+          <Kicker color={C.green}>Why LSAs win</Kicker>
         </div>
-        <div style={{position: 'absolute', top: 560, width: '100%', height: 700}}>
-          <SerpRow top={0} delay={26} highlight label="Your Local Service Ad" />
-          <SerpRow top={200} delay={48} label="Standard Google Ad" />
-          <SerpRow top={330} delay={62} label="Organic SEO result" />
-          <SerpRow top={460} delay={76} label="Organic SEO result" />
+        <KineticHeadline text="They sit {above} everything" size={60} delay={6} accent={C.green} />
+        <div style={{display: 'flex', justifyContent: 'center', marginTop: 10}}>
+          <DrawUnderline delay={34} width={360} color={C.green} />
         </div>
-      </Center>
-    </AbsoluteFill>
-  );
-};
+      </div>
+      <div style={{position: 'absolute', top: 600, width: '100%', height: 760}}>
+        <SerpRow top={0} delay={28} highlight label="Your Local Service Ad" />
+        <SerpRow top={210} delay={52} label="Standard Google Ad" />
+        <SerpRow top={340} delay={66} label="Organic SEO result" />
+        <SerpRow top={460} delay={80} label="Organic SEO result" />
+      </div>
+    </Frame>
+  </AbsoluteFill>
+);
 
-/* ------------------------------------------------------------------ */
-/* Scene 4 — Pay per lead + Google Guaranteed                          */
-/* ------------------------------------------------------------------ */
-
-const Pill: React.FC<{
-  delay: number;
-  icon: string;
-  title: string;
-  body: string;
-  accent: string;
-}> = ({delay, icon, title, body, accent}) => {
-  const r = useReveal(delay);
+/* --------------------------- Scene 4: Trust pills ------------------------- */
+const Pill: React.FC<{delay: number; icon: string; title: string; body: string; accent: string}> = ({
+  delay,
+  icon,
+  title,
+  body,
+  accent,
+}) => {
+  const r = useReveal(delay, 16);
   return (
     <div
       style={{
         ...r,
-        width: 840,
-        background: 'rgba(255,255,255,0.06)',
-        border: `1px solid ${accent}55`,
-        borderRadius: 30,
-        padding: '34px 38px',
+        ...glass(accent),
+        width: 860,
+        padding: '32px 36px',
         display: 'flex',
-        gap: 28,
+        gap: 26,
         alignItems: 'center',
         textAlign: 'left',
       }}
@@ -351,8 +271,9 @@ const Pill: React.FC<{
           width: 96,
           height: 96,
           minWidth: 96,
-          borderRadius: 24,
+          borderRadius: 26,
           background: `${accent}26`,
+          border: `1px solid ${accent}55`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -362,8 +283,8 @@ const Pill: React.FC<{
         {icon}
       </div>
       <div>
-        <div style={{color: COLORS.white, fontSize: 40, fontWeight: 900}}>{title}</div>
-        <div style={{color: COLORS.mute, fontSize: 30, fontWeight: 600, marginTop: 6, lineHeight: 1.3}}>
+        <div style={{color: C.white, fontSize: 40, fontWeight: 800, fontFamily: POPPINS}}>{title}</div>
+        <div style={{color: C.mute, fontSize: 29, fontWeight: 500, marginTop: 6, lineHeight: 1.3}}>
           {body}
         </div>
       </div>
@@ -371,49 +292,26 @@ const Pill: React.FC<{
   );
 };
 
-const SceneValue: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Bg tint={COLORS.yellow} />
-      <Center>
-        <div style={{position: 'absolute', top: 170}}>
-          <Kicker color={COLORS.yellow}>Built for trust</Kicker>
-          <div style={{color: COLORS.white, fontSize: 60, fontWeight: 900, lineHeight: 1.1}}>
-            Pay per <span style={{color: COLORS.yellow}}>lead</span>,<br />not per click
-          </div>
+const SceneValue: React.FC = () => (
+  <AbsoluteFill>
+    <MeshBg tint={C.yellow} />
+    <Frame>
+      <div style={{position: 'absolute', top: 180}}>
+        <div style={{marginBottom: 26}}>
+          <Kicker color={C.yellow}>Built for trust</Kicker>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 34, marginTop: 220}}>
-          <Pill
-            delay={24}
-            icon="✅"
-            title="Google Guaranteed badge"
-            body="Verified & licensed — instant credibility at the top."
-            accent={COLORS.green}
-          />
-          <Pill
-            delay={42}
-            icon="💸"
-            title="Only pay for real leads"
-            body="Charged per call, not per click on your ad."
-            accent={COLORS.yellow}
-          />
-          <Pill
-            delay={60}
-            icon="📞"
-            title="Calls from ready buyers"
-            body="High commercial intent — people looking to act now."
-            accent={COLORS.blue}
-          />
-        </div>
-      </Center>
-    </AbsoluteFill>
-  );
-};
+        <KineticHeadline text="Pay per {lead}, not click" size={58} delay={6} accent={C.yellow} />
+      </div>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 30, marginTop: 200}}>
+        <Pill delay={26} icon="✅" title="Google Guaranteed" body="Verified & licensed — instant credibility up top." accent={C.green} />
+        <Pill delay={42} icon="💸" title="Only pay for real leads" body="Charged per call, not per click on your ad." accent={C.yellow} />
+        <Pill delay={58} icon="📞" title="Calls from ready buyers" body="High commercial intent — people acting now." accent={C.blue} />
+      </div>
+    </Frame>
+  </AbsoluteFill>
+);
 
-/* ------------------------------------------------------------------ */
-/* Scene 5 — SEO long game                                             */
-/* ------------------------------------------------------------------ */
-
+/* --------------------------- Scene 5: The numbers ------------------------- */
 const Bar: React.FC<{delay: number; label: string; pct: number; color: string}> = ({
   delay,
   label,
@@ -422,17 +320,23 @@ const Bar: React.FC<{delay: number; label: string; pct: number; color: string}> 
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const g = spring({frame: frame - delay, fps, config: {damping: 200}, durationInFrames: 40});
+  const g = spring({frame: frame - delay, fps, config: {damping: 200}, durationInFrames: 44});
   return (
-    <div style={{width: 820, marginBottom: 40, textAlign: 'left'}}>
-      <div style={{color: COLORS.white, fontSize: 32, fontWeight: 800, marginBottom: 12}}>{label}</div>
-      <div style={{height: 46, borderRadius: 23, background: 'rgba(255,255,255,0.08)', overflow: 'hidden'}}>
+    <div style={{width: 860, marginBottom: 44, textAlign: 'left'}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14}}>
+        <span style={{color: C.white, fontSize: 30, fontWeight: 700, fontFamily: INTER}}>{label}</span>
+        <span style={{color, fontSize: 40, fontWeight: 900, fontFamily: POPPINS}}>
+          <CountUp to={pct} delay={delay} duration={44} suffix="%" />
+        </span>
+      </div>
+      <div style={{height: 28, borderRadius: 14, background: 'rgba(255,255,255,0.08)', overflow: 'hidden'}}>
         <div
           style={{
             height: '100%',
             width: `${interpolate(g, [0, 1], [0, pct])}%`,
-            borderRadius: 23,
-            background: `linear-gradient(90deg, ${color}, ${color}AA)`,
+            borderRadius: 14,
+            background: `linear-gradient(90deg, ${color}, ${color}99)`,
+            boxShadow: `0 0 24px ${color}88`,
           }}
         />
       </div>
@@ -440,157 +344,147 @@ const Bar: React.FC<{delay: number; label: string; pct: number; color: string}> 
   );
 };
 
-const SceneSeo: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Bg tint={COLORS.blue} />
-      <Center>
-        <div style={{position: 'absolute', top: 200}}>
-          <Kicker color={COLORS.blue}>The long game</Kicker>
-          <div style={{color: COLORS.white, fontSize: 58, fontWeight: 900, lineHeight: 1.1}}>
-            LSAs win today.<br />
-            <span style={{color: COLORS.blue}}>SEO</span> compounds forever.
-          </div>
+const SceneNumbers: React.FC = () => (
+  <AbsoluteFill>
+    <MeshBg tint={C.blue} />
+    <Frame>
+      <div style={{position: 'absolute', top: 210}}>
+        <div style={{marginBottom: 26}}>
+          <Kicker color={C.blueLite}>The long game</Kicker>
         </div>
-        <div style={{marginTop: 300}}>
-          <Bar delay={30} label="Local Service Ads — fast top placement" pct={92} color={COLORS.green} />
-          <Bar delay={48} label="SEO — durable, free organic traffic" pct={78} color={COLORS.blue} />
-          <Bar delay={66} label="Both together — total local dominance" pct={100} color={COLORS.yellow} />
-        </div>
-      </Center>
-    </AbsoluteFill>
-  );
-};
+        <KineticHeadline text="LSAs win {today}. SEO {compounds}." size={56} delay={6} accent={C.blueLite} />
+      </div>
+      <div style={{marginTop: 320}}>
+        <Bar delay={34} label="Local Service Ads — fast top spot" pct={92} color={C.green} />
+        <Bar delay={54} label="SEO — durable organic traffic" pct={78} color={C.blueLite} />
+        <Bar delay={74} label="Both together — local dominance" pct={100} color={C.yellow} />
+      </div>
+    </Frame>
+  </AbsoluteFill>
+);
 
-/* ------------------------------------------------------------------ */
-/* Scene 6 — Takeaways                                                 */
-/* ------------------------------------------------------------------ */
-
-const Check: React.FC<{delay: number; text: string}> = ({delay, text}) => {
-  const r = useReveal(delay);
+/* --------------------------- Scene 6: Playbook ---------------------------- */
+const Step: React.FC<{delay: number; n: number; text: string}> = ({delay, n, text}) => {
+  const r = useReveal(delay, 16);
   return (
-    <div style={{...r, display: 'flex', alignItems: 'center', gap: 24, textAlign: 'left', width: 840}}>
+    <div style={{...r, ...glass(C.green), width: 860, padding: '28px 34px', display: 'flex', alignItems: 'center', gap: 26, textAlign: 'left'}}>
       <div
         style={{
-          width: 56,
-          height: 56,
-          minWidth: 56,
-          borderRadius: '50%',
-          background: COLORS.green,
-          color: COLORS.white,
-          fontSize: 34,
+          width: 72,
+          height: 72,
+          minWidth: 72,
+          borderRadius: 20,
+          background: `linear-gradient(135deg, ${C.green}, ${C.blue})`,
+          color: C.white,
+          fontSize: 40,
           fontWeight: 900,
+          fontFamily: POPPINS,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          boxShadow: `0 0 30px ${C.green}66`,
         }}
       >
-        ✓
+        {n}
       </div>
-      <div style={{color: COLORS.white, fontSize: 38, fontWeight: 700, lineHeight: 1.25}}>{text}</div>
+      <div style={{color: C.white, fontSize: 36, fontWeight: 600, lineHeight: 1.25}}>{text}</div>
     </div>
   );
 };
 
-const SceneTakeaways: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Bg tint={COLORS.green} />
-      <Center>
-        <div style={{position: 'absolute', top: 200}}>
-          <Kicker color={COLORS.green}>Your playbook</Kicker>
-          <div style={{color: COLORS.white, fontSize: 62, fontWeight: 900}}>3 moves to win</div>
+const ScenePlaybook: React.FC = () => (
+  <AbsoluteFill>
+    <MeshBg tint={C.green} />
+    <Frame>
+      <div style={{position: 'absolute', top: 210}}>
+        <div style={{marginBottom: 26}}>
+          <Kicker color={C.green}>Your playbook</Kicker>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', gap: 46, marginTop: 180}}>
-          <Check delay={26} text="Claim & verify your Google Guaranteed profile" />
-          <Check delay={46} text="Run LSAs to capture high-intent calls now" />
-          <Check delay={66} text="Invest in local SEO for lasting organic reach" />
-        </div>
-      </Center>
-    </AbsoluteFill>
-  );
-};
+        <KineticHeadline text="3 moves to {win}" size={66} delay={6} accent={C.green} />
+      </div>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 34, marginTop: 200}}>
+        <Step delay={28} n={1} text="Claim & verify your Google Guaranteed profile" />
+        <Step delay={46} n={2} text="Run LSAs to capture high-intent calls now" />
+        <Step delay={64} n={3} text="Invest in local SEO for lasting reach" />
+      </div>
+    </Frame>
+  </AbsoluteFill>
+);
 
-/* ------------------------------------------------------------------ */
-/* Scene 7 — CTA outro                                                 */
-/* ------------------------------------------------------------------ */
-
+/* ----------------------------- Scene 7: Outro ----------------------------- */
 const SceneOutro: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const pop = spring({frame, fps, config: {damping: 12}});
-  const t = useReveal(18);
-  const b = useReveal(34);
-  const tag = useReveal(50);
+  const tag = useReveal(46);
   return (
     <AbsoluteFill>
-      <Bg tint={COLORS.blue} />
-      <Dots />
-      <Center>
-        <div
-          style={{
-            transform: `scale(${pop})`,
-            color: COLORS.white,
-            fontSize: 92,
-            fontWeight: 900,
-            lineHeight: 1.05,
-          }}
-        >
-          Get found
+      <MeshBg tint={C.blue} />
+      <FloatingDots count={20} />
+      <div style={{position: 'absolute', top: 520, left: '50%', transform: 'translateX(-50%)', opacity: 0.35}}>
+        <div style={{transform: `rotate(${-frame * 0.3}deg)`}}>
+          <Triangle length={320} direction="up" fill="none" stroke={C.green} strokeWidth={2} />
         </div>
-        <div style={{...t, color: COLORS.green, fontSize: 92, fontWeight: 900, lineHeight: 1.05}}>
-          locally.
-        </div>
-        <div style={{...b, color: COLORS.mute, fontSize: 34, marginTop: 40, fontWeight: 600}}>
+      </div>
+      <Frame>
+        <KineticHeadline text="Get found {locally.}" size={92} delay={6} accent={C.green} stagger={6} />
+        <div style={{color: C.mute, fontSize: 34, marginTop: 36, fontWeight: 500, ...useReveal(34)}}>
           Local Service Ads + SEO, working together.
         </div>
         <div
           style={{
             ...tag,
-            marginTop: 64,
-            padding: '20px 44px',
-            borderRadius: 40,
-            border: `2px solid ${COLORS.blue}`,
-            color: COLORS.white,
+            marginTop: 60,
+            padding: '22px 46px',
+            borderRadius: 100,
+            ...glass(C.blue),
+            color: C.white,
             fontSize: 34,
-            fontWeight: 800,
+            fontWeight: 700,
+            fontFamily: POPPINS,
           }}
         >
           Momentum Digital · Mac Frederick
         </div>
-      </Center>
+      </Frame>
     </AbsoluteFill>
   );
 };
 
-/* ------------------------------------------------------------------ */
-/* Master timeline                                                     */
-/* ------------------------------------------------------------------ */
+/* ------------------------------- Timeline --------------------------------- */
+const ease = linearTiming({durationInFrames: 25, easing: Easing.inOut(Easing.ease)});
 
 export const Highlight: React.FC = () => {
   return (
-    <AbsoluteFill style={{background: COLORS.ink}}>
-      <Sequence durationInFrames={165}>
-        <SceneIntro />
-      </Sequence>
-      <Sequence from={165} durationInFrames={255}>
-        <SceneHook />
-      </Sequence>
-      <Sequence from={420} durationInFrames={300}>
-        <SceneSerp />
-      </Sequence>
-      <Sequence from={720} durationInFrames={300}>
-        <SceneValue />
-      </Sequence>
-      <Sequence from={1020} durationInFrames={300}>
-        <SceneSeo />
-      </Sequence>
-      <Sequence from={1320} durationInFrames={300}>
-        <SceneTakeaways />
-      </Sequence>
-      <Sequence from={1620} durationInFrames={180}>
-        <SceneOutro />
-      </Sequence>
+    <AbsoluteFill style={{background: C.ink}}>
+      <TransitionSeries>
+        <TransitionSeries.Sequence durationInFrames={230}>
+          <SceneIntro />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={290}>
+          <SceneHook />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={wipe({direction: 'from-left'})} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={320}>
+          <SceneSerp />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={slide({direction: 'from-right'})} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={320}>
+          <SceneValue />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={clockWipe({width: W, height: H})} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={300}>
+          <SceneNumbers />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={300}>
+          <ScenePlaybook />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={fade()} timing={ease} />
+        <TransitionSeries.Sequence durationInFrames={190}>
+          <SceneOutro />
+        </TransitionSeries.Sequence>
+      </TransitionSeries>
     </AbsoluteFill>
   );
 };

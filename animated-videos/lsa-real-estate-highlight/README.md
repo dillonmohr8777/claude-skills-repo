@@ -8,6 +8,24 @@ Agents"** by Mac Frederick / Momentum Digital
 The original is a vertical YouTube Short, so this highlight is rendered
 vertical (1080×1920, 30fps) for Shorts / Reels / TikTok.
 
+## Motion-design stack
+
+This is not a slideshow — it leans on the Remotion plugin ecosystem:
+
+- **`@remotion/google-fonts`** — Poppins (display) + Inter (body) typography
+- **`@remotion/transitions`** — slide / wipe / clock-wipe / fade between scenes
+- **`@remotion/noise`** — Perlin-noise-driven animated gradient mesh background
+- **`@remotion/paths`** — draw-on underlines + animated check ticks
+- **`@remotion/shapes`** — rotating decorative star / triangle outlines
+
+Plus kinetic word-by-word headline reveals (blur → sharp, scale overshoot),
+fake-glass cards, glowing count-up stat bars, and a vignette.
+
+> Performance note: the mesh background and "glass" cards are built from
+> stacked radial-gradients rather than `blur()` / `backdrop-filter`, which
+> software-render ~20× faster. The full 60s renders in ~2 minutes at
+> `--concurrency=4`.
+
 ## Output
 
 The rendered video lives at `out/lsa-real-estate-highlight.mp4`.
@@ -40,8 +58,13 @@ existing Chromium **headless shell**:
 
 ```bash
 npx remotion render Highlight out/lsa-real-estate-highlight.mp4 \
-  --browser-executable=/path/to/chrome-headless-shell
+  --browser-executable=/path/to/chrome-headless-shell \
+  --concurrency=4
 ```
+
+If `@remotion/google-fonts` can't reach `fonts.gstatic.com` because you're
+behind a TLS-intercepting proxy, add `--ignore-certificate-errors` (only
+needed in such sandboxes; normal machines load the fonts fine).
 
 ## Editing the content
 
