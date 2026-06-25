@@ -1,73 +1,75 @@
-# LSA & SEO for Real Estate — 60s Animated Highlight
+# LSA & SEO for Real Estate — 3D Animated Highlight
 
-An animated ~60-second highlight built with [Remotion](https://remotion.dev),
-based on the video **"Google Local Service Ads (LSA) & SEO for Real Estate
-Agents"** by Mac Frederick / Momentum Digital
-([source short](https://youtu.be/18aAUyyFYjY)).
+A ~60-second **fully 3D (WebGL)** animated highlight built with
+[Remotion](https://remotion.dev) + [Three.js](https://threejs.org), based on
+the video **"Google Local Service Ads (LSA) & SEO for Real Estate Agents"** by
+Mac Frederick / Momentum Digital ([source short](https://youtu.be/18aAUyyFYjY)).
 
-The original is a vertical YouTube Short, so this highlight is rendered
-vertical (1080×1920, 30fps) for Shorts / Reels / TikTok.
+Rendered vertical (1080×1920, 30fps) for Shorts / Reels / TikTok. Opens with the
+**Momentum logo as a 3D metallic medallion**.
 
-## Motion-design stack
+## What makes it 3D
 
-This is not a slideshow — it leans on the Remotion plugin ecosystem:
+Real WebGL via `@remotion/three` + `@react-three/fiber`, composited under crisp
+DOM typography:
 
-- **`@remotion/google-fonts`** — Poppins (display) + Inter (body) typography
-- **`@remotion/transitions`** — slide / wipe / clock-wipe / fade between scenes
-- **`@remotion/noise`** — Perlin-noise-driven animated gradient mesh background
-- **`@remotion/paths`** — draw-on underlines + animated check ticks
-- **`@remotion/shapes`** — rotating decorative star / triangle outlines
+- **Logo medallion** — your logo on a spinning metallic coin (front + back),
+  polished rim, glow ring (`src/three/objects.tsx` → `Medallion`)
+- **3D SERP stack** — the "LSAs sit above everything" cards are real extruded
+  boxes in perspective, with text rendered onto their faces via `CanvasTexture`
+- **3D bar chart** — extruded, glowing bars growing on a reflective floor
+- **3D trust badge** — a green Google-Guaranteed coin with a check
+- **Living 3D world** — a deterministic particle field, floating wireframe
+  shapes, and a noise-driven camera dolly behind every scene
 
-Plus kinetic word-by-word headline reveals (blur → sharp, scale overshoot),
-fake-glass cards, glowing count-up stat bars, and a vignette.
+Supporting motion: `@remotion/transitions` (slide/wipe/clock-wipe/fade),
+`@remotion/google-fonts` (Poppins + Inter), kinetic headline reveals, count-up
+stats, and faux-extruded 3D text via layered shadows.
 
-> Performance note: the mesh background and "glass" cards are built from
-> stacked radial-gradients rather than `blur()` / `backdrop-filter`, which
-> software-render ~20× faster. The full 60s renders in ~2 minutes at
-> `--concurrency=4`.
+### Skills consulted
 
-## Output
+Built using guidance from the repo's skills: **`demo-video`** (producer mindset
+— every scene has one job; hook → proof → logo arc), **`video-content-strategist`**
+(hook/messaging), and brand discipline from **`alignhcm-carousel-video`**. Note:
+this reel's brand is **Momentum (blue)** to match the logo + content, not the
+AlignHCM orange.
 
-The rendered video lives at `out/lsa-real-estate-highlight.mp4`.
+## Output & compositions
 
-## Scenes
-
-1. **Intro** — Local Service Ads + SEO for Realtors
-2. **The hook** — high-intent "realtor near me" searches
-3. **Why LSAs win** — they appear above standard ads and organic results
-4. **Built for trust** — Google Guaranteed badge, pay-per-lead, ready buyers
-5. **The long game** — LSAs win today, SEO compounds over time
-6. **Your playbook** — 3 moves: verify profile, run LSAs, invest in local SEO
-7. **CTA outro** — Get found locally · Momentum Digital
+- `out/lsa-real-estate-highlight.mp4` — the rendered 3D video
+- Remotion comps: **`Highlight`** (3D, main) and **`Highlight2D`** (the earlier
+  flat motion-graphics version, kept for reference)
 
 ## Develop / preview
 
 ```bash
-npm install
-npm start          # opens the Remotion Studio for live editing
+npm install --legacy-peer-deps   # r3f v9 peer ranges
+npm start                        # Remotion Studio
 ```
 
-## Render the MP4
+## Render
 
 ```bash
-npm run render
+npm run render     # 3D version  (Highlight)
+npm run render2d   # 2D version  (Highlight2D)
 ```
 
-In a headless/CI environment without a bundled Chrome, point Remotion at an
-existing Chromium **headless shell**:
+WebGL must render in your environment. On a machine with a GPU the default works;
+**headless / CI** needs software GL — this is why the script passes `--gl=angle`.
+Also point Remotion at a Chromium **headless shell**:
 
 ```bash
 npx remotion render Highlight out/lsa-real-estate-highlight.mp4 \
-  --browser-executable=/path/to/chrome-headless-shell \
-  --concurrency=4
+  --gl=angle --concurrency=4 \
+  --browser-executable=/path/to/chrome-headless-shell
 ```
 
-If `@remotion/google-fonts` can't reach `fonts.gstatic.com` because you're
-behind a TLS-intercepting proxy, add `--ignore-certificate-errors` (only
-needed in such sandboxes; normal machines load the fonts fine).
+If `@remotion/google-fonts` can't reach `fonts.gstatic.com` because you're behind
+a TLS-intercepting proxy, add `--ignore-certificate-errors` (sandbox-only).
 
-## Editing the content
+## Editing
 
-All copy, timing, colors, and animation live in `src/Highlight.tsx`. Each scene
-is its own component; the master timeline at the bottom controls scene order and
-duration (frames = seconds × 30).
+- 2D layout / copy / timing: `src/Highlight3D.tsx` (scenes + master timeline)
+- 3D objects: `src/three/objects.tsx`; world/lighting/camera: `src/three/world.tsx`
+- Brand colors + fonts: `src/theme.ts`
+- Swap the logo: replace `public/logo.png` (square; the medallion crops it to a circle)
