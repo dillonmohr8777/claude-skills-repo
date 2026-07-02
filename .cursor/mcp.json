@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "gmail": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://gmailmcp.googleapis.com/mcp/v1",
+        "8787"
+      ]
+    }
+  }
+}
