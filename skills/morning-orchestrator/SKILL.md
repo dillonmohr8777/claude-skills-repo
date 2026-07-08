@@ -34,9 +34,11 @@ to gated). The swarm checks itself before it asks you for anything.
 ## The Core Loop
 
 ```
-  overnight ──► 1. WAKE (scheduled, no human)
+  overnight ──► 0. INTAKE  (read Morning Directives — Dillon's dropped tasks — and inject as lanes)
+                1. WAKE (scheduled, no human)
                 2. PRE-FLIGHT  (authorization + tag/version + conversion-intent checks)
-                3. FAN-OUT SCOUTS  (parallel, read-only, no approval)   ── all clients at once
+                    └─ RESEARCH?  spawn scoped research agents if a trigger fires (see references/research-triggers.md)
+                3. FAN-OUT SCOUTS  (parallel, read-only) ── route each job to a skill via skill-map.json
                 4. SYNTHESIZE  (commander builds the ranked approval board)
                 5. PUSH  ──────────────────────────────────► Dillon's phone: one notification
   Dillon taps "approve" ──►
@@ -45,7 +47,30 @@ to gated). The swarm checks itself before it asks you for anything.
                 8. DELIVER  (draft recaps; sends stay gated)
 ```
 
-Steps 1–5 need **no human** and run to completion on their own. The human touches it once, at step 6.
+Steps 0–5 need **no human** and run to completion on their own. The human touches it once, at step 6 —
+plus the optional 30 seconds of dropping tasks into Morning Directives whenever the work evolves.
+
+## Step 0 — Morning Task Intake (your evolving directives)
+
+Your work changes, so the loop starts by reading **`mohr-vault/vault/11_Agents/Morning Directives.md`** —
+a plain drop-box you (or a Slack/phone note) fill with freeform tasks. The commander parses each into a
+bounded lane, classifies its tier, routes it to a skill via `skill-map.json`, and folds it into the same
+board. Anything it can't map to a skill it flags back to you in the board rather than guessing. Directives
+are one-shot (cleared after the run) unless you mark one `recurring`.
+
+## Use Dillon's own toolkit (routing)
+
+Before any worker builds from scratch, it checks **`skill-map.json`** (+ `references/skill-registry.md`)
+for a matching skill — your design skills, `mirror`, `paid-ads`, `client-report`, `deep-research`, etc.
+Pinned "most-used" skills win ties. Build-from-scratch is the fallback, not the default. This is how the
+swarm runs *your* system instead of a generic one.
+
+## Staying current (research)
+
+The swarm spawns scoped, read-only research agents when a trigger fires — weekly best-practices refresh,
+a worker's uncertainty, a platform surprise, or a repeated ledger loss — to pull **current 2026 Google/
+Meta best practices** and inject verified findings into the affected briefs. Full rules and the
+recency/credibility gate: `references/research-triggers.md`.
 
 ## Tiered Approval — why this unblocks the day
 
