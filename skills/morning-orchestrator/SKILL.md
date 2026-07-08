@@ -14,6 +14,23 @@ This is the commander that drives the agents already defined in `mohr-vault/vaul
 It is designed for the 64GB machine: heavy read-only fan-out in parallel, then parallel
 execution across multiple remote Chrome tabs (one client per tab) after a single approval.
 
+## Autonomy Model (read this first)
+
+These are **self-driving agents**, not scripts a human runs step by step. Left alone each morning, the
+commander spawns a **bounded parallel swarm** — lane leads → per-client workers → analyst facets (depth
+3, capped) — that reads, analyzes, drafts, and **verifies its own work**, then surfaces a single
+decision. The human touches it roughly **once**, to approve.
+
+Autonomy is *total on everything reversible* and gated only at the irreversible last inch — and that
+gate is made frictionless, not removed. The full rules live in:
+- `references/agent-protocol.md` — swarm topology, worker contract, self-verification, budgets, failure isolation, kill switch
+- `references/autonomy-policy.md` — exactly what runs unattended vs. gated, and the guardrails
+- `orchestrator.config.json` — the machine-readable topology/concurrency/budget the runtime reads
+
+The one thing that makes "fully autonomous" safe: **nothing reaches the board or a report until a
+separate verifier agent has tried to refute it and failed** (default: reject if uncertain; ties escalate
+to gated). The swarm checks itself before it asks you for anything.
+
 ## The Core Loop
 
 ```
@@ -69,9 +86,10 @@ On 64GB this is cheap RAM-wise; the real cap is API rate limit, so keep scout bu
 | SEO / AEO-GEO | `SEO Agent` | content due, schema/extractability gaps, authority tasks |
 | Comms | Gmail/Slack read | client asks, approvals, dates, access proof → drafts only |
 
-Each scout returns the worker-handoff JSON from the 64GB handoff (`lane`, `verified_facts`,
-`artifacts_created`, `draft_or_publish_state`, `blockers`, `approval_required`, `qa_status`,
-`recommended_next_action`). The commander never re-derives; it consumes those.
+Each scout is a **lane lead** that itself spawns per-client workers in parallel (and ads workers spawn
+the four analyst facets) per `references/agent-protocol.md`. Every node returns the worker-handoff JSON;
+the commander never re-derives, it consumes structured returns. Every candidate recommendation and every
+report metric passes the verifier before it counts.
 
 ## Step 4 — Synthesize the Approval Board
 

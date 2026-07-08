@@ -1,0 +1,58 @@
+{
+  "$comment": "Machine-readable swarm topology + autonomy config the local runtime reads each morning. Tune breadth/concurrency/budgets here; raise limits only after observing clean runs.",
+  "run": {
+    "schedule": "06:30 local",
+    "unattended_through_step": 5,
+    "resume_by_node_id": true,
+    "stop_flag_file": "automation-runs/morning-orchestrator/STOP"
+  },
+  "swarm": {
+    "max_delegation_depth": 3,
+    "max_agents_total": 60,
+    "max_concurrent_agents": 8,
+    "breadth_per_level": { "lane_leads": 5, "workers_per_lane": 13, "facets_per_worker": 4 },
+    "retries": 1,
+    "retry_backoff_seconds": [4, 8],
+    "budgets": {
+      "scout":   { "minutes": 15, "tokens": 40000, "writes": false },
+      "builder": { "minutes": 40, "tokens": 80000, "writes": "append-only" },
+      "verifier":{ "minutes": 10, "tokens": 25000, "writes": false },
+      "commander":{ "minutes": 20, "tokens": 60000, "writes": "run-artifacts" }
+    },
+    "total_token_ceiling": 1500000
+  },
+  "verification": {
+    "require_for_tier1": true,
+    "require_for_report_metrics": true,
+    "default_on_uncertain": "reject",
+    "tie_breaks_to": "gated",
+    "run_flag_reject_rate": 0.4
+  },
+  "approval": {
+    "tiers": {
+      "0_auto": "read, analyze, verify, draft, QA, build, append vault, ledger-pending",
+      "1_morning_batch": "reversible ads/web tweaks; one approve-all on the push",
+      "2_live_only": "budget/bid up, new campaigns, conversion-goal change, send, post, publish, billing, credentials, file moves"
+    },
+    "tier1_max_changes_per_client": 5,
+    "tier1_requires_undo_path": true,
+    "no_timeout_auto_apply": true,
+    "push_default_action": "approve-all"
+  },
+  "execution": {
+    "one_tab_per_client": true,
+    "cdp_endpoint": "http://127.0.0.1:9222",
+    "max_concurrent_client_tabs": 3,
+    "max_concurrent_client_tabs_ceiling": 6,
+    "screenshot_before_after": true,
+    "require_readback": true,
+    "stop_client_on_auth_fail": true,
+    "never_close_live_browser": true
+  },
+  "lanes": ["ads", "web", "reporting", "seo", "comms"],
+  "clients_ads": ["Onsite Concrete", "NKCDC", "Omega Landscaping", "Fresh Blends Replenish", "Kimberly James Bridal", "Shadow HVAC"],
+  "runtime_split": {
+    "local_only": ["authenticated_chrome_pulls", "tier1_execution", "live_readback"],
+    "cloud_safe": ["vault_scouts", "board_synthesis", "report_artifacts", "ledger_io"]
+  }
+}

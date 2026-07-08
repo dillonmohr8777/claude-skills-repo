@@ -13,8 +13,11 @@ Called by `morning-orchestrator` as the ads scout, or run standalone for a deep 
 
 ## The Agents (fan out in parallel, read-only, Tier 0)
 
-One commander + four bounded analyst workers. All read-only — they never touch the account. Delegate
-one level only. On 64GB run all four at once per client, and multiple clients in parallel.
+One commander + four bounded analyst workers. All read-only — they never touch the account. On 64GB run
+all four at once per client, and multiple clients in parallel. When run inside `morning-orchestrator`,
+this is the L2→L3 layer of the swarm (`morning-orchestrator/references/agent-protocol.md`): the ads
+lane lead spawns one campaign-intel worker per client, each spawning these four facets. Every output is
+adversarially **verified before it enters a brief or the Tier-1 batch** — default reject if uncertain.
 
 | Agent | Reads | Returns |
 |-------|-------|---------|
