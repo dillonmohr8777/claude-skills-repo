@@ -151,12 +151,22 @@ but **sends stay Tier 2.** The morning run ends with drafts staged and a one-pag
 - **On demand:** invoke this skill to run the pass now.
 - **Design mode:** invoke with a change request to evolve the orchestra (add a lane, retune tiers, adjust concurrency).
 
+## Who runs this (model roles)
+
+The default commander on the 64GB machine is **GPT-5.6 / Codex** — it's the persistent orchestrator that
+owns the swarm, the board, and the push. **Claude Code (desktop, run occasionally) is a specialist
+worker** Codex can delegate a bounded lane to via the worker contract. The contract is model-agnostic —
+`orchestrator.config.json` + the `references/` files are plain JSON/markdown that either model reads.
+This SKILL.md is the Claude-friendly wrapper around that same contract; see
+`dillon-os/11_Agents/64gb Morning Orchestrator Spec 2026-07-08.md` for the Codex-facing entry point.
+
 ## Runtime boundary
 
 Ads/Meta/CMS execution needs Dillon's logged-in Chrome, so **steps 2, 6, and 7's live readback run on
-the 64GB machine** (Codex or local Claude Code over CDP at `127.0.0.1:9222`). Steps 3–5 and 8's
-artifact-building are cloud-safe and can run in a hosted session against the vault, Drive, and public
-pages. Same skill, both places — only the authenticated Chrome half is pinned local.
+the 64GB machine** (Codex as commander, or local Claude Code as a worker, over CDP at
+`127.0.0.1:9222`). Steps 3–5 and 8's artifact-building are cloud-safe and can run in a hosted session
+against the vault, Drive, and public pages. Same contract, both places — only the authenticated Chrome
+half is pinned local.
 
 ## Hard stops (unchanged from the 64GB handoff)
 
