@@ -1,0 +1,45 @@
+{
+  "$comment": "Routing map: which existing skills the swarm invokes per lane/job, so it uses Dillon's toolkit instead of reinventing. Mark most-used with \"pinned\": true so the orchestrator prefers them. Verify names against claude-skills-repo/skills/ and dillon-os/.claude/skills/. Mirror skill now lives at skills/mirror/.",
+  "lanes": {
+    "ads": {
+      "primary": ["campaign-intel", "paid-ads"],
+      "supporting": ["ab-test-setup", "campaign-analytics", "marketing-psychology", "analytics-tracking"],
+      "creative": ["ad-creative", "content-creator", "copywriting"]
+    },
+    "web": {
+      "primary": ["mirror", "landing-page-generator", "page-cro"],
+      "supporting": ["form-cro", "ui-design-system", "a11y-audit", "schema-markup", "site-architecture", "apple-hig-expert"],
+      "automation": ["browser-automation", "playwright-pro"]
+    },
+    "seo": {
+      "primary": ["ai-seo", "seo-audit"],
+      "supporting": ["seo-auditor", "programmatic-seo", "schema-markup"]
+    },
+    "reporting": {
+      "primary": ["client-report", "metrics-pull"],
+      "supporting": ["product-analytics", "social-media-analyzer"]
+    },
+    "comms": {
+      "primary": ["inbox-brief"],
+      "supporting": ["cold-email", "email-sequence", "team-communications", "churn-prevention"]
+    },
+    "research": {
+      "primary": ["deep-research", "autoresearch-agent"],
+      "supporting": ["research-summarizer", "competitive-intel", "competitive-teardown"]
+    },
+    "command": {
+      "primary": ["am-report", "plan-today", "client-pulse"],
+      "meta": ["self-improving-agent", "agent-designer", "agent-workflow-designer", "orchestration", "prompt-engineer-toolkit"]
+    }
+  },
+  "pinned_most_used": {
+    "$comment": "Dillon: set these to the skills + plugins you actually reach for most. The orchestrator prefers pinned skills when a job matches more than one. Placeholder list below — confirm/prune.",
+    "skills": ["mirror", "campaign-intel", "paid-ads", "landing-page-generator", "page-cro", "ai-seo", "client-report", "deep-research"],
+    "plugins": ["self-improving-agent", "research-summarizer", "behuman"]
+  },
+  "routing_rule": "Before building anything, the worker checks this map for a matching skill and invokes it. Only build from scratch if no skill matches. Pinned skills win ties. Unknown/new job types get logged to morning-directives for Dillon to route.",
+  "sources": {
+    "skills": ["claude-skills-repo/skills/", "dillon-os/.claude/skills/", "mohr-vault vault agents"],
+    "plugins": "resolve installed plugins on the local machine at boot; reconcile against pinned_most_used.plugins"
+  }
+}
