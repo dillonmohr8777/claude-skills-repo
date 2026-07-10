@@ -29,7 +29,8 @@
     },
     "command": {
       "primary": ["am-report", "plan-today", "client-pulse"],
-      "meta": ["self-improving-agent", "agent-designer", "agent-workflow-designer", "orchestration", "prompt-engineer-toolkit"]
+      "meta": ["self-improving-agent", "agent-designer", "agent-workflow-designer", "orchestration", "prompt-engineer-toolkit"],
+      "routing": ["model-routing"]
     }
   },
   "pinned_most_used": {
