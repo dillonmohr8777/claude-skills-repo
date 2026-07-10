@@ -2,23 +2,18 @@
 
 Status: **complete**
 
-## Masters (cloud artifacts)
+## The MP4 (in this repo)
 
-| File | Size | Role |
-|---|---|---|
-| `picking-up-my-notepad-v2-web.mp4` | 172MB | **Site drop-in** — 1080p @ ~8 Mbps |
-| `picking-up-my-notepad-v2-preview.mp4` | 82MB | Review cut (720p) |
-| `picking-up-my-notepad-v2-teaser30.mp4` | 30MB | First 30s for email gate / social |
+**[`dist/picking-up-my-notepad.mp4`](dist/picking-up-my-notepad.mp4)** — 1080p @ ~8 Mbps, full 2:52 track (Git LFS)
 
-Audio: full 2:52 mix extracted from the live Netlify MV (Gmail MCP was unavailable in this run).
+Audio: full mix extracted from the live Netlify MV (Gmail MCP unavailable in this run).
 
 ## Netlify drop-in
 
-1. Download `picking-up-my-notepad-v2-web.mp4`
-2. Rename → `picking-up-my-notepad.mp4`
-3. Replace `public/video/picking-up-my-notepad.mp4` in the Immortal site repo
-4. Optional: refresh `public/video/notepad-poster.jpg` from a strong frame (~5s title card)
-5. Redeploy Netlify — keep the existing 30s email gate
+1. Take `immohrtal/picking-up-my-notepad-v2/dist/picking-up-my-notepad.mp4`
+2. Replace `public/video/picking-up-my-notepad.mp4` in the Immortal site repo
+3. Optional: refresh `public/video/notepad-poster.jpg` from a strong frame (~5s title card)
+4. Redeploy Netlify — keep the existing 30s email gate
 
 ## Rebuild later
 
