@@ -1,0 +1,31 @@
+{
+  "name": "lsa-real-estate-highlight",
+  "version": "1.0.0",
+  "description": "60-second animated highlight of 'Google Local Service Ads (LSA) & SEO for Real Estate Agents'",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio",
+    "render": "remotion render Highlight out/lsa-real-estate-highlight.mp4 --gl=angle --concurrency=4",
+    "render2d": "remotion render Highlight2D out/lsa-real-estate-highlight-2d.mp4 --concurrency=4"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.6.1",
+    "@remotion/cli": "4.0.290",
+    "@remotion/google-fonts": "^4.0.290",
+    "@remotion/motion-blur": "^4.0.290",
+    "@remotion/noise": "^4.0.290",
+    "@remotion/paths": "^4.0.290",
+    "@remotion/shapes": "^4.0.290",
+    "@remotion/three": "^4.0.290",
+    "@remotion/transitions": "^4.0.290",
+    "@types/three": "^0.171.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.290",
+    "three": "^0.171.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "typescript": "5.5.4"
+  }
+}
