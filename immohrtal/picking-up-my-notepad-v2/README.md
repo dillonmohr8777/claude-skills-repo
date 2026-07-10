@@ -26,13 +26,12 @@ Gmail MCP is not connected in this cloud agent run. The full mix was extracted f
 python3 scripts/build_v2.py
 ```
 
-Outputs:
+## The MP4 (right here)
 
-- `output/picking-up-my-notepad-v2-web.mp4` — **drop-in master** (1080p @ ~8 Mbps)
-- `output/picking-up-my-notepad-v2-preview.mp4` — 720p preview
-- `output/picking-up-my-notepad-v2-teaser30.mp4` — first 30s for the email gate
-- `output/picking-up-my-notepad-v2.mp4` — lossless-ish CRF18 working master (large)
+**[`dist/picking-up-my-notepad.mp4`](dist/picking-up-my-notepad.mp4)** — Netlify drop-in master (1080p, full track).
+
+Rebuild also writes working copies under `output/` (gitignored).
 
 ## Drop-in on the site
 
-Replace `public/video/picking-up-my-notepad.mp4` with `picking-up-my-notepad-v2-web.mp4` (and refresh `notepad-poster.jpg` from a strong frame) then redeploy Netlify. Keep the 30s email gate.
+Copy `dist/picking-up-my-notepad.mp4` → `public/video/picking-up-my-notepad.mp4`, refresh the poster if you want, redeploy Netlify. Keep the 30s email gate.
