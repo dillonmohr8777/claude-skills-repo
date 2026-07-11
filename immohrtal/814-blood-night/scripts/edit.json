@@ -1,0 +1,27 @@
+{
+  "track": "814 Blood (ft. King Keev)",
+  "mode": "teaser30",
+  "duration": 30.024,
+  "bpm": 123.0,
+  "segments": [
+    0.0,
+    3.902,
+    7.805,
+    11.707,
+    14.634,
+    18.537,
+    22.439,
+    27.317,
+    30.024
+  ],
+  "n_segments": 8,
+  "dissolve": 0.8,
+  "declaration": {
+    "t": 13.51,
+    "text": "THE CMO ISN'T REAL"
+  },
+  "grammar": "star-room-study.md",
+  "resolution": "1920x1080",
+  "fps": 24,
+  "audio_source": "814-blood-preview30.mp3"
+}

@@ -1,1 +1,4 @@
 immohrtal/picking-up-my-notepad-v2/dist/*.mp4 filter=lfs diff=lfs merge=lfs -text
+immohrtal/814-blood-night/dist/*.mp4 filter=lfs diff=lfs merge=lfs -text
+immohrtal/my-own-way-night/dist/*.mp4 filter=lfs diff=lfs merge=lfs -text
+immohrtal/my-own-way-night/clips/*.mp4 filter=lfs diff=lfs merge=lfs -text
