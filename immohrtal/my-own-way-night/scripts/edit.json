@@ -1,0 +1,277 @@
+{
+  "track": "My Own Way",
+  "duration": 192.3872,
+  "segments": [
+    {
+      "t": 0.0,
+      "kind": "panel"
+    },
+    {
+      "t": 3.23,
+      "kind": "panel"
+    },
+    {
+      "t": 5.91,
+      "kind": "panel"
+    },
+    {
+      "t": 9.02,
+      "kind": "panel"
+    },
+    {
+      "t": 11.46,
+      "kind": "clip"
+    },
+    {
+      "t": 15.07,
+      "kind": "panel"
+    },
+    {
+      "t": 17.56,
+      "kind": "vert"
+    },
+    {
+      "t": 20.4,
+      "kind": "panel"
+    },
+    {
+      "t": 22.98,
+      "kind": "panel"
+    },
+    {
+      "t": 25.86,
+      "kind": "clip"
+    },
+    {
+      "t": 28.59,
+      "kind": "panel"
+    },
+    {
+      "t": 31.69,
+      "kind": "panel"
+    },
+    {
+      "t": 34.44,
+      "kind": "vert"
+    },
+    {
+      "t": 37.98,
+      "kind": "panel"
+    },
+    {
+      "t": 40.89,
+      "kind": "clip"
+    },
+    {
+      "t": 44.17,
+      "kind": "panel"
+    },
+    {
+      "t": 46.85,
+      "kind": "panel"
+    },
+    {
+      "t": 50.04,
+      "kind": "panel"
+    },
+    {
+      "t": 52.83,
+      "kind": "clip"
+    },
+    {
+      "t": 56.36,
+      "kind": "vert"
+    },
+    {
+      "t": 59.34,
+      "kind": "panel"
+    },
+    {
+      "t": 62.38,
+      "kind": "panel"
+    },
+    {
+      "t": 64.98,
+      "kind": "panel"
+    },
+    {
+      "t": 68.36,
+      "kind": "clip"
+    },
+    {
+      "t": 71.69,
+      "kind": "panel"
+    },
+    {
+      "t": 74.52,
+      "kind": "vert"
+    },
+    {
+      "t": 78.08,
+      "kind": "panel"
+    },
+    {
+      "t": 81.37,
+      "kind": "panel"
+    },
+    {
+      "t": 83.79,
+      "kind": "clip"
+    },
+    {
+      "t": 86.71,
+      "kind": "panel"
+    },
+    {
+      "t": 89.25,
+      "kind": "panel"
+    },
+    {
+      "t": 91.82,
+      "kind": "vert"
+    },
+    {
+      "t": 94.84,
+      "kind": "panel"
+    },
+    {
+      "t": 97.24,
+      "kind": "clip"
+    },
+    {
+      "t": 100.51,
+      "kind": "panel"
+    },
+    {
+      "t": 103.55,
+      "kind": "panel"
+    },
+    {
+      "t": 106.61,
+      "kind": "panel"
+    },
+    {
+      "t": 109.71,
+      "kind": "clip"
+    },
+    {
+      "t": 112.89,
+      "kind": "vert"
+    },
+    {
+      "t": 115.97,
+      "kind": "panel"
+    },
+    {
+      "t": 118.47,
+      "kind": "panel"
+    },
+    {
+      "t": 121.54,
+      "kind": "panel"
+    },
+    {
+      "t": 124.64,
+      "kind": "clip"
+    },
+    {
+      "t": 127.77,
+      "kind": "panel"
+    },
+    {
+      "t": 130.16,
+      "kind": "vert"
+    },
+    {
+      "t": 133.33,
+      "kind": "panel"
+    },
+    {
+      "t": 136.22,
+      "kind": "panel"
+    },
+    {
+      "t": 138.86,
+      "kind": "clip"
+    },
+    {
+      "t": 142.17,
+      "kind": "panel"
+    },
+    {
+      "t": 145.38,
+      "kind": "panel"
+    },
+    {
+      "t": 148.25,
+      "kind": "vert"
+    },
+    {
+      "t": 151.32,
+      "kind": "panel"
+    },
+    {
+      "t": 153.91,
+      "kind": "clip"
+    },
+    {
+      "t": 156.6,
+      "kind": "panel"
+    },
+    {
+      "t": 159.05,
+      "kind": "panel"
+    },
+    {
+      "t": 161.82,
+      "kind": "panel"
+    },
+    {
+      "t": 164.75,
+      "kind": "clip"
+    },
+    {
+      "t": 167.47,
+      "kind": "vert"
+    },
+    {
+      "t": 170.27,
+      "kind": "panel"
+    },
+    {
+      "t": 173.47,
+      "kind": "panel"
+    },
+    {
+      "t": 176.53,
+      "kind": "panel"
+    },
+    {
+      "t": 179.45,
+      "kind": "clip"
+    },
+    {
+      "t": 182.67,
+      "kind": "panel"
+    },
+    {
+      "t": 185.56,
+      "kind": "vert"
+    },
+    {
+      "t": 188.59,
+      "kind": "panel"
+    }
+  ],
+  "n_segments": 65,
+  "dissolve": 0.8,
+  "grammar": "star-room-study.md (ink+gold adaptation)",
+  "sources": {
+    "boards": 3,
+    "clips": 2,
+    "panels": 94
+  },
+  "resolution": "1920x1080",
+  "fps": 24,
+  "audio_source": "my-own-way.mp3"
+}
