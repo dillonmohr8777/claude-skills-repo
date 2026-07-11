@@ -1,0 +1,7 @@
+output/frames/
+output/*.mp4
+!output/.gitkeep
+__pycache__/
+*.pyc
+.DS_Store
+814-blood.mp3
