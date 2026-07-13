@@ -1,0 +1,390 @@
+/* =============================================================================
+   THE IRONIC INEPTOCRACY — DESIGN TOKENS
+   Paste this entire file into:  WP Admin > Appearance > Customize > Additional CSS
+   Every Custom HTML block on the site references these variables.
+   Namespace: --ii-* (Ironic Ineptocracy) to avoid collisions with theme styles.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   01. WEBFONTS
+   Loaded once globally. Custom HTML blocks don't need to re-import.
+   display=swap so the page renders before fonts arrive.
+----------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* -----------------------------------------------------------------------------
+   02. ROOT TOKENS
+----------------------------------------------------------------------------- */
+:root {
+
+  /* === COLOR — RAW BRAND ANCHORS ============================================
+     The 8 anchors from the brand brief. Everything else derives from these.
+  ========================================================================== */
+  --ii-black:           #0A0A0A;   /* base black */
+  --ii-navy:            #0A0F1E;   /* deep atmospheric navy */
+  --ii-blood:           #9B2020;   /* primary blood red */
+  --ii-crimson:         #C9384A;   /* secondary crimson accent */
+  --ii-crimson-deep:    #8B0000;   /* glitch / deepest red */
+  --ii-brass:           #C9A84C;   /* aged brass / patriotic gold */
+  --ii-parchment:       #EBEBEB;   /* off-white parchment */
+  --ii-parchment-aged:  #D0C8BC;   /* aged paper, body alt */
+
+  /* === COLOR — SEMANTIC SCALES ==============================================
+     Tints/shades the design will actually use. Not a 9-step Tailwind clone —
+     just the steps the dark cinematic UI needs.
+  ========================================================================== */
+
+  /* Neutral / surface (dark-first) */
+  --ii-surface-0:       #000000;   /* absolute black, video letterbox */
+  --ii-surface-1:       #0A0A0A;   /* page base */
+  --ii-surface-2:       #111118;   /* card, atmospheric panel */
+  --ii-surface-3:       #161824;   /* elevated panel */
+  --ii-surface-4:       #1F2230;   /* hover / focus surface */
+  --ii-line:            #2A2D3C;   /* hairline borders */
+  --ii-line-subtle:     rgba(235, 235, 235, 0.08);
+
+  /* Blood scale (warm reds, applied to threat/conspiracy panels) */
+  --ii-blood-300:       #E0586A;   /* lightest, hover on dark */
+  --ii-blood-400:       #C9384A;   /* = crimson */
+  --ii-blood-500:       #9B2020;   /* = blood, base */
+  --ii-blood-600:       #7A1818;
+  --ii-blood-700:       #5A0E0E;
+  --ii-blood-800:       #3A0808;   /* deep oxide */
+  --ii-blood-glitch:    #8B0000;   /* glitch / corruption flash */
+
+  /* Brass scale (patriotic, CTA, accents) */
+  --ii-brass-300:       #E2C77A;   /* hover */
+  --ii-brass-400:       #D4B65E;
+  --ii-brass-500:       #C9A84C;   /* base */
+  --ii-brass-600:       #A8893A;
+  --ii-brass-700:       #80662A;
+  --ii-brass-shimmer:   #F0D88A;   /* highlight rim */
+
+  /* Parchment scale (text on dark) */
+  --ii-parch-50:        #F5F4EE;
+  --ii-parch-100:       #EBEBEB;   /* primary body text */
+  --ii-parch-200:       #D0C8BC;   /* aged body */
+  --ii-parch-300:       #A89F90;   /* muted, captions */
+  --ii-parch-400:       #756E63;   /* deepest aged, fine print */
+
+  /* Terminal green (surveillance / "Enter the World" page only) */
+  --ii-term-green:      #00FF66;
+  --ii-term-green-dim:  #1ABC55;
+  --ii-term-green-glow: rgba(0, 255, 100, 0.18);
+
+  /* === COLOR — SEMANTIC ROLES ===============================================
+     Components reference these, not the raw scales.
+  ========================================================================== */
+  --ii-bg:              var(--ii-surface-1);
+  --ii-bg-deep:         var(--ii-navy);
+  --ii-text:            var(--ii-parch-100);
+  --ii-text-muted:      var(--ii-parch-300);
+  --ii-text-faint:      var(--ii-parch-400);
+  --ii-text-on-brass:   var(--ii-surface-1);
+  --ii-text-on-blood:   var(--ii-parch-50);
+
+  --ii-accent:          var(--ii-brass-500);   /* CTA, key highlights */
+  --ii-accent-hover:    var(--ii-brass-300);
+  --ii-danger:          var(--ii-blood-400);   /* threat indicator */
+  --ii-glitch:          var(--ii-blood-glitch);
+
+  --ii-border:          var(--ii-line);
+  --ii-border-strong:   var(--ii-blood-500);
+  --ii-border-accent:   var(--ii-brass-500);
+
+  /* === TYPOGRAPHY ===========================================================
+     Four families, mapped to roles. Always reference --ii-font-* not raw names.
+  ========================================================================== */
+  --ii-font-display:    'Bebas Neue', 'Impact', 'Arial Narrow', sans-serif;
+  --ii-font-quote:      'Playfair Display', 'Georgia', serif;
+  --ii-font-redacted:   'Special Elite', 'Courier New', monospace;
+  --ii-font-body:       'Source Serif 4', 'Georgia', 'Times New Roman', serif;
+  --ii-font-mono:       'Special Elite', 'Courier New', monospace;
+
+  /* Fluid type scale — clamp(min, preferred, max) for cinematic resize.
+     Body 17px (slightly larger than 16 for prestige-editorial feel). */
+  --ii-fs-xs:           0.75rem;                              /* 12px  caption */
+  --ii-fs-sm:           0.875rem;                             /* 14px  meta */
+  --ii-fs-base:         1.0625rem;                            /* 17px  body */
+  --ii-fs-lg:           1.25rem;                              /* 20px  lede */
+  --ii-fs-xl:           clamp(1.5rem,   1.2rem + 1.5vw, 2rem);    /* 24-32  subhead */
+  --ii-fs-2xl:          clamp(2rem,     1.4rem + 3vw,   3rem);    /* 32-48  section head */
+  --ii-fs-3xl:          clamp(3rem,     2rem + 5vw,    5rem);     /* 48-80  hero subhead */
+  --ii-fs-display:      clamp(4rem,     2rem + 10vw,   10rem);    /* 64-160 THE IRONIC INEPTOCRACY */
+
+  /* Weight (Bebas is single-weight, others use these) */
+  --ii-fw-regular:      400;
+  --ii-fw-semibold:     600;
+  --ii-fw-bold:         700;
+
+  /* Line height */
+  --ii-lh-tight:        0.95;   /* display */
+  --ii-lh-snug:         1.15;   /* headlines */
+  --ii-lh-base:         1.55;   /* body */
+  --ii-lh-loose:        1.75;   /* long-form essay (Dispatches) */
+
+  /* Letter spacing */
+  --ii-ls-tight:        -0.02em;
+  --ii-ls-base:         0;
+  --ii-ls-wide:         0.06em;
+  --ii-ls-display:      0.08em;   /* Bebas hero, all-caps */
+  --ii-ls-redacted:     0.18em;   /* CLASSIFIED // SUBJECT 001 labels */
+
+  /* === SPACING — 8pt grid ===================================================
+     Use --ii-space-* for component padding; --ii-section-* for section rhythm.
+  ========================================================================== */
+  --ii-space-0:         0;
+  --ii-space-1:         0.25rem;   /* 4  */
+  --ii-space-2:         0.5rem;    /* 8  */
+  --ii-space-3:         0.75rem;   /* 12 */
+  --ii-space-4:         1rem;      /* 16 */
+  --ii-space-5:         1.5rem;    /* 24 */
+  --ii-space-6:         2rem;      /* 32 */
+  --ii-space-7:         3rem;      /* 48 */
+  --ii-space-8:         4rem;      /* 64 */
+  --ii-space-9:         6rem;      /* 96 */
+  --ii-space-10:        8rem;      /* 128 */
+
+  /* Section vertical rhythm — fluid between mobile and desktop */
+  --ii-section-y:       clamp(4rem, 6vw + 2rem, 8rem);
+  --ii-content-w:       72rem;     /* 1152px max content width */
+  --ii-prose-w:         38rem;     /* 608px essay column */
+
+  /* === BORDERS ==============================================================
+     Distressed/document aesthetic = sharp corners. Pills only on CTAs.
+  ========================================================================== */
+  --ii-radius-none:     0;
+  --ii-radius-xs:       2px;
+  --ii-radius-sm:       4px;
+  --ii-radius-pill:     999px;
+  --ii-bw-hairline:     1px;
+  --ii-bw-base:         2px;
+  --ii-bw-thick:        4px;
+
+  /* === SHADOWS — atmospheric, never neutral grey =========================== */
+  --ii-shadow-none:        none;
+  --ii-shadow-card:        0 12px 40px rgba(0, 0, 0, 0.6),
+                           0 2px 4px rgba(0, 0, 0, 0.4);
+  --ii-shadow-cinematic:   0 24px 80px rgba(0, 0, 0, 0.85);
+  --ii-shadow-blood-glow:  0 0 24px rgba(155, 32, 32, 0.45);
+  --ii-shadow-brass-glow:  0 0 16px rgba(201, 168, 76, 0.3);
+  --ii-shadow-term-glow:   0 0 32px var(--ii-term-green-glow);
+  --ii-shadow-inset-vignette:
+                           inset 0 0 120px rgba(0, 0, 0, 0.7);
+
+  /* === MOTION ===============================================================
+     Tokens map to GSAP eases and CSS transitions. ScrollTrigger uses ms values
+     directly (e.g., gsap.to(el, { duration: 1.2, ease: 'power3.out' }) maps to
+     --ii-dur-cinematic + --ii-ease-cinematic).
+  ========================================================================== */
+  --ii-dur-instant:     80ms;     /* glitch flash tick */
+  --ii-dur-fast:        200ms;    /* hover, button press */
+  --ii-dur-base:        400ms;    /* state change */
+  --ii-dur-slow:        700ms;    /* fade-in */
+  --ii-dur-cinematic:   1200ms;   /* hero reveal, section enter */
+  --ii-dur-epic:        2400ms;   /* opening title sequence */
+
+  --ii-ease-cinematic:  cubic-bezier(0.16, 1, 0.3, 1);     /* GSAP power3.out */
+  --ii-ease-reveal:     cubic-bezier(0.22, 1, 0.36, 1);    /* GSAP expo.out */
+  --ii-ease-cut:        cubic-bezier(0.7, 0, 0.84, 0);     /* hard, abrupt */
+  --ii-ease-pulse:      cubic-bezier(0.45, 0, 0.55, 1);    /* surveillance ping */
+  --ii-ease-linear:     linear;                            /* typewriter */
+
+  /* === LAYERS / Z-INDEX ===================================================== */
+  --ii-z-base:          0;
+  --ii-z-content:       10;
+  --ii-z-sticky:        50;
+  --ii-z-overlay:       100;
+  --ii-z-scanline:      200;
+  --ii-z-grain:         300;
+  --ii-z-modal:         1000;
+  --ii-z-system:        9999;
+
+  /* === BREAKPOINTS — exposed for JS use (CSS uses media queries below) ===== */
+  --ii-bp-xs:           0px;
+  --ii-bp-sm:           480px;
+  --ii-bp-md:           640px;
+  --ii-bp-lg:           768px;
+  --ii-bp-xl:           1024px;
+  --ii-bp-2xl:          1280px;
+}
+
+/* -----------------------------------------------------------------------------
+   03. PAGE BASELINE
+   Scoped to <body> so it only paints when the site theme allows it.
+   If WordPress's active theme overrides body, wrap pages in <div class="ii-root">.
+----------------------------------------------------------------------------- */
+body,
+.ii-root {
+  background: var(--ii-bg);
+  color: var(--ii-text);
+  font-family: var(--ii-font-body);
+  font-size: var(--ii-fs-base);
+  line-height: var(--ii-lh-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display class — apply to hero title, big section heads */
+.ii-display {
+  font-family: var(--ii-font-display);
+  font-weight: var(--ii-fw-regular);
+  letter-spacing: var(--ii-ls-display);
+  line-height: var(--ii-lh-tight);
+  text-transform: uppercase;
+  color: var(--ii-parch-50);
+}
+
+/* Quote / italic editorial */
+.ii-quote {
+  font-family: var(--ii-font-quote);
+  font-style: italic;
+  font-weight: var(--ii-fw-regular);
+  line-height: var(--ii-lh-snug);
+  color: var(--ii-parch-100);
+}
+
+/* Redacted / surveillance metadata */
+.ii-redacted {
+  font-family: var(--ii-font-redacted);
+  letter-spacing: var(--ii-ls-redacted);
+  text-transform: uppercase;
+  color: var(--ii-parch-300);
+  font-size: var(--ii-fs-sm);
+}
+
+/* Body essay paragraphs */
+.ii-prose {
+  font-family: var(--ii-font-body);
+  font-size: var(--ii-fs-base);
+  line-height: var(--ii-lh-loose);
+  max-width: var(--ii-prose-w);
+  color: var(--ii-parch-100);
+}
+
+/* -----------------------------------------------------------------------------
+   04. UTILITY CLASS HOOKS — referenced by per-section blocks
+   Tokens only. Animation keyframes live in their owning Custom HTML block.
+----------------------------------------------------------------------------- */
+
+/* Scan-line overlay. Drop class onto a fixed full-viewport <div>. */
+.ii-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--ii-z-scanline);
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* Film grain overlay. Pair with a noise SVG/PNG via background-image in block. */
+.ii-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--ii-z-grain);
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+}
+
+/* Edge vignette */
+.ii-vignette {
+  position: relative;
+}
+.ii-vignette::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: var(--ii-shadow-inset-vignette);
+}
+
+/* Brass CTA — single button style across the site */
+.ii-cta {
+  display: inline-block;
+  padding: var(--ii-space-3) var(--ii-space-6);
+  font-family: var(--ii-font-display);
+  font-size: var(--ii-fs-lg);
+  letter-spacing: var(--ii-ls-display);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ii-text-on-brass);
+  background: var(--ii-brass-500);
+  border: var(--ii-bw-base) solid var(--ii-brass-600);
+  border-radius: var(--ii-radius-none);
+  cursor: pointer;
+  transition:
+    background var(--ii-dur-fast) var(--ii-ease-cinematic),
+    box-shadow var(--ii-dur-fast) var(--ii-ease-cinematic),
+    transform var(--ii-dur-fast) var(--ii-ease-cinematic);
+}
+.ii-cta:hover,
+.ii-cta:focus-visible {
+  background: var(--ii-brass-300);
+  box-shadow: var(--ii-shadow-brass-glow);
+  transform: translateY(-1px);
+}
+.ii-cta:focus-visible {
+  outline: var(--ii-bw-base) solid var(--ii-parch-50);
+  outline-offset: 4px;
+}
+
+/* Section wrapper — consistent vertical rhythm */
+.ii-section {
+  padding-block: var(--ii-section-y);
+  padding-inline: var(--ii-space-5);
+}
+.ii-section > .ii-container {
+  max-width: var(--ii-content-w);
+  margin-inline: auto;
+}
+
+/* -----------------------------------------------------------------------------
+   05. ACCESSIBILITY — REDUCED MOTION
+   Surveillance flash, glitch, scroll-tied 3D — all disabled when user opts out.
+   Per-block scripts must also gate GSAP/Three.js inits behind this query.
+----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ii-dur-instant:   0ms;
+    --ii-dur-fast:      0ms;
+    --ii-dur-base:      0ms;
+    --ii-dur-slow:      0ms;
+    --ii-dur-cinematic: 0ms;
+    --ii-dur-epic:      0ms;
+  }
+  .ii-scanlines,
+  .ii-grain { display: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   06. FOCUS RING — accessible default for keyboard users
+   Brass on dark = ~9.5:1 contrast, AAA.
+----------------------------------------------------------------------------- */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: var(--ii-bw-base) solid var(--ii-brass-500);
+  outline-offset: 3px;
+}
+
+/* -----------------------------------------------------------------------------
+   07. SELECTION COLOR — blood on parchment
+----------------------------------------------------------------------------- */
+::selection {
+  background: var(--ii-blood-500);
+  color: var(--ii-parch-50);
+}
