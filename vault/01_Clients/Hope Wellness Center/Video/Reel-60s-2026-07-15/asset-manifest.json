@@ -1,0 +1,104 @@
+{
+  "source_pdf": "The-Hope-Wellness-Visual-Kit-and-Growth-Plan.pdf",
+  "source_pdf_sha256": "cea16d05642f520230a9b12c1356a16accf810c73dc633afdb6858d51b6dcd06",
+  "page_count": 15,
+  "assets": [
+    {
+      "filename": "00-hope-wellness-logo.png",
+      "pdf_xref": 110,
+      "width": 709,
+      "height": 245,
+      "mode": "RGBA",
+      "sha256": "7c87a7ab0de4b051172709d36137efc5f8674d7e4b184574ca6c06780cff72be"
+    },
+    {
+      "filename": "01-meditation-and-breathing.png",
+      "pdf_xref": 112,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "2506e1d2e69de2babddc4398ce75a4d287ba7fc3a5831f1aea297c7e7a1bc877"
+    },
+    {
+      "filename": "02-self-compassion.png",
+      "pdf_xref": 120,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "dbacbf598ab9e06d50444888136cee938b6ae19e010bc2988d3a928ec37dcddb"
+    },
+    {
+      "filename": "03-reflection-and-journaling.png",
+      "pdf_xref": 113,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "51b6136174ddc953c1e633a067d74498c9b4acfaf83979e681ef1e6b0d3d1639"
+    },
+    {
+      "filename": "04-gentle-stretch.png",
+      "pdf_xref": 121,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "bfe81a0d55bc5854d3e68c42de29490ae156ea33a2803c415c5b4f094b582922"
+    },
+    {
+      "filename": "05-balance-and-mindfulness.png",
+      "pdf_xref": 114,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "1c3c97d0481ead588f54038307d57a3eb934e1f6f237cb141349d4b335952376"
+    },
+    {
+      "filename": "06-rest-and-recovery.png",
+      "pdf_xref": 122,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "354be6386216caca5b41e0edc396fac7969d4c7e15eba6b1027290effc8c2c26"
+    },
+    {
+      "filename": "07-movement-and-mood.png",
+      "pdf_xref": 123,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "ad35f0eff89dcd666ab73ae2fc4afc56980655ad407bc66d1fae90469d085b96"
+    },
+    {
+      "filename": "08-daily-routine.png",
+      "pdf_xref": 115,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "a2cdfd662d92bc4348472448b551b9b36a703581eebc6efac3d25d78c6a99f04"
+    },
+    {
+      "filename": "09-active-wellness.png",
+      "pdf_xref": 124,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "0dc5fb8e1094aa1b3e835f1467a295bac4e7482f4f5fa1175a12210a90de27a5"
+    },
+    {
+      "filename": "10-focus-and-drive.png",
+      "pdf_xref": 125,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "448a5857b7196143c168337f9dbdc77eeee87749cf901be2ed557084cbb0fc85"
+    },
+    {
+      "filename": "11-playful-confidence.png",
+      "pdf_xref": 126,
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "sha256": "842cd3c26b7faaaca3873b16a776d7e5b144e497081578084bb85169078301e5"
+    }
+  ],
+  "contact_sheet": "hope-wellness-illustration-contact-sheet.png"
+}

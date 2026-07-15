@@ -1,0 +1,129 @@
+{
+  "project": "The Hope Wellness Center 60 Second Reel",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration_seconds": 60,
+    "total_frames": 1800
+  },
+  "scenes": [
+    {
+      "start_frame": 0,
+      "end_frame_exclusive": 90,
+      "start": "00:00.000",
+      "end": "00:03.000",
+      "asset": "assets/00-hope-wellness-logo.png",
+      "role": "opening logo assembly",
+      "transition_out": "interlocking brain and leaf masks open into breath rings"
+    },
+    {
+      "start_frame": 90,
+      "end_frame_exclusive": 240,
+      "start": "00:03.000",
+      "end": "00:08.000",
+      "asset": "assets/01-meditation-and-breathing.png",
+      "role": "breath and emotional reset",
+      "transition_out": "breath rings carry drifting leaves into the next scene"
+    },
+    {
+      "start_frame": 240,
+      "end_frame_exclusive": 390,
+      "start": "00:08.000",
+      "end": "00:13.000",
+      "asset": "assets/02-self-compassion.png",
+      "role": "warmth and self kindness",
+      "transition_out": "hearts soften into pale ink dots"
+    },
+    {
+      "start_frame": 390,
+      "end_frame_exclusive": 540,
+      "start": "00:13.000",
+      "end": "00:18.000",
+      "asset": "assets/03-reflection-and-journaling.png",
+      "role": "reflection and interior space",
+      "transition_out": "journal ink line draws the edge of the yoga mat"
+    },
+    {
+      "start_frame": 540,
+      "end_frame_exclusive": 690,
+      "start": "00:18.000",
+      "end": "00:23.000",
+      "asset": "assets/04-gentle-stretch.png",
+      "role": "release and room to breathe",
+      "transition_out": "camera follows the arm arc into an organic plant wipe"
+    },
+    {
+      "start_frame": 690,
+      "end_frame_exclusive": 840,
+      "start": "00:23.000",
+      "end": "00:28.000",
+      "asset": "assets/05-balance-and-mindfulness.png",
+      "role": "balance and steady support",
+      "transition_out": "foreground leaves lift and drift across frame"
+    },
+    {
+      "start_frame": 840,
+      "end_frame_exclusive": 990,
+      "start": "00:28.000",
+      "end": "00:33.000",
+      "asset": "assets/06-rest-and-recovery.png",
+      "role": "rest and restoration",
+      "transition_out": "rolled mat extends into a curved path"
+    },
+    {
+      "start_frame": 990,
+      "end_frame_exclusive": 1140,
+      "start": "00:33.000",
+      "end": "00:38.000",
+      "asset": "assets/07-movement-and-mood.png",
+      "role": "hopeful forward momentum",
+      "transition_out": "path parallax becomes the park path"
+    },
+    {
+      "start_frame": 1140,
+      "end_frame_exclusive": 1290,
+      "start": "00:38.000",
+      "end": "00:43.000",
+      "asset": "assets/08-daily-routine.png",
+      "role": "small approachable steps",
+      "transition_out": "dog and plant foreground pass create a soft wipe"
+    },
+    {
+      "start_frame": 1290,
+      "end_frame_exclusive": 1440,
+      "start": "00:43.000",
+      "end": "00:48.000",
+      "asset": "assets/09-active-wellness.png",
+      "role": "energy and community",
+      "transition_out": "volleyball match cut"
+    },
+    {
+      "start_frame": 1440,
+      "end_frame_exclusive": 1590,
+      "start": "00:48.000",
+      "end": "00:53.000",
+      "asset": "assets/10-focus-and-drive.png",
+      "role": "confidence and follow through",
+      "transition_out": "volleyball match cut with subtle orbit"
+    },
+    {
+      "start_frame": 1590,
+      "end_frame_exclusive": 1680,
+      "start": "00:53.000",
+      "end": "00:56.000",
+      "asset": "assets/11-playful-confidence.png",
+      "role": "uplift and state coverage message",
+      "transition_out": "ball, leaves, and particles gather toward center"
+    },
+    {
+      "start_frame": 1680,
+      "end_frame_exclusive": 1800,
+      "start": "00:56.000",
+      "end": "01:00.000",
+      "asset": "assets/00-hope-wellness-logo.png",
+      "role": "logo, tagline, and website close",
+      "transition_out": "hold and gentle audio tail"
+    }
+  ]
+}
