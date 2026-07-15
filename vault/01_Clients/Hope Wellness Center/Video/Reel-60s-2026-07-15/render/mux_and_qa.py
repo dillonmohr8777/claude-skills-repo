@@ -37,10 +37,10 @@ else:  # imageio-ffmpeg ships ffmpeg only; parse with ffmpeg -i
     probe_cmd = None
 
 info = {}
-r = run([FF, "-i", FINAL, "-map", "0:v:0", "-c", "copy", "-f", "null", "-"])
+r = run([FF, "-i", FINAL, "-map", "0:v:0", "-f", "null", "-"])
 import re
-m = re.search(r"frame=\s*(\d+)", r.stderr)
-info["frames"] = int(m.group(1)) if m else -1
+frames = re.findall(r"frame=\s*(\d+)", r.stderr)
+info["frames"] = int(frames[-1]) if frames else -1
 m = re.search(r"(\d+)x(\d+)[, ]", r.stderr)
 m2 = re.search(r"Video:.*?(\d{3,4})x(\d{3,4})", r.stderr)
 if m2:
