@@ -19,9 +19,9 @@ overlays — **preserving the compositions, not redesigning them.**
   source plates load from `assets/plates/`. Open it in Chrome and press **space** to preview.
 - **`scripts/render.mjs`** — Playwright drives `seek(t)` frame-by-frame and pipes frames
   straight into ffmpeg (`image2pipe`) → H.264. No multi-GB frame dump on disk.
-- **`scripts/make_audio.py`** — synthesizes the cinematic bed (pad + sub pulse + shimmer +
-  transition risers, chord changes on the scene cuts). Music only by default; set
-  `INCLUDE_VO = True` to add the edge-tts voiceover (ducked under the bed).
+- **`scripts/make_audio.py`** — optional cinematic-bed generator (pad + sub + shimmer +
+  risers; `INCLUDE_VO` flag for edge-tts VO). **Not used in the deliverable — the video is
+  silent**; `build.sh` produces no audio track. Kept for a future audio cut.
 - **`scripts/build.sh`** — one command: audio → render → mux master → 720p/muted/poster.
 
 ## Edit it

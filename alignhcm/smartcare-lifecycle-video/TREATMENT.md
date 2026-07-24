@@ -1,6 +1,6 @@
 # Align HCM — SmartCare · "Stabilize · Optimize · Thrive"
 
-**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~46 s · **Audio:** procedural cinematic bed (music only — no voiceover)
+**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~46 s · **Audio:** none — silent (no music, no voiceover)
 **Use:** Website hero, LinkedIn (feed + Sales Nav), sales-enablement, event loop.
 **Bookends:** intro + CTA present the real SmartCare logo on a **white card** with a thick orange+white gradient outline + glow (the logo's charcoal text needs a light ground).
 
@@ -42,10 +42,9 @@ S4 CTA       36.45 → 45.60  SmartCare logo (white card) + Stabilize·Optimize�
 
 ## Audio
 
-Music only — no voiceover (removed per direction). The synthesized bed carries the piece:
-warm pad + sub pulse + shimmer, with chord changes and risers landing on the scene cuts.
-`scripts/make_audio.py` keeps a `INCLUDE_VO` flag (default off); the edge-tts voiceover path
-remains in the script if a narrated cut is ever wanted.
+None — the deliverable is **silent** (no music, no voiceover, per direction). The frames
+carry the piece. The cinematic-bed generator (`scripts/make_audio.py`) stays in the repo if
+an audio version is ever wanted, but `scripts/build.sh` no longer muxes any audio track.
 
 ## Brand tokens  (sampled from the SmartCare plates — exact)
 
