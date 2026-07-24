@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"; OUT.mkdir(exist_ok=True)
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 SR = 48000
-DUR = 59.8          # matches video.html DURATION
+DUR = 45.6          # matches video.html DURATION
 N = int(SR * DUR)
 T = np.arange(N) / SR
 rng = np.random.default_rng(814)
@@ -38,7 +38,7 @@ VO = [
     (43.3,  "Insights compound, performance rises, and your platform keeps paying you back."),
     (51.5,  "SmartCare, from Align. Stabilize, optimize, and thrive. Align H C M dot com."),
 ]
-BOUNDS = [6.0, 16.15, 25.15, 33.65, 42.65, 50.85]  # scene starts (for risers/chord changes)
+BOUNDS = [5.15, 15.45, 25.95, 36.45]  # scene starts (for risers/chord changes)
 
 # ----------------------------------------------------------------- helpers
 def adsr(n, a, d, s, r, sus=0.7):
@@ -80,7 +80,7 @@ CHORDS = {
  'Csm':[138.59,164.81,207.65,277.18],
 }
 # (start, chord) — changes near scene boundaries
-PROG = [(0.0,'A'),(6.0,'E'),(16.15,'F#m'),(25.15,'D'),(33.65,'A'),(42.65,'E'),(50.85,'A')]
+PROG = [(0.0,'A'),(5.15,'E'),(15.45,'F#m'),(25.95,'D'),(36.45,'A')]
 
 def chord_weight(start, end):
     w=np.zeros(N); s=int(start*SR); e=int(min(end,DUR)*SR)
