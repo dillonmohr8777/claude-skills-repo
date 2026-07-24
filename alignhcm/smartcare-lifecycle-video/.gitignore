@@ -1,0 +1,5 @@
+# intermediates (regenerable via scripts/build.sh)
+output/
+node_modules/
+*.log
+dist/*-muted.mp4
