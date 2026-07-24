@@ -121,8 +121,9 @@ html,body{background:#000;overflow:hidden}
 
 <script>
 /* =======================  CONFIG  ======================= */
-const FPS=30, DURATION=45.6, K=1920/1672;      // plate(px 1672w) -> screen scale
+const FPS=30, DURATION=52.1, K=1920/1672;      // plate(px 1672w) -> screen scale
 const PLATES={
+  s0:"../assets/plates/s0-stabilize.png",
   s1:"../assets/plates/s1-overview.png",
   s2:"../assets/plates/s2-optimize-statement.png",
   s3:"../assets/plates/s3-optimize-proof.png",
@@ -145,7 +146,7 @@ const SCENES=[
      {role:"label", cls:"tx tagline",  x:836, y:614, txt:"The work that keeps HCM moving after&nbsp;go&#8209;live.", a:{t0:1.55,dur:1.0,dy:24,out:4.85,od:0.6}},
      {role:"align", cls:"align-mark brand-logo", x:836, y:742, a:{t0:2.2,dur:0.9,out:4.9,od:0.6}},
  ]},
- { id:"overview", in:5.15, out:15.90, plate:"s1", cam:push(1.0,1.026,836,470), fx:[
+ { id:"overview", in:5.15, out:14.90, plate:"s1", cam:push(1.0,1.026,836,470), fx:[
      {role:"glow", x:225, y:560, r:410, peak:0.42, a:{t0:0.7,dur:1.4}},
      {role:"glow", x:620, y:560, r:410, peak:0.42, a:{t0:1.5,dur:1.4}},
      {role:"glow", x:1015,y:560, r:410, peak:0.42, a:{t0:2.3,dur:1.4}},
@@ -156,7 +157,20 @@ const SCENES=[
      {role:"pop",  x:815, y:388, r:56, a:{t0:2.3}},
      {role:"glow", x:1425,y:560, r:380, peak:0.34, a:{t0:3.4,dur:1.5}},
  ]},
- { id:"optimize", in:15.45, out:26.40, plate:"s2", cam:push(1.0,1.03,836,470), fx:[
+ { id:"stabilize", in:14.45, out:24.40, plate:"s0", cam:push(1.0,1.03,836,470), fx:[
+     {role:"glow",  x:1113,y:390, r:430, peak:0.34, a:{t0:0.6,dur:1.6}},   // right Stabilize panel
+     {role:"glow",  x:490, y:570, r:390, peak:0.26, a:{t0:1.2,dur:1.5}},   // left ops dashboard
+     {role:"uline", x:1002,y:390, w:150, a:{t0:1.0,dur:0.6}},              // under panel "Stabilize"
+     {role:"pop",   x:1005,y:424, r:48, a:{t0:1.6}},                       // Triage issues quickly
+     {role:"pop",   x:1005,y:483, r:48, a:{t0:2.0}},                       // Support daily admin
+     {role:"pop",   x:1005,y:542, r:48, a:{t0:2.4}},                       // Resolve cases with urgency
+     {role:"pop",   x:1005,y:600, r:48, a:{t0:2.8}},                       // Restore confidence fast
+     {role:"pop",   x:280, y:793, r:80, a:{t0:3.2}},                       // Admin support
+     {role:"pop",   x:593, y:793, r:80, a:{t0:3.5}},                       // Case management
+     {role:"pop",   x:927, y:793, r:80, a:{t0:3.8}},                       // Issue resolution
+     {role:"pop",   x:1247,y:793, r:80, a:{t0:4.1}},                       // Adoption support
+ ]},
+ { id:"optimize", in:23.95, out:33.90, plate:"s2", cam:push(1.0,1.03,836,470), fx:[
      {role:"glow",  x:1262,y:450, r:540, peak:0.34, a:{t0:0.6,dur:1.6}},
      {role:"uline", x:1048,y:512, w:150, a:{t0:1.0,dur:0.6}},
      {role:"pop",   x:1052,y:600, r:56, a:{t0:1.8}},
@@ -167,7 +181,7 @@ const SCENES=[
      {role:"pop",   x:526, y:703, r:96, a:{t0:3.9}},
      {role:"pop",   x:712, y:703, r:96, a:{t0:4.2}},
  ]},
- { id:"thrive", in:25.95, out:36.90, plate:"s4", cam:push(1.0,1.03,836,470), fx:[
+ { id:"thrive", in:33.45, out:43.40, plate:"s4", cam:push(1.0,1.03,836,470), fx:[
      {role:"glow",  x:1262,y:430, r:540, peak:0.34, a:{t0:0.6,dur:1.6}},
      {role:"uline", x:1048,y:474, w:120, a:{t0:1.0,dur:0.6}},
      {role:"pop",   x:1050,y:532, r:56, a:{t0:1.8}},
@@ -178,7 +192,7 @@ const SCENES=[
      {role:"pop",   x:555, y:703, r:96, a:{t0:3.9}},
      {role:"pop",   x:760, y:703, r:96, a:{t0:4.2}},
  ]},
- { id:"cta", in:36.45, out:45.60, cam:still, fx:[
+ { id:"cta", in:42.95, out:52.10, cam:still, fx:[
      {role:"logobox", x:836, y:307, a:{t0:0.0,dur:1.0,s0:0.9}},
      {role:"label", cls:"tx wordmark", x:836, y:533, txt:"Stabilize.&nbsp; <b>Optimize.</b>&nbsp; Thrive.", a:{t0:0.9,dur:0.9,dy:18}},
      {role:"url",   x:836, y:612, txt:"ALIGNHCM.COM", a:{t0:1.5,dur:0.8,per:2.4,sh:2.2}},

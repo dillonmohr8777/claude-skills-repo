@@ -1,6 +1,6 @@
 # Delivery — SmartCare "Stabilize · Optimize · Thrive"
 
-Status: **complete** · 1920×1080 · 30 fps · ~45.6 s · H.264 High · **silent (no audio track)**
+Status: **complete** · 1920×1080 · 30 fps · ~52.1 s · H.264 High · **silent (no audio track)**
 
 ## Files (`dist/`)
 | File | What |
@@ -10,13 +10,14 @@ Status: **complete** · 1920×1080 · 30 fps · ~45.6 s · H.264 High · **silen
 | `smartcare-stabilize-optimize-thrive-poster.jpg` | Poster / thumbnail (intro card) |
 
 ## What it is
-A five-slide sizzle for Align HCM's SmartCare post-go-live lifecycle, built by animating the
+A six-slide sizzle for Align HCM's SmartCare post-go-live lifecycle, built by animating the
 finished SmartCare frames — slow dimensional camera, staged glass-panel illumination,
 selective icon activation, orange energy-path light trails, accent-underline draws,
 seamless light-trail transitions, and a CTA finish. Compositions preserved, not redesigned.
 
-**5 unique slides:** Intro (SmartCare logo on a white card) → Overview (Stabilize · Optimize
-· Thrive model) → Optimize (clean panel) → Thrive (clean panel) → CTA (logo card + alignhcm.com).
+**6 unique slides (full lifecycle):** Intro (SmartCare logo on a white card) → Overview
+(the model) → **Stabilize** → **Optimize** → **Thrive** (clean panels) → CTA (logo card +
+alignhcm.com). The Stabilize frame is 3:2, padded to 16:9 on black so nothing is cropped.
 
 ## Source of truth
 The supplied SmartCare frames in `assets/plates/`. The edit uses the clean stage plates

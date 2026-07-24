@@ -1,6 +1,6 @@
 # Align HCM — SmartCare · "Stabilize · Optimize · Thrive"
 
-**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~46 s · **Audio:** none — silent (no music, no voiceover)
+**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~52 s · **Audio:** none — silent (no music, no voiceover)
 **Use:** Website hero, LinkedIn (feed + Sales Nav), sales-enablement, event loop.
 **Bookends:** intro + CTA present the real SmartCare logo on a **white card** with a thick orange+white gradient outline + glow (the logo's charcoal text needs a light ground).
 
@@ -14,30 +14,31 @@ accent lighting, CTA shimmer, headline treatment — 16:9, not the 8-slide portr
 **demo-video** (owns the editable project, audio, scene timing, transitions, ffmpeg render, MP4 validation) ·
 **code-reviewer** (engineering QA of the JS source after build).
 
-## Slides (5 unique — every slide distinct, no duplicates)
+## Slides (6 unique — full lifecycle Stabilize · Optimize · Thrive)
 
-The supplied set had two Optimize variants and two Thrive variants. To keep every slide
-unique — and to keep the frames clean (no dashboard/chart graphics, per direction) — the
-film uses the clean-statement variant of each stage. The data-viz variants
-(`s3-optimize-proof` with the 87% dashboard, `s5-thrive-proof` with the growth chart) are
-held in `assets/plates/` but not used in the edit.
+The supplied set had two Optimize and two Thrive variants. The edit uses the clean-statement
+variant of each stage (no dashboard/chart graphics, per direction); the data-viz variants
+(`s3`, `s5`) stay in `assets/plates/` unused. The standalone **Stabilize** frame (supplied
+later, 3:2 → padded to 16:9 on black) completes the lifecycle.
 
 | # | Slide | File | Focus |
 |---|-------|------|-------|
 | 1 | Intro | — | SmartCare logo on a white card + "keeps HCM moving after go-live" |
 | 2 | Overview | `s1-overview` (5/5) | the model: Stabilize · Optimize · Thrive + coverage |
-| 3 | Optimize | `s2-optimize-statement` | "Optimize the system you already own" + panel + icon row |
-| 4 | Thrive | `s4-thrive-statement` | "Thrive beyond support" + panel + icon row |
-| 5 | CTA | — | SmartCare logo (white card) + ALIGNHCM.COM |
+| 3 | Stabilize | `s0-stabilize` | "Stabilize what just launched" + ops dashboard + checklist |
+| 4 | Optimize | `s2-optimize-statement` | "Optimize the system you already own" + panel + icon row |
+| 5 | Thrive | `s4-thrive-statement` | "Thrive beyond support" + panel + icon row |
+| 6 | CTA | — | SmartCare logo (white card) + ALIGNHCM.COM |
 
 ## Timeline (master clock · 0.45 s crossfades — never a black frame)
 
 ```
 S0 Intro     0.00 → 5.60    SmartCare logo (white card) forms + tagline
-S1 Overview  5.15 → 15.90   s1 · 01→02→03 cards illuminate, connector arrows energize
-S2 Optimize  15.45 → 26.40  s2 · panel + checklist + icon row activate, accent underline draws
-S3 Thrive    25.95 → 36.90  s4 · panel + checklist + icon row activate, accent underline draws
-S4 CTA       36.45 → 45.60  SmartCare logo (white card) + Stabilize·Optimize·Thrive + ALIGNHCM.COM
+S1 Overview  5.15 → 14.90   s1 · 01→02→03 cards illuminate, connector arrows energize
+S2 Stabilize 14.45 → 24.40  s0 · panels illuminate, checklist + support-icon row activate
+S3 Optimize  23.95 → 33.90  s2 · panel + checklist + icon row activate, accent underline draws
+S4 Thrive    33.45 → 43.40  s4 · panel + checklist + icon row activate, accent underline draws
+S5 CTA       42.95 → 52.10  SmartCare logo (white card) + Stabilize·Optimize·Thrive + ALIGNHCM.COM
 ```
 
 ## Audio
