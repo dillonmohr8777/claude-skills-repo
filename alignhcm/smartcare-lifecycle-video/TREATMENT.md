@@ -17,16 +17,17 @@ accent lighting, CTA shimmer, headline treatment — 16:9, not the 8-slide portr
 ## Slides (5 unique — every slide distinct, no duplicates)
 
 The supplied set had two Optimize variants and two Thrive variants. To keep every slide
-unique, the film uses the richer data-viz variant of each stage; the clean-statement
-duplicates (`s2-optimize-statement`, `s4-thrive-statement`) are held in `assets/plates/`
-but not used in the edit.
+unique — and to keep the frames clean (no dashboard/chart graphics, per direction) — the
+film uses the clean-statement variant of each stage. The data-viz variants
+(`s3-optimize-proof` with the 87% dashboard, `s5-thrive-proof` with the growth chart) are
+held in `assets/plates/` but not used in the edit.
 
 | # | Slide | File | Focus |
 |---|-------|------|-------|
 | 1 | Intro | — | SmartCare logo on a white card + "keeps HCM moving after go-live" |
 | 2 | Overview | `s1-overview` (5/5) | the model: Stabilize · Optimize · Thrive + coverage |
-| 3 | Optimize | `s3-optimize-proof` | "Optimize the system you already own" + 87% System-Health dashboard |
-| 4 | Thrive | `s5-thrive-proof` | "Thrive beyond support" + rising growth chart |
+| 3 | Optimize | `s2-optimize-statement` | "Optimize the system you already own" + panel + icon row |
+| 4 | Thrive | `s4-thrive-statement` | "Thrive beyond support" + panel + icon row |
 | 5 | CTA | — | SmartCare logo (white card) + ALIGNHCM.COM |
 
 ## Timeline (master clock · 0.45 s crossfades — never a black frame)
@@ -34,8 +35,8 @@ but not used in the edit.
 ```
 S0 Intro     0.00 → 5.60    SmartCare logo (white card) forms + tagline
 S1 Overview  5.15 → 15.90   s1 · 01→02→03 cards illuminate, connector arrows energize
-S2 Optimize  15.45 → 26.40  s3 · 87% System-Health ring pulses, checklist + icon row activate
-S3 Thrive    25.95 → 36.90  s5 · growth chart glows, checklist + icon row activate
+S2 Optimize  15.45 → 26.40  s2 · panel + checklist + icon row activate, accent underline draws
+S3 Thrive    25.95 → 36.90  s4 · panel + checklist + icon row activate, accent underline draws
 S4 CTA       36.45 → 45.60  SmartCare logo (white card) + Stabilize·Optimize·Thrive + ALIGNHCM.COM
 ```
 
