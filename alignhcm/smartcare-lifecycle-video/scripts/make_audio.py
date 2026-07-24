@@ -25,6 +25,7 @@ N = int(SR * DUR)
 T = np.arange(N) / SR
 rng = np.random.default_rng(814)
 
+INCLUDE_VO = False          # music-only bed (voiceover removed per direction)
 VOICE = "en-US-AndrewMultilingualNeural"
 RATE = "-6%"
 # (start_time, text)
@@ -228,10 +229,9 @@ def main():
     # space
     wet = early_reflections(music.mean(1)*0.5)
     music = music*0.9 + wet
-    music = norm_rms(music, -19.5)
+    music = norm_rms(music, -20.5 if not INCLUDE_VO else -19.5)
 
-    print("rendering voiceover…")
-    vo, ok = synth_vo()
+    vo, ok = ((np.zeros((N,2), np.float32), False) if not INCLUDE_VO else synth_vo())
     if ok:
         d = duck_env(vo)
         music *= (1 - 0.72*d)[:,None]          # duck bed ~11 dB under VO for clarity
@@ -240,7 +240,11 @@ def main():
     else:
         print("!! no VO — music only")
         mix = music
-    mix = limit(mix, -1.2)
+    if ok:
+        mix = limit(mix, -1.2)
+    else:                                   # music-only: gentle peak-normalize, keep dynamics
+        pk = np.max(np.abs(mix)) + 1e-9
+        mix = softclip(mix * (db(-1.5) / pk), 1.08) * db(-0.5)
 
     # master fades
     fi=int(0.4*SR); fo=int(0.8*SR)

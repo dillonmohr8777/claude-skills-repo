@@ -32,7 +32,9 @@ scripts/build.sh          # audio + 30fps render + master + variants + poster
 See `README.md` for the editable knobs (scene timing, camera, illumination cues, VO copy).
 
 ## Notes
-- Voiceover: edge-tts `en-US-AndrewMultilingualNeural`, ducked ~11 dB under a synthesized
-  cinematic bed whose chord changes land on the scene cuts.
+- Audio: **music only** — synthesized cinematic bed whose chord changes and risers land on the
+  scene cuts. No voiceover. (`make_audio.py` keeps an `INCLUDE_VO` flag for a narrated cut.)
+- Intro + CTA show the real SmartCare logo on a **white card** with a thick orange+white gradient
+  outline, so the logo's charcoal wordmark reads (it disappears on black).
 - Rendered deterministically (Playwright drives `seek(t)`, frames piped to ffmpeg), so the
   build is exactly reproducible.

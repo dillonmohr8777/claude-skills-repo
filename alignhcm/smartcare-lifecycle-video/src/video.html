@@ -71,6 +71,15 @@ html,body{background:#000;overflow:hidden}
   background:linear-gradient(90deg,transparent,rgba(255,214,150,.55),transparent);}
 .logo-hero{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:560px;height:340px;opacity:0;will-change:transform,opacity,filter;}
+/* white-box logo card (intro + CTA): clean brand logo on white with a thick
+   orange+white gradient outline (Bristol orange) + ambient glow */
+.logo-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);
+  opacity:0;padding:17px;border-radius:38px;will-change:transform,opacity;
+  background:linear-gradient(135deg,#FF9A2E 0%,#FFFFFF 22%,#FF7A00 50%,#FFFFFF 78%,#E8500A 100%);
+  box-shadow:0 0 56px rgba(255,133,0,.55),0 26px 70px rgba(0,0,0,.6);}
+.logo-box{background:#FFFFFF;border-radius:24px;padding:42px 60px;
+  box-shadow:0 0 0 4px #FFFFFF, 0 0 0 4px rgba(255,133,0,.25);}
+.sc-clean{width:470px;height:300px;}
 .align-mark{position:absolute;left:50%;translate:-50% 0;width:260px;height:78px;opacity:0;
   will-change:transform,opacity;}
 /* global overlays (NOT camera-transformed) */
@@ -131,10 +140,10 @@ const still=()=>({zoom:1,cx:836,cy:470});      // identity (intro/cta)
 
 const SCENES=[
  { id:"intro", in:0.00, out:6.40, cam:still, fx:[
-     {role:"logo",  cls:"logo-hero smartcare-logo", x:960/K, y:452/K, a:{t0:0.35,dur:1.25,s0:0.82,b0:10,out:5.55,od:0.7}},
-     {role:"label", cls:"tx eyebrow",  x:836, y:600, txt:"SmartCare&nbsp;&nbsp;·&nbsp;&nbsp;Post&#8209;Go&#8209;Live Support", a:{t0:1.15,dur:0.9,dy:16,ls:0.30,ls1:0.42,out:5.5,od:0.7}},
-     {role:"label", cls:"tx tagline",  x:836, y:672, txt:"The work that keeps HCM moving after&nbsp;go&#8209;live.", a:{t0:1.55,dur:1.0,dy:24,out:5.5,od:0.7}},
-     {role:"align", cls:"align-mark brand-logo", x:836, y:790, a:{t0:2.2,dur:0.9,out:5.6,od:0.7}},
+     {role:"logobox", x:836, y:322, a:{t0:0.3,dur:1.05,s0:0.88,out:5.55,od:0.7}},
+     {role:"label", cls:"tx eyebrow",  x:836, y:556, txt:"SmartCare&nbsp;&nbsp;·&nbsp;&nbsp;Post&#8209;Go&#8209;Live Support", a:{t0:1.15,dur:0.9,dy:16,ls:0.30,ls1:0.42,out:5.5,od:0.7}},
+     {role:"label", cls:"tx tagline",  x:836, y:614, txt:"The work that keeps HCM moving after&nbsp;go&#8209;live.", a:{t0:1.55,dur:1.0,dy:24,out:5.5,od:0.7}},
+     {role:"align", cls:"align-mark brand-logo", x:836, y:742, a:{t0:2.2,dur:0.9,out:5.6,od:0.7}},
  ]},
  { id:"overview", in:5.95, out:16.60, plate:"s1", cam:push(1.0,1.026,836,470), fx:[
      {role:"glow", x:225, y:560, r:410, peak:0.42, a:{t0:0.7,dur:1.4}},
@@ -189,10 +198,10 @@ const SCENES=[
      {role:"pop",  x:1050,y:668, r:56, a:{t0:3.7}},
  ]},
  { id:"cta", in:50.85, out:59.80, cam:still, fx:[
-     {role:"logo",  cls:"logo-hero smartcare-logo", x:960/K, y:404/K, a:{t0:0.0,dur:1.0,s0:0.86,b0:7}},
-     {role:"label", cls:"tx wordmark", x:836, y:566, txt:"Stabilize.&nbsp; <b>Optimize.</b>&nbsp; Thrive.", a:{t0:0.9,dur:0.9,dy:18}},
-     {role:"url",   x:836, y:648, txt:"ALIGNHCM.COM", a:{t0:1.5,dur:0.8,per:2.4,sh:2.2}},
-     {role:"align", cls:"align-mark brand-logo", x:836, y:812, a:{t0:2.2,dur:0.9}},
+     {role:"logobox", x:836, y:307, a:{t0:0.0,dur:1.0,s0:0.9}},
+     {role:"label", cls:"tx wordmark", x:836, y:533, txt:"Stabilize.&nbsp; <b>Optimize.</b>&nbsp; Thrive.", a:{t0:0.9,dur:0.9,dy:18}},
+     {role:"url",   x:836, y:612, txt:"ALIGNHCM.COM", a:{t0:1.5,dur:0.8,per:2.4,sh:2.2}},
+     {role:"align", cls:"align-mark brand-logo", x:836, y:742, a:{t0:2.2,dur:0.9}},
  ]},
 ];
 
@@ -231,6 +240,7 @@ for(const sc of SCENES){
         const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d','M'+f.pts.replace(/ /g,' L'));node.appendChild(path);scene.appendChild(node);f._path=path;f._len=0;}
     else if(role==='label'||role==='url'||role==='wordmark'){node=el(f.cls||'tx',scene);node.style.left=P(f.x,0).x+'px';node.style.top=P(0,f.y).y+'px';node.innerHTML=f.txt||'';if(role==='url'){node.className='cta-url';}}
     else if(role==='logo'){node=el(f.cls,scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';}
+    else if(role==='logobox'){node=el('logo-frame',scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';const box=el('logo-box',node);el('sc-clean',box);}
     else if(role==='align'){node=el(f.cls,scene);node.style.left=P(f.x,0).x+'px';node.style.top=P(0,f.y).y+'px';}
     sc._fx.push({role,node,a:f.a,f});
   }
@@ -266,6 +276,10 @@ const ROLE={
    o.node.style.opacity=op.toFixed(3);
    o.node.style.transform=`translate(-50%,-50%) scale(${lerp(a.s0??0.86,1,eob(ip)).toFixed(4)})`;
    o.node.style.filter=`drop-shadow(0 0 ${lerp(2,24,e).toFixed(1)}px rgba(255,133,0,${(0.5*e).toFixed(3)})) blur(${lerp(a.b0??8,0,e).toFixed(2)}px)`;},
+ logobox(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||1.0));const e=eoe(ip);let op=e;
+   if(a.out!=null){op=Math.min(e,1-eoc(clamp((lt-a.out)/(a.od||0.6))));}
+   o.node.style.opacity=op.toFixed(3);
+   o.node.style.transform=`translate(-50%,-50%) scale(${lerp(a.s0??0.9,1,eob(ip)).toFixed(4)})`;},
  align(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||0.9));const e=eoe(ip);let op=e*0.92;
    if(a.out!=null){op=Math.min(e*0.92,0.92*(1-eoc(clamp((lt-a.out)/(a.od||0.6)))));}
    o.node.style.opacity=op.toFixed(3);o.node.style.transform=`translateY(${lerp(14,0,e).toFixed(2)}px)`;},

@@ -20,8 +20,8 @@ overlays — **preserving the compositions, not redesigning them.**
 - **`scripts/render.mjs`** — Playwright drives `seek(t)` frame-by-frame and pipes frames
   straight into ffmpeg (`image2pipe`) → H.264. No multi-GB frame dump on disk.
 - **`scripts/make_audio.py`** — synthesizes the cinematic bed (pad + sub pulse + shimmer +
-  transition risers, chord changes on the scene cuts) and renders the 7 edge-tts VO lines,
-  ducking the bed ~6 dB under the voice.
+  transition risers, chord changes on the scene cuts). Music only by default; set
+  `INCLUDE_VO = True` to add the edge-tts voiceover (ducked under the bed).
 - **`scripts/build.sh`** — one command: audio → render → mux master → 720p/muted/poster.
 
 ## Edit it

@@ -1,7 +1,8 @@
 # Align HCM — SmartCare · "Stabilize · Optimize · Thrive"
 
-**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~60 s · **Audio:** cinematic bed + AI voiceover (ducked)
+**Format:** 1920×1080, 16:9, 30 fps · **Runtime:** ~60 s · **Audio:** procedural cinematic bed (music only — no voiceover)
 **Use:** Website hero, LinkedIn (feed + Sales Nav), sales-enablement, event loop.
+**Bookends:** intro + CTA present the real SmartCare logo on a **white card** with a thick orange+white gradient outline + glow (the logo's charcoal text needs a light ground).
 
 Motion **preserves** the five finished SmartCare compositions — it does not redesign them.
 Applied in order: **alignhcm-brand** (navy/black + orange glow system, logo, expert tone) ·
@@ -38,15 +39,12 @@ S5 Thrive·pf   42.65 → 51.30  s5 · punch to rising chart (bars + trend draw 
 S6 CTA         50.85 → 59.80  SmartCare logo + Stabilize·Optimize·Thrive + ALIGNHCM.COM (shimmer)
 ```
 
-## Voiceover  (warm-confident enterprise; leaves air for the bed)
+## Audio
 
-- **S0:** "Go-live is only the beginning. SmartCare keeps your HCM moving — every day after."
-- **S1:** "Stabilize. Optimize. Thrive. One support model for the work that never really stops."
-- **S2:** "Optimize the system you already own — sharper workflows, cleaner reporting, less friction."
-- **S3:** "As configuration gets dialed in, system health climbs toward optimal."
-- **S4:** "Then thrive beyond support — continuous improvement, stronger decisions, room to grow."
-- **S5:** "Insights compound, performance rises, and your platform keeps paying you back."
-- **S6:** "SmartCare, from Align. Stabilize, optimize, and thrive. Align H-C-M dot com."
+Music only — no voiceover (removed per direction). The synthesized bed carries the piece:
+warm pad + sub pulse + shimmer, with chord changes and risers landing on the scene cuts.
+`scripts/make_audio.py` keeps a `INCLUDE_VO` flag (default off); the edge-tts voiceover path
+remains in the script if a narrated cut is ever wanted.
 
 ## Brand tokens  (sampled from the SmartCare plates — exact)
 
