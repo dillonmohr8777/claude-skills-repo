@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SmartCare — Stabilize · Optimize · Thrive</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="assets.css">
+<style>
+/* ============================================================
+   Align HCM · SmartCare sizzle — editable motion source
+   1920×1080 · 30fps · deterministic timeline driven by seek(t)
+   Motion PRESERVES the finished plates (camera + illumination
+   + energy trails + crisp vector overlays), never redesigns them.
+   ============================================================ */
+:root{
+  --bg:#030303; --ink:#FCFCFC; --muted:#A9AEBB;
+  --orange:#FF8500; --orange-hot:#FFA23A; --orange-deep:#F0560E;
+  --stageW:1920px; --stageH:1080px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;overflow:hidden}
+#stage{position:fixed;left:0;top:0;width:var(--stageW);height:var(--stageH);
+  background:#000;overflow:hidden;font-family:'Inter',system-ui,sans-serif;
+  color:var(--ink);}
+/* camera layer — plates live here and share one transform */
+#cam{position:absolute;inset:0;transform-origin:960px 540px;will-change:transform;}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity;}
+.plate{position:absolute;inset:0;background-size:cover;background-position:center;
+  background-repeat:no-repeat;}
+.scene.black{background:radial-gradient(130% 100% at 50% 44%,#130c05 0%,#070503 48%,#020202 100%);}
+/* fx primitives (positioned in plate-cover screen space, inside #cam) */
+.glow{position:absolute;border-radius:50%;transform:translate(-50%,-50%);
+  mix-blend-mode:screen;opacity:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 50%,rgba(255,145,25,.95),rgba(255,110,0,.35) 42%,transparent 70%);}
+.pop{position:absolute;border-radius:50%;transform:translate(-50%,-50%);
+  border:3px solid var(--orange);mix-blend-mode:screen;opacity:0;pointer-events:none;
+  box-shadow:0 0 22px 4px rgba(255,133,0,.55),inset 0 0 12px rgba(255,133,0,.5);}
+.ring{position:absolute;transform:translate(-50%,-50%);border-radius:50%;opacity:0;
+  mix-blend-mode:screen;pointer-events:none;
+  background:conic-gradient(from -90deg,var(--orange) calc(var(--p,0)*1%),rgba(255,255,255,.10) 0);
+  -webkit-mask:radial-gradient(circle,transparent 55%,#000 57%);
+          mask:radial-gradient(circle,transparent 55%,#000 57%);
+  filter:drop-shadow(0 0 10px rgba(255,133,0,.6));}
+.ring .ring-val{position:absolute;inset:0;display:none;}
+.bar{position:absolute;transform-origin:bottom center;transform:scaleY(0);opacity:0;
+  border-radius:3px 3px 0 0;mix-blend-mode:screen;pointer-events:none;
+  background:linear-gradient(180deg,var(--orange-hot),var(--orange-deep));
+  box-shadow:0 0 14px rgba(255,133,0,.5);}
+.uline{position:absolute;height:4px;border-radius:2px;transform-origin:left center;
+  transform:scaleX(0);opacity:0;mix-blend-mode:screen;pointer-events:none;
+  background:linear-gradient(90deg,var(--orange-hot),var(--orange-deep));
+  box-shadow:0 0 12px rgba(255,133,0,.6);}
+.trend{position:absolute;overflow:visible;pointer-events:none;opacity:0;mix-blend-mode:screen;}
+.trend path{fill:none;stroke:#FFC27A;stroke-width:5;stroke-linecap:round;}
+/* text / logo fx (intro + CTA) */
+.tx{position:absolute;opacity:0;will-change:transform,opacity;pointer-events:none;
+  transform:translateY(22px);text-align:center;left:50%;translate:-50% 0;}
+.eyebrow{font:600 22px/1 'Inter';letter-spacing:.42em;text-transform:uppercase;
+  color:var(--orange);}
+.tagline{font:400 40px/1.35 'Inter';color:var(--muted);max-width:1180px;}
+.wordmark{font:italic 600 46px/1 'Playfair Display';color:var(--ink);letter-spacing:.01em;}
+.wordmark b{color:var(--orange);font-style:italic;font-weight:700}
+.cta-url{position:absolute;left:50%;translate:-50% 0;opacity:0;
+  font:700 40px/1 'Inter';letter-spacing:.30em;color:var(--ink);
+  padding:22px 46px;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(240,86,11,.16),rgba(255,162,58,.10));
+  border:1.5px solid rgba(255,133,0,.55);
+  box-shadow:0 0 40px rgba(255,133,0,.22),inset 0 0 24px rgba(255,133,0,.10);}
+.cta-url::after{content:"";position:absolute;top:-40%;left:var(--sx,-30%);width:26%;height:180%;
+  transform:skewX(-18deg);mix-blend-mode:screen;
+  background:linear-gradient(90deg,transparent,rgba(255,214,150,.55),transparent);}
+.logo-hero{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:560px;height:340px;opacity:0;will-change:transform,opacity,filter;}
+.align-mark{position:absolute;left:50%;translate:-50% 0;width:260px;height:78px;opacity:0;
+  will-change:transform,opacity;}
+/* global overlays (NOT camera-transformed) */
+#fx{position:absolute;inset:0;pointer-events:none;}
+#trails{position:absolute;inset:0;overflow:visible;mix-blend-mode:screen;opacity:.5;}
+#trails path{fill:none;stroke-linecap:round;}
+.tglow{stroke:rgba(255,120,0,.20);stroke-width:7;}
+.tcomet{stroke:#FFC27A;stroke-width:3.4;}
+#sweep{position:absolute;top:-20%;left:0;width:13%;height:140%;opacity:0;
+  transform:translateX(-40%) skewX(-14deg);mix-blend-mode:screen;
+  background:linear-gradient(90deg,transparent,rgba(255,190,120,.30),rgba(255,255,255,.5),rgba(255,190,120,.30),transparent);
+  filter:blur(2px);}
+#vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 120% at 50% 46%,transparent 52%,rgba(0,0,0,.55) 100%);}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.06;
+  background-image:url("../assets/grain.png");background-size:180px 180px;background-repeat:repeat;}
+/* accessibility: pause ambient CSS motion for reduced-motion previews
+   (the deterministic JS timeline still positions everything for the render) */
+@media (prefers-reduced-motion: reduce){#grain{display:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="cam"></div>
+  <div id="fx">
+    <svg id="trails" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+      <path class="tglow" d="M180 1080 C 640 980 1180 900 1980 600"/>
+      <path class="tglow" d="M460 1120 C 980 1010 1460 820 2000 480"/>
+      <path class="tglow" d="M120 980 C 760 1120 1520 980 2040 740"/>
+      <path class="tcomet" data-i="0" d="M180 1080 C 640 980 1180 900 1980 600"/>
+      <path class="tcomet" data-i="1" d="M460 1120 C 980 1010 1460 820 2000 480"/>
+      <path class="tcomet" data-i="2" d="M120 980 C 760 1120 1520 980 2040 740"/>
+    </svg>
+    <div id="sweep"></div>
+    <div id="vignette"></div>
+    <div id="grain"></div>
+  </div>
+</div>
+
+<script>
+/* =======================  CONFIG  ======================= */
+const FPS=30, DURATION=59.8, K=1920/1672;      // plate(px 1672w) -> screen scale
+const PLATES={
+  s1:"../assets/plates/s1-overview.png",
+  s2:"../assets/plates/s2-optimize-statement.png",
+  s3:"../assets/plates/s3-optimize-proof.png",
+  s4:"../assets/plates/s4-thrive-statement.png",
+  s5:"../assets/plates/s5-thrive-proof.png",
+};
+const P=(px,py)=>({x:px*K,y:py*K});           // plate px -> screen px
+
+// gentle push-in camera about frame centre
+const push=(z0,z1,cx=836,cy=470)=>u=>({zoom:z0+(z1-z0)*eis(clamp(u)),cx,cy});
+// punch camera that tracks a moving centre (plate px)
+const punch=(z0,z1,c0,c1)=>u=>({zoom:z0+(z1-z0)*eis(clamp(u)),
+  cx:c0[0]+(c1[0]-c0[0])*eio(clamp(u)), cy:c0[1]+(c1[1]-c0[1])*eio(clamp(u))});
+const still=()=>({zoom:1,cx:836,cy:470});      // identity (intro/cta)
+
+const SCENES=[
+ { id:"intro", in:0.00, out:6.40, cam:still, fx:[
+     {role:"logo",  cls:"logo-hero smartcare-logo", x:960/K, y:452/K, a:{t0:0.35,dur:1.25,s0:0.82,b0:10,out:5.55,od:0.7}},
+     {role:"label", cls:"tx eyebrow",  x:836, y:600, txt:"SmartCare&nbsp;&nbsp;·&nbsp;&nbsp;Post&#8209;Go&#8209;Live Support", a:{t0:1.15,dur:0.9,dy:16,ls:0.30,ls1:0.42,out:5.5,od:0.7}},
+     {role:"label", cls:"tx tagline",  x:836, y:672, txt:"The work that keeps HCM moving after&nbsp;go&#8209;live.", a:{t0:1.55,dur:1.0,dy:24,out:5.5,od:0.7}},
+     {role:"align", cls:"align-mark brand-logo", x:836, y:790, a:{t0:2.2,dur:0.9,out:5.6,od:0.7}},
+ ]},
+ { id:"overview", in:5.95, out:16.60, plate:"s1", cam:push(1.04,1.095,742,472), fx:[
+     {role:"glow", x:225, y:560, r:410, peak:0.42, a:{t0:0.7,dur:1.4}},
+     {role:"glow", x:620, y:560, r:410, peak:0.42, a:{t0:1.5,dur:1.4}},
+     {role:"glow", x:1015,y:560, r:410, peak:0.42, a:{t0:2.3,dur:1.4}},
+     {role:"pop",  x:112, y:470, r:104, a:{t0:1.0}},
+     {role:"pop",  x:503, y:470, r:104, a:{t0:1.8}},
+     {role:"pop",  x:897, y:470, r:104, a:{t0:2.6}},
+     {role:"pop",  x:420, y:388, r:56, a:{t0:1.5}},
+     {role:"pop",  x:815, y:388, r:56, a:{t0:2.3}},
+     {role:"glow", x:1425,y:560, r:380, peak:0.34, a:{t0:3.4,dur:1.5}},
+ ]},
+ { id:"optimize", in:16.15, out:25.60, plate:"s2", cam:push(1.03,1.075,808,462), fx:[
+     {role:"glow",  x:1262,y:450, r:560, peak:0.34, a:{t0:0.6,dur:1.6}},
+     {role:"uline", x:1048,y:512, w:150, a:{t0:1.0,dur:0.6}},
+     {role:"pop",   x:1052,y:600, r:56, a:{t0:1.6}},
+     {role:"pop",   x:1052,y:662, r:56, a:{t0:2.2}},
+     {role:"pop",   x:1052,y:724, r:56, a:{t0:2.8}},
+     {role:"pop",   x:146, y:700, r:96, a:{t0:3.2}},
+     {role:"pop",   x:340, y:700, r:96, a:{t0:3.5}},
+     {role:"pop",   x:526, y:700, r:96, a:{t0:3.8}},
+     {role:"pop",   x:712, y:700, r:96, a:{t0:4.1}},
+ ]},
+ { id:"optimize2", in:25.15, out:34.10, plate:"s3",
+     cam:punch(1.36,1.45,[985,335],[1060,470]), fx:[
+     {role:"glow", x:832, y:236, r:210, peak:0.40, a:{t0:0.5,dur:1.7}},
+     {role:"pop",  x:832, y:236, r:120, a:{t0:0.7}},
+     {role:"glow", x:880, y:700, r:210, peak:0.28, a:{t0:2.6,dur:1.4}},
+     {role:"pop",  x:1052,y:600, r:56, a:{t0:2.9}},
+     {role:"pop",  x:1052,y:662, r:56, a:{t0:3.3}},
+     {role:"pop",  x:1052,y:724, r:56, a:{t0:3.7}},
+ ]},
+ { id:"thrive", in:33.65, out:43.10, plate:"s4", cam:push(1.03,1.075,808,452), fx:[
+     {role:"glow",  x:1262,y:430, r:560, peak:0.34, a:{t0:0.6,dur:1.6}},
+     {role:"uline", x:1048,y:474, w:120, a:{t0:1.0,dur:0.6}},
+     {role:"glow",  x:700, y:520, r:320, peak:0.30, a:{t0:1.4,dur:1.5}},
+     {role:"pop",   x:1050,y:532, r:56, a:{t0:1.7}},
+     {role:"pop",   x:1050,y:600, r:56, a:{t0:2.3}},
+     {role:"pop",   x:1050,y:668, r:56, a:{t0:2.9}},
+     {role:"pop",   x:130, y:700, r:96, a:{t0:3.3}},
+     {role:"pop",   x:350, y:700, r:96, a:{t0:3.6}},
+     {role:"pop",   x:555, y:700, r:96, a:{t0:3.9}},
+     {role:"pop",   x:760, y:700, r:96, a:{t0:4.2}},
+ ]},
+ { id:"thrive2", in:42.65, out:51.30, plate:"s5",
+     cam:punch(1.40,1.50,[740,560],[770,520]), fx:[
+     {role:"bars", base:[ [672,650],[712,650],[752,650],[792,650],[830,650] ],
+                   heights:[70,104,150,196,250], w:26, a:{t0:0.7,dur:1.7}},
+     {role:"trend",pts:"600,610 672,584 712,556 752,516 792,470 838,432", a:{t0:1.5,dur:1.2}},
+     {role:"glow", x:760, y:520, r:300, peak:0.30, a:{t0:0.6,dur:1.5}},
+     {role:"pop",  x:1050,y:532, r:56, a:{t0:3.0}},
+     {role:"pop",  x:1050,y:600, r:56, a:{t0:3.4}},
+     {role:"pop",  x:1050,y:668, r:56, a:{t0:3.8}},
+ ]},
+ { id:"cta", in:50.85, out:59.80, cam:still, fx:[
+     {role:"logo",  cls:"logo-hero smartcare-logo", x:960/K, y:404/K, a:{t0:0.0,dur:1.0,s0:0.86,b0:7}},
+     {role:"label", cls:"tx wordmark", x:836, y:566, txt:"Stabilize.&nbsp; <b>Optimize.</b>&nbsp; Thrive.", a:{t0:0.9,dur:0.9,dy:18}},
+     {role:"url",   x:836, y:648, txt:"ALIGNHCM.COM", a:{t0:1.5,dur:0.8,per:2.4,sh:2.2}},
+     {role:"align", cls:"align-mark brand-logo", x:836, y:812, a:{t0:2.2,dur:0.9}},
+ ]},
+];
+
+/* =======================  ENGINE  ======================= */
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eoe=x=>x>=1?1:1-Math.pow(2,-10*x);
+const eoc=x=>1-Math.pow(1-x,3);
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eis=x=>-(Math.cos(Math.PI*clamp(x))-1)/2;
+const eob=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+
+const cam=document.getElementById('cam');
+const comets=[...document.querySelectorAll('.tcomet')];
+const cometLen=comets.map(p=>p.getTotalLength());
+comets.forEach((p,i)=>{p.style.strokeDasharray=`22 ${cometLen[i]}`;});
+const sweep=document.getElementById('sweep');
+const trails=document.getElementById('trails');
+
+function el(cls,parent){const d=document.createElement('div');d.className=cls;parent.appendChild(d);return d;}
+
+// build DOM for every scene from its fx spec
+for(const sc of SCENES){
+  const scene=el('scene'+(sc.plate?'':' black'),cam); sc._node=scene;
+  if(sc.plate){const pl=el('plate',scene);pl.style.backgroundImage=`url("${PLATES[sc.plate]}")`;}
+  sc._fx=[];
+  for(const f of (sc.fx||[])){
+    let node, role=f.role;
+    if(role==='glow'){node=el('glow',scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';node.style.width=f.r*2*K+'px';node.style.height=f.r*2*K+'px';}
+    else if(role==='pop'){node=el('pop',scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';node.style.width=f.r*2*K+'px';node.style.height=f.r*2*K+'px';}
+    else if(role==='ring'){node=el('ring',scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';node.style.width=f.r*2*K+'px';node.style.height=f.r*2*K+'px';}
+    else if(role==='uline'){node=el('uline',scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';node.style.width=f.w*K+'px';}
+    else if(role==='bars'){node=el('barwrap',scene);node.style.position='absolute';node.style.inset='0';
+        f._bars=f.base.map((b,i)=>{const bar=el('bar',node);const s=P(b[0],b[1]);bar.style.left=s.x+'px';bar.style.top=(s.y-f.heights[i]*K)+'px';bar.style.width=f.w*K+'px';bar.style.height=f.heights[i]*K+'px';return bar;});}
+    else if(role==='trend'){node=document.createElementNS('http://www.w3.org/2000/svg','svg');node.setAttribute('class','trend');node.setAttribute('viewBox','0 0 1672 941');node.style.position='absolute';node.style.inset='0';node.style.width='100%';node.style.height='100%';
+        const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d','M'+f.pts.replace(/ /g,' L'));node.appendChild(path);scene.appendChild(node);f._path=path;f._len=0;}
+    else if(role==='label'||role==='url'||role==='wordmark'){node=el(f.cls||'tx',scene);node.style.left=P(f.x,0).x+'px';node.style.top=P(0,f.y).y+'px';node.innerHTML=f.txt||'';if(role==='url'){node.className='cta-url';}}
+    else if(role==='logo'){node=el(f.cls,scene);const s=P(f.x,f.y);node.style.left=s.x+'px';node.style.top=s.y+'px';}
+    else if(role==='align'){node=el(f.cls,scene);node.style.left=P(f.x,0).x+'px';node.style.top=P(0,f.y).y+'px';}
+    sc._fx.push({role,node,a:f.a,f});
+  }
+}
+
+function sceneAlpha(sc,t){const XF=0.45;if(t<=sc.in||t>=sc.out)return 0;return clamp(Math.min((t-sc.in)/XF,(sc.out-t)/XF));}
+
+const ROLE={
+ glow(o,lt){const a=o.a;const p=clamp((lt-a.t0)/a.dur);if(p<=0){o.node.style.opacity=0;return;}
+   const e=p<0.5?eoc(p/0.5):lerp(1,0.62,eoc((p-0.5)/0.5));o.node.style.opacity=(o.f.peak*e).toFixed(3);},
+ pop(o,lt){const a=o.a;const p=clamp((lt-a.t0)/0.64);if(p<=0){o.node.style.opacity=0;return;}
+   const s=lerp(0.5,1.16,eob(p));const op=p<0.32?p/0.32:1-(p-0.32)/0.68;
+   o.node.style.transform=`translate(-50%,-50%) scale(${s.toFixed(3)})`;o.node.style.opacity=clamp(op).toFixed(3);},
+ ring(o,lt){const a=o.a;const p=clamp((lt-a.t0)/a.dur);const v=lerp(a.from,a.to,eoc(p));
+   o.node.style.setProperty('--p',v.toFixed(1));o.node.style.opacity=clamp((lt-a.t0)/0.3).toFixed(3);},
+ uline(o,lt){const a=o.a;const p=clamp((lt-a.t0)/a.dur);
+   o.node.style.transform=`scaleX(${eoc(p).toFixed(3)})`;o.node.style.opacity=p>0?1:0;},
+ bars(o,lt){const a=o.a;o.f._bars.forEach((bar,i)=>{const d=i*0.12;const p=clamp((lt-a.t0-d)/(a.dur-0.4));
+   bar.style.transform=`scaleY(${eob(p).toFixed(3)})`;bar.style.opacity=p>0?clamp(p*3).toFixed(3):0;});},
+ trend(o,lt){const a=o.a;if(!o.f._len){o.f._len=o.f._path.getTotalLength();o.f._path.style.strokeDasharray=o.f._len;}
+   const p=clamp((lt-a.t0)/a.dur);o.f._path.style.strokeDashoffset=(o.f._len*(1-eoc(p))).toFixed(1);
+   o.node.style.opacity=clamp((lt-a.t0)/0.25).toFixed(3);},
+ label(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||0.9));const e=eoe(ip);let op=e;
+   if(a.out!=null){op=Math.min(e,1-eoc(clamp((lt-a.out)/(a.od||0.6))));}
+   o.node.style.opacity=op.toFixed(3);o.node.style.transform=`translateY(${lerp(a.dy??22,0,e).toFixed(2)}px)`;
+   if(a.ls!=null)o.node.style.letterSpacing=lerp(a.ls,a.ls1??a.ls,e).toFixed(3)+'em';},
+ wordmark(o,lt){ROLE.label(o,lt);},
+ url(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||0.8));const e=eoe(ip);
+   o.node.style.opacity=e.toFixed(3);o.node.style.transform=`translateY(${lerp(16,0,e).toFixed(2)}px)`;
+   const per=a.per||2.4;const ph=(((lt-a.t0)%per)+per)%per/per;o.node.style.setProperty('--sx',lerp(-30,130,ph).toFixed(1)+'%');},
+ logo(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||1.1));const e=eoe(ip);let op=e;
+   if(a.out!=null){op=Math.min(e,1-eoc(clamp((lt-a.out)/(a.od||0.6))));}
+   o.node.style.opacity=op.toFixed(3);
+   o.node.style.transform=`translate(-50%,-50%) scale(${lerp(a.s0??0.86,1,eob(ip)).toFixed(4)})`;
+   o.node.style.filter=`drop-shadow(0 0 ${lerp(2,24,e).toFixed(1)}px rgba(255,133,0,${(0.5*e).toFixed(3)})) blur(${lerp(a.b0??8,0,e).toFixed(2)}px)`;},
+ align(o,lt){const a=o.a;const ip=clamp((lt-a.t0)/(a.dur||0.9));const e=eoe(ip);let op=e*0.92;
+   if(a.out!=null){op=Math.min(e*0.92,0.92*(1-eoc(clamp((lt-a.out)/(a.od||0.6)))));}
+   o.node.style.opacity=op.toFixed(3);o.node.style.transform=`translateY(${lerp(14,0,e).toFixed(2)}px)`;},
+};
+
+function applyCam(t){
+  let z=0,cx=0,cy=0,w=0;
+  for(const sc of SCENES){const al=sceneAlpha(sc,t);if(al<=0)continue;const u=(t-sc.in)/(sc.out-sc.in);const c=sc.cam(u);z+=c.zoom*al;cx+=c.cx*al;cy+=c.cy*al;w+=al;}
+  if(w<=0){cam.style.transform='';return;}
+  z/=w;cx/=w;cy/=w;const s=P(cx,cy);
+  cam.style.transform=`translate(${(z*(960-s.x)).toFixed(2)}px,${(z*(540-s.y)).toFixed(2)}px) scale(${z.toFixed(4)})`;
+}
+
+function updateTrails(t){
+  // comets travel; whole trail brightens near scene transitions
+  let boost=0;
+  for(let i=1;i<SCENES.length;i++){const b=SCENES[i].in;const d=Math.abs(t-b);if(d<0.4)boost=Math.max(boost,1-d/0.4);}
+  trails.style.opacity=(0.42+0.4*boost).toFixed(3);
+  comets.forEach((p,i)=>{const L=cometLen[i];const speed=[210,250,180][i];const off=((t*speed)% (L+240));p.style.strokeDashoffset=(-off).toFixed(1);});
+  // transition sweep
+  let sx=null,sa=0;
+  for(let i=1;i<SCENES.length;i++){const b=SCENES[i].in;const d=t-b;if(d>=-0.34&&d<=0.34){sx=(d+0.34)/0.68;sa=1-Math.abs(d)/0.34;}}
+  if(sx==null){sweep.style.opacity=0;}else{sweep.style.opacity=(0.85*sa).toFixed(3);sweep.style.transform=`translateX(${lerp(-40,1560,sx).toFixed(1)}px) skewX(-14deg)`;}
+}
+
+function seek(t){
+  t=clamp(t,0,DURATION);
+  for(const sc of SCENES){
+    const al=sceneAlpha(sc,t);sc._node.style.opacity=al.toFixed(3);
+    if(al<=0){sc._node.style.visibility='hidden';continue;}
+    sc._node.style.visibility='visible';const lt=t-sc.in;
+    for(const o of sc._fx){const fn=ROLE[o.role];if(fn)fn(o,lt);}
+  }
+  applyCam(t);updateTrails(t);
+}
+window.seek=seek;
+window.DURATION=DURATION;window.FPS=FPS;
+
+// preload plates, then signal ready for frame-accurate capture
+window.__ready=false;
+(async()=>{
+  await (document.fonts?document.fonts.ready:Promise.resolve());
+  await Promise.all([...Object.values(PLATES),'../assets/grain.png'].map(u=>new Promise(res=>{const im=new Image();im.onload=im.onerror=res;im.src=u;})));
+  seek(0);requestAnimationFrame(()=>{window.__ready=true;});
+})();
+
+// live preview when opened in a browser (not used during capture)
+let _play=false,_t0=0;
+function loop(now){if(_play){const t=((now-_t0)/1000)%DURATION;seek(t);}requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+window.addEventListener('keydown',e=>{if(e.key===' '){_play=!_play;_t0=performance.now()-(_play?0:0);}});
+</script>
+</body>
+</html>
