@@ -26,6 +26,9 @@ Also fire whenever Dillon mentions brand, colors, fonts, logos, or visual consis
 
 1. **Read the brand reference first:**
    `C:\Users\DillonMohr\.claude\clients\align-hcm\brand.md`
+   Remote/cloud sessions can't reach that path — use the canonical token table
+   below (verified 2026-08-10 against the shipped Aug 2026 editorial PDFs) and
+   the vault page `dillon-os/02_FullTimeJob/AlignHCM/brand-guidelines.md`.
 
 2. **Use exact hex codes and exact font names.** Don't paraphrase. `#FF6B2B` not "orange". `Inter` not "a sans-serif."
 
@@ -45,6 +48,20 @@ Also fire whenever Dillon mentions brand, colors, fonts, logos, or visual consis
 - Deck structure — separate skill to be built from the `.pptx` source (pending)
 - Final MP4 video outputs — this skill references the HTML sources, not rendered video
 
+## Canonical tokens (remote-safe copy, verified 2026-08-10)
+
+Extracted from the shipped Align editorial PDF set (Aug 2026) plus the
+production carousel/motion files. Exact values; do not paraphrase.
+
+- Navy ink / masthead `#0A1628` · slate body `#2D3748` / `#4A5568` · muted `#646E7C`
+- Steel blue `#1B4F72` (tint `#EDF3F8`) · muted blue on navy `#B9C6D8`
+- Orange primary `#F05A28` · bright `#FF6B2B` · legacy `#E8832A` · rust kickers `#AD3D1B` (tint `#FDF1EA`)
+- Teal chips `#136E61` (tint `#E9F7F4`) · product teal `#2BB5A0`
+- Paper `#FCFAF7` · panel `#F5F1EA` · hairlines `#E9E4DC` · sheet total cream `#F4EFE7` · editable yellow `#FFF2CC`
+- Fonts: Inter + DM Sans + Syne (web/motion); Arial in Office docs
+- Exact logo (reverse, transparent 268x108):
+  `dillon-os/02_FullTimeJob/AlignHCM/assets/align-hcm-logo-reverse.png` — place big, on navy
+
 ## Rule of thumb
 
-If this skill fires, every color, font, and effect in your output should trace back to a token in `brand.md`. No "close enough."
+If this skill fires, every color, font, and effect in your output should trace back to a token in `brand.md` (or the canonical table above when remote). No "close enough."
