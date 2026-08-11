@@ -1,0 +1,10 @@
+{
+  "enabledMcpjsonServers": [
+    "microsoft_foundry"
+  ],
+  "permissions": {
+    "allow": [
+      "mcp__microsoft_foundry"
+    ]
+  }
+}
