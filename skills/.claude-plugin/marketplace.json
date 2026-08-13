@@ -13,6 +13,24 @@
   },
   "plugins": [
     {
+      "name": "alignhcm-brand-system",
+      "source": "./alignhcm-brand-system",
+      "description": "Exact Align HCM and SmartCare brand production system with a bundled PowerPoint master reference, exact Align deck logo, deterministic client co-branding, surface tokens, accessibility, motion, social, web, editorial, and voice rules.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Dillon Mohr"
+      },
+      "keywords": [
+        "align-hcm",
+        "smartcare",
+        "brand-system",
+        "powerpoint",
+        "client-decks",
+        "co-branding"
+      ],
+      "category": "design"
+    },
+    {
       "name": "marketing-skills",
       "source": "./marketing-skill",
       "description": "44 marketing skills across 7 pods: Content, SEO, CRO, Channels, Growth, Intelligence, Sales enablement, and X/Twitter growth. 51 Python tools, 73 reference docs.",
