@@ -1,50 +1,34 @@
 ---
 name: alignhcm-brand
-description: Load Align HCM / SmartCare brand tokens — exact hex codes, Google Fonts stack (Inter + DM Sans + Syne), signature visual effects (orange-to-red gradient CTAs, backdrop-blur glass panels, text-underline accent animation, ambient glow blobs), typography scale, and voice/tone rules. Use ANY time you're designing, coding, or writing visual content for Align HCM or SmartCare — LinkedIn graphics, email headers, landing pages, HubSpot modules, decks, carousels, motion graphics, ad creative, social posts. Skip if the work is non-visual copy only.
+description: DEPRECATED. Superseded by `alignhcm-brand-system`, which consolidates Align HCM brand tokens, the PowerPoint master template system, carousel and motion specs, and voice rules into one package. Use `alignhcm-brand-system` instead.
 ---
 
-# Align HCM / SmartCare Brand Loader
+# Deprecated — use `alignhcm-brand-system`
 
-## What this skill does
+This skill has been folded into **`alignhcm-brand-system`**.
 
-Loads the canonical brand token reference so you don't re-derive colors, fonts, or signature effects every session. The tokens come from real production files (May-6 carousel, motion graphics, premium variant) — they're already shipped and in-market.
+## Why
 
-## When to invoke
+It was pointer-only. It instructed the reader to load
+`C:\Users\DillonMohr\.claude\clients\align-hcm\brand.md`, which does not exist
+in any repository and was independently recorded as missing on 2026-07-16 in
+`align-hcm-august-2026-content/master-template-reference/SOURCE-NOTES.md`.
 
-Fire this whenever Dillon asks for Align HCM or SmartCare:
+The usable tokens carried in its prose have been salvaged into the new package,
+reconciled against production files, and split by surface — because the single
+`#FF6B2B` "primary" this skill named is in fact the *blog* accent, not the web,
+deck, social, or motion orange.
 
-- Graphics, icons, illustrations, or image generation
-- Landing pages, HubSpot CMS modules, web page code
-- LinkedIn carousel videos, motion graphics, animated videos
-- Decks, slides, one-pagers
-- Email templates, ad creative, social post graphics
-- Any CSS / HTML / JSX / SVG work
+It also noted that a deck skill was still "pending". That gap is now closed.
 
-Also fire whenever Dillon mentions brand, colors, fonts, logos, or visual consistency for these clients.
+## Where things went
 
-## How to use it
+| Was here | Now |
+|---|---|
+| Colour tokens | `alignhcm-brand-system/references/tokens.md` |
+| Signature effects | `alignhcm-brand-system/references/carousel-and-motion.md` |
+| Voice rules | `alignhcm-brand-system/references/voice-and-copy.md` |
+| Deck system (was pending) | `alignhcm-brand-system/references/powerpoint-deck-system.md` |
+| Audit of what conflicted | `alignhcm-brand-system/references/provenance-and-conflicts.md` |
 
-1. **Read the brand reference first:**
-   `C:\Users\DillonMohr\.claude\clients\align-hcm\brand.md`
-
-2. **Use exact hex codes and exact font names.** Don't paraphrase. `#FF6B2B` not "orange". `Inter` not "a sans-serif."
-
-3. **Pair with the carousel template skill** (`alignhcm-carousel-video`) when the work is a LinkedIn carousel specifically.
-
-4. **Pair with the SmartCare GTM skill** (`alignhcm-smartcare`) when positioning/copy also needs to match.
-
-5. **When generating new assets**, always apply the signature effects where relevant:
-   - CTA buttons → orange-to-red gradient `linear-gradient(135deg, #F05A28 0%, #FF6B35 100%)` + shimmer loop
-   - Accent word in headline → text-underline animation (`scaleX(0)→scaleX(1)`, 0.6s, transform-origin left)
-   - Depth panels → `backdrop-filter: blur(20–24px)` glass
-   - Ambient background → 120px blur glow blob, top/bottom corner, low opacity
-
-## What's NOT in this skill
-
-- Messaging / positioning / pricing — that's `alignhcm-smartcare`
-- Deck structure — separate skill to be built from the `.pptx` source (pending)
-- Final MP4 video outputs — this skill references the HTML sources, not rendered video
-
-## Rule of thumb
-
-If this skill fires, every color, font, and effect in your output should trace back to a token in `brand.md`. No "close enough."
+Safe to delete once nothing references the old name.
