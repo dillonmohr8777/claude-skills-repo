@@ -1,133 +1,107 @@
-# Align HCM PowerPoint deck system
+# Align HCM primary PowerPoint system
 
-How to build an Align deck that matches the master template, and how to make the
-template itself the authority instead of a hand-copied hex list.
+## Authority and implementation model
 
----
+`assets/templates/Align-HCM-Primary-Deck-Reference.pptx` is the privacy-scrubbed
+clone of the exact visual authority supplied by Dillon on 2026-08-13. Its
+geometry, styles, colors, type, icons, Align artwork, and client-logo zone are
+unchanged. Prior-client branding, contacts, pricing, and engagement facts were
+removed before committing it to the public repository. It is a designed seven-
+slide deck, not a mature `.potx` theme.
 
-## Step 1 — ingest the template (do this first, every time)
+The file retains the stock Office theme internally. Its real Align identity is
+hand-painted into slide shapes and text:
 
-```bash
-python3 scripts/extract_pptx_theme.py assets/templates/Align_HCM_Master_Template.potx \
-  --md references/powerpoint-tokens.md \
-  --json references/powerpoint-tokens.json
-```
+- primary navy `#232E3E`
+- primary orange `#E97722`
+- contrast orange `#B05512`
+- paper `#F6F8FA`
+- light text/rules `#C5CEDA` and `#E3E8EE`
+- direct type overrides: Calibri, Arial, and Cambria
 
-This reads the OPC container directly — no `python-pptx` needed — and pulls:
+Therefore:
 
-- the **12 theme colour slots** (`dk1`, `lt1`, `dk2`, `lt2`, `accent1–6`,
-  `hlink`, `folHlink`) with exact hex
-- the **major/minor font pair** (headings and body) as PowerPoint resolves them
-- **slide geometry** in inches, pixels at 96 DPI, and EMU
-- the **layout inventory** with each layout's name and placeholder types
-- **every hex actually painted** on masters and layouts, by frequency
-- **font overrides** applied directly to runs instead of via `+mj-lt` / `+mn-lt`
+- Do not use the Office `accent1` through `accent6` slots as Align colors.
+- Do not rebuild the design from the reported stock Office layouts.
+- Clone a designed slide and edit its existing shapes.
+- Treat `powerpoint-tokens.md` as measurement evidence and the rendered deck as
+  the visual authority.
 
-The last two are the drift detectors. A colour that appears in "painted" but is
-not a theme slot was typed onto a shape by hand and will not follow a theme
-change.
+## Exact file and artwork
 
-Once `powerpoint-tokens.md` exists, **it outranks every other source for deck
-work**, including `tokens.md`.
+- Scrubbed reference deck SHA-256:
+  `1BE9BDEE225E53C4F4E5F17B7D92CE5E98C15AE0709C10B9F61C331F3287A722`
+- Exact Align deck lockup SHA-256:
+  `3A0340D27BFE44B21277F4A689796B1C31338F5FD74134786209F5B736D22A07`
+- Canvas: 13.333 x 7.5 inches, 16:9
 
----
+Never reconstruct or recolor the Align lockup. Use the embedded image or the
+bundled exact copy.
 
-## Step 2 — build on the layouts, not on rectangles
+## Client co-branding
 
-Use the layout names exactly as the extractor reports them. Never rebuild a
-cover by drawing shapes onto a blank slide — it breaks theme inheritance, the
-footer chrome, and every subsequent template update.
+The cover has two distinct brand zones:
 
-Colours go in as **theme references** (`accent1`), not literals (`#F05A28`).
-Fonts go in as `+mj-lt` / `+mn-lt`. That is what makes a deck survive a rebrand.
-
----
-
-## Structure observed on the master
-
-From `Align_HCM_Master_Template_9…`, read off
-`align-hcm-maher-brent-chatcut/references/align-brand-system-reference.jpg`.
-Design intent is reliable here; measurements are not — take those from Step 1.
-
-### Cover
-- Navy ground, full bleed
-- Logo lock top-left: `Align` wordmark with the orange chevron/dot mark and
-  `HUMAN CAPITAL MANAGEMENT` beneath in small caps
-- Orange eyebrow, caps, wide tracking: `PRESENTATION CATEGORY · EYEBROW`
-- Serif display title, sentence case, large
-- One-line descriptor in light sans below
-- Thin orange rule
-- `Client or Audience Name` bold, `Engagement or Date · Month YYYY` muted
-- Decorative: soft darker-navy quarter circle upper right, small orange dot
-- Footer: `alignhcm.com` · `Confidential` · `Align HCM · 01`
-
-### Brand at a Glance (slide 2)
-Three cards on paper ground, each with a thin orange top rule:
-- **LOGO** — primary lock on light, reversed lock on navy
-- **COLOR** — four swatches labelled Base (navy), Card (white), Accent (orange),
-  Surface (off-white)
-- **TYPE** — serif `Headline` "Display weight for titles"; sans `Body copy`
-  "easy, light and readable"; orange `EYEBROW · LABEL` "Slip line, eyebrow, footnote"
-
-Keep this slide in client-facing decks. It is doing brand-standards work.
-
-### Section divider
-Paper ground · large solid orange circle with the section number reversed out ·
-orange `SECTION OVERVIEW` eyebrow · serif section title · one framing sentence ·
-navy footer bar.
-
-### Footer chrome
-Present on every slide. Three zones: `alignhcm.com` left, `Confidential` centre,
-`Align HCM · NN` right. Zero-padded slide number.
-
----
-
-## Type hierarchy
-
-| Level | Face | Treatment |
+| Zone | Named picture | Position and box |
 |---|---|---|
-| Display title | Theme major (serif) | Sentence case, tight tracking |
-| Section title | Theme major (serif) | Sentence case |
-| Eyebrow / label | Theme minor (sans) | Caps, orange, wide tracking (~0.16–0.34em) |
-| Body | Theme minor (sans) | Light weight, generous leading |
-| Footer | Theme minor (sans) | Small, caps, wide tracking, muted |
+| Align lockup | `AlignHCM_Logo` | x 0.900 in, y 0.780 in, 2.750 x 1.275 in |
+| Client logo | `CLIENT_LOGO` after preparation | x 9.667 in, y 3.460 in, maximum 2.900 x 0.997 in |
 
-The eyebrow is the signature move — an orange caps line above nearly every
-title. Do not drop it.
+The client logo belongs below `PREPARED FOR` on the navy panel. Contain it
+inside the maximum box, center it on both axes, preserve aspect ratio, and do
+not crop, trace, recolor, add effects, or place it on a white card unless the
+official mark is unreadable on navy. Prefer the client's official reverse or
+white mark. If only a dark mark exists, use the approved light-background logo
+variant and a restrained clear-space field.
 
----
+Normalize by optical height, not bounding-box width. A wide wordmark should
+not visually overpower the Align logo. Client branding does not enter the
+footer and does not replace Align ownership.
 
-## Colour discipline
+## Slide recipes in the supplied authority
 
-- Navy and paper alternate as grounds. Orange is **accent only** — eyebrows,
-  rules, the section numeral, one KPI figure per slide.
-- Never set body copy in orange.
-- Never put an orange field behind a large text block; orange is a stroke, a
-  dot, a numeral, or a thin rule.
-- One accent per slide. Two oranges competing reads as a template failure.
+1. **Dual-brand cover**: navy split field, Align lockup upper left, client mark
+   centered in the right panel, orange vertical divider, serif title, compact
+   eyebrow, short engagement line, date, and three-zone footer.
+2. **Executive answer**: white field, title and one-sentence answer, four navy
+   proof cards in a two-by-two grid. Use one claim per card.
+3. **Timeline**: white field, six restrained navy phase blocks, one orange
+   go-live marker, and one dark explanatory callout.
+4. **Milestone table**: white field, dark header, alternating pale rows, orange
+   duration column. Keep the body readable; move overflow to an appendix.
+5. **Investment or focal proof**: full navy field, one dominant value, one
+   secondary conditional callout, and one full-width scope note.
+6. **Client responsibility matrix**: white field, compact matrix plus one dark
+   interpretation callout. Use words and color together.
+7. **Close/contact**: navy split field, Align lockup on the left, one clear next
+   step and verified contact details on the right.
 
----
+These are visual archetypes, not permission to preserve the sample content.
+Delete irrelevant slides and duplicate the closest archetype when more pages
+are needed.
 
-## Composing with other skills
+## Content and evidence rules
 
-- `pptx` — the file-manipulation layer. Use it to actually write the `.pptx`.
-  This skill supplies the tokens; that one supplies the mechanics.
-- `slide-polish` — run **after** the deck is built, for alignment and spacing.
-  It is brand-neutral, so it will not fight these tokens.
-- `presentation-design-master` — narrative and condensation. Run it on content
-  before applying this system, not after.
-- `cool-data-elements` — **has the wrong Align palette** (`#E8760A`, `#414042`).
-  Do not use for Align until its tokens are corrected.
+- Read the current brief before touching the deck.
+- Resolve the client and engagement from current source evidence.
+- Replace every sample client, person, price, scope, date, timeline, and claim.
+- Keep one primary idea per slide and one accent behavior per field.
+- Use precise source notes for claims, tables, pricing, and timelines.
+- Keep body text at a readable presentation size. Split dense pages instead of
+  shrinking text.
+- Preserve the footer sequence: `alignhcm.com`, confidentiality, `Align HCM`,
+  and zero-padded slide number.
 
----
+## Build and delivery gate
 
-## Checks before shipping
+1. Run `prepare_client_deck.py` with a verified client name and PNG logo.
+2. Rewrite the deck from the current brief.
+3. Run `validate_client_deck.py` with the same client name and logo.
+4. Render all slides at 16:9 and review them as images.
+5. Confirm the Align logo hash, client logo fidelity and aspect ratio, no sample
+   residue, no unresolved placeholders, no overflow, and sequential footers.
+6. Check body contrast at 4.5:1 and large display text at 3:1.
+7. Deliver both the editable `.pptx` and a reviewed PDF when requested.
 
-1. Every slide uses a named layout — none built freehand on Blank.
-2. Colours reference theme slots, not literals.
-3. Fonts resolve through `+mj-lt` / `+mn-lt`.
-4. Eyebrow present and orange on every title slide.
-5. Footer chrome intact, slide numbers zero-padded and sequential.
-6. One orange accent per slide.
-7. Re-run the extractor on the finished deck and diff its "painted colours"
-   against the template's. New hexes mean drift.
+Run `extract_pptx_theme.py` only when onboarding a replacement master or
+auditing drift. Extraction is not required for ordinary deck creation.

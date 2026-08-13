@@ -1,101 +1,104 @@
 ---
 name: alignhcm-brand-system
-description: The single source of truth for Align HCM and SmartCare brand identity — exact per-surface color tokens, font stacks, the PowerPoint master template system, LinkedIn carousel structure, motion-graphics tokens, and voice/copy rules. Use ANY time you design, build, write, or review something branded for Align HCM or SmartCare — PowerPoint decks, slides, presentations, Word documents, LinkedIn carousels, motion graphics, video, landing pages, HubSpot CMS modules, email templates, ad creative, social graphics, blog HTML, reports, or one-pagers. Also use when asked about Align brand colors, the Align orange, Align fonts, logo usage, deck templates, or whether an asset is on-brand. Replaces the older alignhcm-brand, alignhcm-carousel-video, and alignhcm-smartcare skills. Do NOT use for Anthropic's own brand (that is `brand-guidelines`) or for other clients.
+description: Exact, portable Align HCM and SmartCare brand production system with the bundled primary PowerPoint reference, exact Align deck logo, deterministic client-logo placement, surface-specific color and type tokens, deck layouts, web/editorial/data-visualization rules, LinkedIn carousel and motion systems, accessibility checks, and voice/copy guidance. Use for any Align HCM or SmartCare deck, proposal, presentation, Word document, report, one-pager, HubSpot page, landing page, email, ad, social graphic, carousel, video, or brand review. Use especially when a deck must identify the client from its brief, source and verify that client's logo, and render in the exact Align master style. Do not use for Anthropic's brand or another client.
 ---
 
-# Align HCM / SmartCare — brand system
+# Align HCM brand system
 
-Consolidates every Align branding asset found across the account into one
-package, and makes the PowerPoint master template the authority for deck work.
+Use this package as the execution authority for Align-branded work. It contains
+the production assets, not pointers to a missing machine folder.
 
-## The one thing to get right
+## Non-negotiable contract
 
-**Align does not have a single orange.** It has four in active production use,
-one per surface, and they are not interchangeable:
+1. Identify the output surface before selecting tokens.
+2. Load only the reference files required for that surface.
+3. Use bundled artwork. Never redraw, typeset, trace, or image-generate a logo.
+4. Resolve the exact client and logo from the current brief or source material.
+   Do not infer a client from an old filename or the bundled reference content.
+5. Fail closed when the client identity, logo provenance, or approved copy is
+   ambiguous.
+6. Run the surface linter and the output-specific validation before delivery.
 
-| Surface | Orange |
-|---|---|
-| Web / HubSpot | `#FF9902` |
-| PowerPoint decks | *from the template* — see below |
-| LinkedIn carousel / social | `#F05A28` → `#FF6B35` gradient |
-| Video / motion | `#F47A25` |
-| Blog / long-form | `#FF6B2B` |
+## Surface selector
 
-Using the web orange in a deck is the most common way Align work goes off-brand.
-**Identify the surface before picking any token.**
+| Work | Required references | Gate |
+|---|---|---|
+| PowerPoint or sales deck | `powerpoint-deck-system.md`, `powerpoint-tokens.md`, `logo-imagery-data-visualization.md` | `validate_client_deck.py` plus rendered-slide review |
+| Word document, report, one-pager | `tokens.md`, `logo-imagery-data-visualization.md`, `voice-and-copy.md` | `brand_lint.py --surface document` plus PDF review |
+| Web or HubSpot | `tokens.md`, `logo-imagery-data-visualization.md`, `voice-and-copy.md` | `brand_lint.py --surface web` plus responsive/accessibility review |
+| LinkedIn or static social | `carousel-and-motion.md`, `tokens.md`, `voice-and-copy.md` | `brand_lint.py --surface social` |
+| Video or motion | `carousel-and-motion.md`, `tokens.md`, `voice-and-copy.md` | `brand_lint.py --surface motion` plus frame review |
+| Blog or editorial HTML | `tokens.md`, `logo-imagery-data-visualization.md`, `voice-and-copy.md` | `brand_lint.py --surface editorial` |
 
-Never use `#E8760A` or `#414042`. They appear in zero production files.
+## Exact deck workflow
 
-## How to use this skill
+The bundled reference is
+`assets/templates/Align-HCM-Primary-Deck-Reference.pptx`. It is a privacy-
+scrubbed clone of the exact seven-slide authority supplied by Dillon: geometry,
+styles, colors, type, icons, and Align artwork are preserved, while the prior
+client's logo, contacts, pricing, and engagement data are removed. The Align
+lockup is also bundled at `assets/logos/align-hcm-deck-lockup.png`.
 
-1. **Identify the surface.** Deck, web, social, motion, editorial, or document.
-2. **Load the token table for that surface** from `references/tokens.md`.
-3. **For decks, ingest the template first** (below). It outranks everything else.
-4. **Apply voice rules** from `references/voice-and-copy.md` to any copy —
-   especially the no-em-dashes rule, which is absolute.
-5. **Lint before shipping:**
+1. Read the current deck brief and supporting source files. State the resolved
+   client, engagement, audience, deck type, and date.
+2. Obtain the client's official logo from, in order: an attached approved
+   asset, the client's canonical project assets, the client's official brand
+   kit, or its official website. Prefer a transparent PNG or convert an official
+   SVG without modifying the artwork. Record the source locator.
+3. Start from the bundled reference:
+
    ```bash
-   python3 scripts/brand_lint.py --surface <surface> <files>
+   python scripts/prepare_client_deck.py \
+     --output <working-deck>.pptx \
+     --client-name "<verified client>" \
+     --client-logo <verified-logo>.png \
+     --engagement-title "<engagement>" \
+     --deck-type "<deck type>" \
+     --date "<month year>"
    ```
 
-## PowerPoint decks — start here
+4. Rewrite every reference-specific body value from the current brief. Never
+   carry the sample client, people, price, dates, scope, or timeline forward.
+5. Preserve the template's fields, grid, footer rhythm, and named logo zones.
+   Clone the closest designed slide instead of rebuilding from a blank layout.
+6. Validate the editable deck:
 
-Put the master template in `assets/templates/`, then run:
+   ```bash
+   python scripts/validate_client_deck.py <working-deck>.pptx \
+     --client-name "<verified client>" \
+     --client-logo <verified-logo>.png
+   ```
 
-```bash
-python3 scripts/extract_pptx_theme.py assets/templates/<file>.potx \
-  --md references/powerpoint-tokens.md \
-  --json references/powerpoint-tokens.json
-```
+7. Render every slide and compare it with the bundled reference. Check client
+   logo aspect ratio and optical size, Align logo fidelity, overflow, contrast,
+   table legibility, footer sequence, and source notes.
 
-Stdlib only — no `python-pptx` required. This pulls the exact theme colour
-slots, the major/minor font pair, slide geometry, the full layout inventory, and
-every colour actually painted on the masters. The generated
-`references/powerpoint-tokens.md` then becomes authoritative for all deck work.
+Extraction is an onboarding and drift-audit tool, not a runtime dependency.
+Run `extract_pptx_theme.py` only when Dillon supplies a newer master or when the
+bundled reference may have changed.
 
-Build on the **named layouts** the extractor reports. Reference colours as theme
-slots (`accent1`), not literals, and fonts as `+mj-lt` / `+mn-lt` — that is what
-survives a template update.
+## Assets and references
 
-Full deck spec, structure, and shipping checks: `references/powerpoint-deck-system.md`.
-
-> **Status: no Align `.potx` exists in any of the eight repositories searched.**
-> The deck ledger in `tokens.md` is intentionally empty rather than guessed.
-> What is currently known about the master comes from a screenshot at
-> `align-hcm-maher-brent-chatcut/references/align-brand-system-reference.jpg`
-> — reliable for design intent, not for measurement.
-
-## Files
-
-| File | What's in it |
+| Path | Purpose |
 |---|---|
-| `references/tokens.md` | Per-surface colour and type ledger, with precedence rules |
-| `references/powerpoint-deck-system.md` | Deck structure, type hierarchy, colour discipline, checks |
-| `references/voice-and-copy.md` | Tone, hard writing rules, SmartCare messaging |
-| `references/carousel-and-motion.md` | 8-slide carousel arc, motion-master tokens and effects |
-| `references/provenance-and-conflicts.md` | Full audit: every source, every conflict, how each was resolved |
-| `scripts/extract_pptx_theme.py` | `.potx`/`.pptx`/`.thmx` → exact tokens |
-| `scripts/brand_lint.py` | Surface-aware colour and font check; `--list` prints the ledger |
-| `assets/templates/` | Drop the master template here |
+| `assets/templates/Align-HCM-Primary-Deck-Reference.pptx` | Exact primary deck visual authority |
+| `assets/logos/align-hcm-deck-lockup.png` | Exact deck lockup extracted once from that authority |
+| `references/powerpoint-deck-system.md` | Slide recipes, client co-branding, and deck QA |
+| `references/powerpoint-tokens.md` | Generated measurements, painted colors, fonts, and picture zones |
+| `references/tokens.md` | Surface-specific token ledger and precedence |
+| `references/logo-imagery-data-visualization.md` | Logo, imagery, chart, and accessibility rules |
+| `references/carousel-and-motion.md` | Social carousel and motion systems |
+| `references/voice-and-copy.md` | Align voice and SmartCare messaging |
+| `references/provenance-and-conflicts.md` | Repository audit and conflict rulings |
 
-## Composing with other skills
+## Composition with other skills
 
-- **`pptx`** — the mechanics of writing `.pptx` files. This skill supplies tokens.
-- **`slide-polish`** — run after building; brand-neutral, won't fight these tokens.
-- **`presentation-design-master`** — narrative shaping; run on content first.
-- **`docx`** — Word deliverables. Apply the token table manually.
-- **`cool-data-elements`** — ⚠️ hardcodes `#E8760A` / `#414042`. **Off-brand for
-  Align.** Do not use until its tokens are corrected.
-- **`brand-guidelines`** — ⚠️ Anthropic's brand, not Align's. Never use here.
-- **`theme-factory`, `dataviz`** — feed them `references/tokens.md`.
+- Use a PowerPoint file-manipulation skill for mechanics, but always begin from
+  the bundled Align reference and keep this skill's validation gate.
+- Use presentation strategy skills to shape the narrative before applying the
+  visual system.
+- Do not use `cool-data-elements` for Align. It hardcodes unverified colors.
+- Do not use Anthropic's `brand-guidelines` skill for Align.
 
-## Rules of thumb
-
-- Every colour and font in your output should trace to a token in this package.
-  No "close enough."
-- Orange is an accent: eyebrows, rules, numerals, one KPI. Never body copy,
-  never a field behind a text block. One accent per slide.
-- Don't mix font systems. `SOURCE-NOTES.md` is explicit: do not use all four
-  approved faces in one asset.
-- If something isn't here — exact approved page copy, email subject lines — say
-  so and mark anything you write as net-new. Don't fabricate approved copy.
+This is a standard `SKILL.md` package with relative assets and stdlib scripts.
+It is usable by Claude Code and Codex without machine-specific source pointers.

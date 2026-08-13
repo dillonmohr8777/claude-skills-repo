@@ -24,7 +24,7 @@ import sys
 
 # ---------------------------------------------------------------------------
 # Token ledger. Mirrors references/tokens.md -- keep the two in step.
-# `deck` is intentionally EMPTY until a real .potx is ingested; see SKILL.md.
+# Deck and document values come from the supplied primary deck reference.
 # ---------------------------------------------------------------------------
 
 SURFACES = {
@@ -95,9 +95,50 @@ SURFACES = {
         "fonts": ["Plus Jakarta Sans", "DM Sans"],
     },
     "deck": {
-        "label": "PowerPoint decks - AWAITING .potx INGESTION",
-        "colours": {},
-        "fonts": [],
+        "label": "PowerPoint decks (supplied primary reference, 2026-08-13)",
+        "colours": {
+            "#232E3E": "Primary navy - cover, cards, close",
+            "#2B3849": "Navy card",
+            "#1D2735": "Deep navy",
+            "#26334A": "Timeline navy 1",
+            "#2F4059": "Timeline navy 2",
+            "#3A4E6B": "Timeline navy 3",
+            "#465C7E": "Timeline navy 4",
+            "#E97722": "Primary deck orange",
+            "#B05512": "Contrast orange on light fields",
+            "#94480F": "Dark orange for small light-field text",
+            "#F6F8FA": "Paper",
+            "#EDF2F8": "Pale alternating row",
+            "#FFFFFF": "White",
+            "#E3E8EE": "Light reverse text",
+            "#C5CEDA": "Muted reverse text and footer",
+            "#C7D2DF": "Light rules",
+            "#4A5563": "Muted slate",
+            "#55606E": "Muted slate 2",
+            "#4A5C75": "Dark-card border",
+        },
+        "fonts": ["Cambria", "Calibri", "Arial"],
+    },
+    "document": {
+        "label": "Formal Word reports, one-pagers, and sales collateral",
+        "colours": {
+            "#232E3E": "Primary navy",
+            "#2B3849": "Navy card",
+            "#1D2735": "Deep navy",
+            "#E97722": "Primary document orange",
+            "#B05512": "Contrast orange on light fields",
+            "#94480F": "Dark orange for small light-field text",
+            "#F6F8FA": "Paper",
+            "#EDF2F8": "Pale alternating row",
+            "#FFFFFF": "White",
+            "#E3E8EE": "Light reverse text",
+            "#C5CEDA": "Muted reverse text and footer",
+            "#C7D2DF": "Light rules",
+            "#4A5563": "Muted slate",
+            "#55606E": "Muted slate 2",
+            "#4A5C75": "Dark-card border",
+        },
+        "fonts": ["Cambria", "Calibri", "Arial"],
     },
 }
 
@@ -208,10 +249,6 @@ def main():
 
     if not args.files or not args.surface:
         ap.error("need --surface and at least one file (or use --list)")
-
-    if not SURFACES[args.surface]["colours"]:
-        print(f"note: the '{args.surface}' ledger is empty -- only the never-use list "
-              f"is enforced. Ingest the template first.\n", file=sys.stderr)
 
     totals = collections.Counter()
     for path in args.files:

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Align HCM Brand System"
+  short_description: "Exact Align decks, logos, and multi-surface branding"
+  default_prompt: "Use $alignhcm-brand-system to create an exact Align HCM client deck from the current brief and verified client logo."

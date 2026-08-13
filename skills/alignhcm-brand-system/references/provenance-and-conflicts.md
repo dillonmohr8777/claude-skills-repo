@@ -1,179 +1,139 @@
-# Provenance and conflicts — the Align brand audit
+# Align HCM brand provenance and conflict rulings
 
-Every Align HCM branding asset reachable from the account, where it lives, what
-it claims, and how the contradictions were resolved. This is the audit trail
-behind `tokens.md`.
+Audit refreshed 2026-08-13 against all 32 repositories on the
+`dillonmohr8777` account and the primary PowerPoint file supplied directly by
+Dillon.
 
-Audit date: 2026-08-13. Repositories searched: 8 (of 32 on the account; the
-other 24 contain no Align material — see § Scope).
+## Repository scope
 
----
+Eight repositories contain Align material:
 
-## What was consolidated
+1. `align-hcm-august-2026-content`
+2. `align-hcm-lead-intelligence`
+3. `align-hcm-maher-brent-chatcut`
+4. `align-hcm-public-content`
+5. `claude-skills-repo`
+6. `client-operations-canonical`
+7. `dillon-os`
+8. `mohr-vault`
 
-### Skills folded into this package
+`alignhcm-ai-marketing-skills` is named as though it contains Align work, but
+its current tree contains Momentum 360 transfer material and no Align or
+SmartCare path. It is not one of the eight evidence repositories. The other 23
+repositories contain no Align material in their current trees.
 
-| Skill | Location | Status |
-|---|---|---|
-| `alignhcm-brand` | `claude-skills-repo/skills/alignhcm-brand/` | Folded in. Was pointer-only. |
-| `alignhcm-smartcare` | `claude-skills-repo/skills/alignhcm-smartcare/` | Folded in. Was pointer-only. |
-| `alignhcm-carousel-video` | `claude-skills-repo/skills/alignhcm-carousel-video/` | Folded in. Was pointer-only. |
+## Broken legacy skills
 
-All three were **broken before this consolidation**. Each instructed the reader
-to load a file under `C:\Users\DillonMohr\.claude\clients\align-hcm\`:
+The three earlier skills existed in `claude-skills-repo` but pointed to missing
+machine-local files:
 
-- `brand.md`
-- `smartcare-gtm-strategy.md`
-- `smartcare-carousel-template.md`
-- `C:\Users\DillonMohr\Downloads\may-6-smartcare-carousel.html`
-
-None of those files exist in any repository, and `SOURCE-NOTES.md` independently
-recorded them as **already missing on 2026-07-16**. The skills carried usable
-inline tokens in their prose, which is what has been salvaged here; the
-documents they pointed at are gone.
-
-Two of the three also stated that a deck skill was still to be built:
-
-> "Deck structure — separate skill to be built from the `.pptx` source (pending)"
-> — `alignhcm-brand`
->
-> "Full-deck presentations (`.pptx`) — separate skill (pending)"
-> — `alignhcm-carousel-video`
-
-This package closes that gap.
-
-### Source documents folded in
-
-| Source | Repo | Contributes |
-|---|---|---|
-| `master-template-reference/SOURCE-NOTES.md` | align-hcm-august-2026-content | Typography ruling, verification discipline |
-| `master-template-reference/brand-guidelines.md` | align-hcm-august-2026-content | Palette, tone, writing rules |
-| `master-template-reference/gfx3.html` | align-hcm-august-2026-content | Motion master tokens (1,000+ lines) |
-| `02_FullTimeJob/AlignHCM/brand-guidelines.md` | dillon-os | Byte-identical duplicate of the above |
-| `assets/source/website-brand-tokens.md` | align-hcm-lead-intelligence | Live site CSS tokens, 2026-07-15 |
-| `references/align-brand-system-reference.jpg` | align-hcm-maher-brent-chatcut | Screenshot of the PowerPoint master |
-| `_engine/deck8.html` | align-hcm-public-content | Deck engine built on motion tokens |
-| 10 × `vendor-intent-blog-batch/**/*.html` | align-hcm-august-2026-content | Article accent in production |
-
----
-
-## The orange problem
-
-Five oranges are in active production use. Counts are occurrences across all
-eight repositories.
-
-| Hex | Count | Where it lives | Ruling |
-|---|---|---|---|
-| `#F05A28` | 133 | Carousels, blog CTAs, gradient origin | **Keep** — social + editorial gradient start |
-| `#FF6B35` | 104 | Gradient terminus | **Keep** — pairs with the above |
-| `#F47A25` | 60 | `gfx3.html` motion master, `deck8.html` | **Keep** — motion only |
-| `#FF6B2B` | 13 | 10 production blog files + 2 skill files | **Keep** — article accent |
-| `#E8832A` | 9 | `brand-guidelines.md` and derivatives | **Demote** — documented but never shipped |
-| `#FF9902` | live CSS | alignhcm.com production | **Keep** — web only |
-| `#E8760A` | 0 | `cool-data-elements` skill only | **Reject** |
-
-### How this was resolved
-
-The instinct is to declare one winner. That would be wrong. Reading the actual
-usage, these are not five competing answers to one question — they are four
-distinct surface systems that were each developed correctly and simply never
-written down together:
-
-- **Web** runs `#FF9902` / `#EF6936`, straight from the live stylesheet.
-- **Motion** runs `#F47A25`, consistently, across the master and the deck engine.
-- **Social** runs the `#F05A28 → #FF6B35` gradient across every shipped carousel.
-- **Editorial** runs `#FF6B2B` across all ten blog builds.
-
-Each is internally consistent. The failure was never having a document that said
-which applies where — so `tokens.md` is organised by surface, and `brand_lint.py`
-takes `--surface` as a required argument rather than checking one flat list.
-
-Two genuine errors did surface:
-
-1. **`#E8832A` is documented but unshipped.** It appears only in
-   `brand-guidelines.md` and files that copy from it. No production asset uses
-   it. Demoted, not deleted — it may be a legacy print value worth confirming.
-
-2. **`#E8760A` and `#414042` are unsupported.** Zero occurrences across every
-   repository. They come from the `cool-data-elements` account skill. Rejected.
-
----
-
-## The typography problem
-
-| Source | Claims | Ruling |
-|---|---|---|
-| Live site CSS | Inter, sans-serif | Web body/UI |
-| `SOURCE-NOTES.md` | Plus Jakarta Sans (headings) + DM Sans (body) | **Authoritative for web/editorial** |
-| `brand-guidelines.md` | Plus Jakarta Sans, DM Sans, Poppins, Barlow | Menu, not a stack |
-| `alignhcm-brand` skill | Inter + DM Sans + Syne | Social variants |
-| `gfx3.html` | Gelasio + Inter | Motion only |
-| PowerPoint master (screenshot) | Serif display + sans body | Deck — needs measurement |
-
-`SOURCE-NOTES.md` wins on typography because it is the only source that states
-its method, its date, and its own caveats. It resolves the Inter-vs-Plus-Jakarta
-tension directly:
-
-> "The current page also contains a legacy or component-level Inter declaration.
-> The production default is: Plus Jakarta Sans for primary sans headings and UI,
-> DM Sans for body and support copy, Gelasio plus Inter only when intentionally
-> inheriting the verified editorial motion-master system."
-
-And it sets the rule that matters most:
-
-> "Do not mix all four fonts in one asset."
-
-The `brand-guidelines.md` list of four is a menu of approved faces, not a stack
-to be used simultaneously. That misreading is the likeliest cause of drift.
-
-The deck's serif display face is **unresolved** — the screenshot shows a serif
-headline that is not Gelasio-obvious at that resolution, and no deck file exists
-to measure. It comes out of the `.potx` theme's `majorFont`.
-
----
-
-## Adjacent skills — deliberately not folded in
-
-| Skill | Why not |
+| Skill | Missing pointer |
 |---|---|
-| `cool-data-elements` | Word-document data callouts. Genuinely useful, but its palette is wrong (see above). Needs a token fix, not absorption. |
-| `rfp-responder` | Carries Align company boilerplate — brand *voice*, not visual identity. Different lifecycle. |
-| `slide-polish`, `presentation-design-master` | Generic deck craft, brand-neutral. Compose with this skill; do not merge. |
-| `brand-guidelines` (Anthropic) | **Anthropic's** brand. Never use for Align. Name collision only. |
-| `theme-factory`, `dataviz` | Generic systems that accept a brand palette. Feed them `tokens.md`. |
-| `brand-voice` plugin, `marketing:brand-review`, `canva:brand-check` | Generic enforcement machinery, client-agnostic. Point them at this package. |
-| `nimble:brand-mention-monitor`, `brightdata-plugin:brand-listening` | External monitoring. Not identity. |
+| `alignhcm-brand` | `C:\Users\DillonMohr\.claude\clients\align-hcm\brand.md` |
+| `alignhcm-smartcare` | `C:\Users\DillonMohr\.claude\clients\align-hcm\smartcare-gtm-strategy.md` |
+| `alignhcm-carousel-video` | `smartcare-carousel-template.md` and a Downloads HTML file |
 
----
+`SOURCE-NOTES.md` independently recorded the same missing paths on 2026-07-16.
+The redirect stubs remain temporarily so old prompts route to this package.
 
-## Scope
+## Sources consolidated
 
-Searched all 32 repositories on the account by name and metadata; cloned and
-full-text searched the 8 carrying Align material:
+| Source | Repository or origin | Contribution |
+|---|---|---|
+| `master-template-reference/SOURCE-NOTES.md` | `align-hcm-august-2026-content` | Source verification and typography boundaries |
+| `master-template-reference/brand-guidelines.md` | `align-hcm-august-2026-content` | Historical palette, voice, writing rules |
+| `master-template-reference/gfx3.html` | `align-hcm-august-2026-content` | Motion master |
+| `assets/source/website-brand-tokens.md` | `align-hcm-lead-intelligence` | Observed live web tokens |
+| `presentation/DESIGN_SYSTEM.md` | `align-hcm-lead-intelligence` | Logo, photography, chart, layout, and accessibility rules |
+| `references/align-brand-system-reference.jpg` | `align-hcm-maher-brent-chatcut` | Earlier visual screenshot of the deck style |
+| `_engine/deck8.html` | `align-hcm-public-content` | Motion-derived reusable engine |
+| `vendor-intent-blog-batch/**/*.html` | `align-hcm-august-2026-content` | Shipped editorial system |
+| `02_FullTimeJob/AlignHCM/*` | `dillon-os` | Brand, SmartCare, audience, and deliverable context |
+| `AlignHCM Monthly LinkedIn Calendar.md` | `mohr-vault` | Cross-agent brand workflow references |
+| `1-Primary-align-template-.pptx` | Dillon attachment, 2026-08-13 | Exact primary deck reference and exact embedded Align lockup |
 
-`dillon-os` · `claude-skills-repo` · `client-operations-canonical` ·
-`alignhcm-ai-marketing-skills` · `align-hcm-august-2026-content` ·
-`align-hcm-public-content` · `align-hcm-lead-intelligence` ·
-`align-hcm-maher-brent-chatcut`
+The attachment itself contained prior-client branding, contact data, pricing,
+and engagement facts, so the original binary is not published. A privacy-
+scrubbed visual clone is bundled as
+`assets/templates/Align-HCM-Primary-Deck-Reference.pptx`; geometry, styles,
+colors, type, icons, Align artwork, and the client-logo zone are preserved. The
+exact Align deck lockup is bundled separately at
+`assets/logos/align-hcm-deck-lockup.png`.
 
-`alignhcm-ai-marketing-skills` is named as if it holds Align skills but
-contains a Momentum 360 agent suite transfer and one CrewAI note. No Align
-branding.
+## Deck correction
 
-The remaining 24 are client sites, prospect batches, forks, and unrelated
-tooling. No Align brand tokens or skills in any of them.
+The earlier draft assumed the PowerPoint theme slots would become the deck
+authority after extraction. The supplied file disproves that assumption:
 
----
+- color scheme: stock `Office`
+- font scheme: stock `Office`
+- actual design: explicit painted slide colors and direct font overrides
+- measured primary navy: `#232E3E`
+- measured primary orange: `#E97722`
+- measured light-field orange: `#B05512`
+- measured type overrides: Calibri 131, Arial 9, Cambria 8
 
-## Open items
+The correct runtime model is to clone and edit the designed slides. Office
+`accent1` through `accent6` are not Align tokens. The extractor now reports
+`painted-slide-system` and inventories named picture zones instead of treating
+all hand-painted values as drift.
 
-1. **No PowerPoint template exists in any repository.** The package is built to
-   ingest one; until a `.potx` lands in `assets/templates/`, the deck ledger is
-   empty by design rather than guessed.
-2. **`cool-data-elements` ships off-brand colour.** It hardcodes `#E8760A` and
-   `#414042`. Every Word document it has produced carries those. Fixing it is a
-   one-line change per token once the correct Word-surface palette is agreed.
-3. **`#E8832A` needs a verdict** — legacy print value, or a stale draft?
-4. **The deck serif is unidentified** pending the template.
-5. **Three legacy skills remain as redirect stubs.** Delete them once nothing
-   references the old names.
+## Surface-specific orange ruling
+
+| Surface | Approved family | Evidence |
+|---|---|---|
+| Web and HubSpot | `#FF9902`, `#F79A20`, `#EF6936`, `#EF6B51` | Observed production CSS |
+| Social carousel | `#F05A28` to `#FF6B35` | Shipped carousel system |
+| Motion | `#F47A25`, `#FF9A4D`, `#F4A96A` | `gfx3.html` and derived engine |
+| Editorial HTML | `#FF6B2B`, with the social gradient for CTA blocks | Ten shipped article builds |
+| PowerPoint and formal documents | `#E97722`, `#B05512`, `#94480F` | Supplied primary deck |
+
+These values are not interchangeable. `brand_lint.py` requires a surface.
+
+`#E8832A` is documented but does not ship in the audited repository files, so
+it remains historical and unapproved for new work. `#E8760A` and `#414042`
+appear only in the generic `cool-data-elements` skill and are rejected for
+Align.
+
+## Typography ruling
+
+| Surface | Type system |
+|---|---|
+| Web | Inter in observed production CSS; Plus Jakarta Sans and DM Sans remain the verified broader web/editorial pair from `SOURCE-NOTES.md` |
+| Editorial | Plus Jakarta Sans display, DM Sans body |
+| Social | Inter, or DM Sans plus Syne for the premium variant |
+| Motion | Gelasio display, Inter support |
+| PowerPoint and formal documents | Cambria display, Calibri body/support, limited Arial overrides |
+
+Do not mix the systems inside one artifact.
+
+## Missing capabilities found in the earlier package draft
+
+The first draft contained colors, voice, carousel, motion, and an extractor but
+still lacked:
+
+- the actual master deck and exact Align deck lockup
+- deterministic client-logo sourcing, containment, and validation
+- the first-party logo, photography, chart, and accessibility rules from
+  `presentation/DESIGN_SYSTEM.md`
+- a populated deck and formal-document palette
+- residue checks that prevent sample-client names, contacts, prices, and dates
+  from leaking into a new deck
+- Claude marketplace registration, Codex interface metadata, and portable
+  relative resources
+
+Those gaps are addressed in this package revision.
+
+## Remaining open items
+
+1. The supplied deck is a painted reference on the stock Office theme, not a
+   normalized `.potx`. Clone-based production is exact; a future approved
+   custom theme could improve maintainability but must be visually compared
+   before replacing this authority.
+2. The full historical SmartCare GTM document and old carousel source HTML are
+   still unavailable. Do not present reconstructed wording as approved copy.
+3. `#E8832A` still needs an explicit owner verdict before any new use.
+4. Web tokens were observed on 2026-07-15 and should be refreshed when the live
+   production theme changes.
+5. A client logo is intentionally resolved per deck from current official
+   evidence. Never bundle or reuse one client's logo as another client's.
