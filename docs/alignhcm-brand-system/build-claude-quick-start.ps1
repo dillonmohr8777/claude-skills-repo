@@ -117,7 +117,7 @@ try {
     Set-ShapeText -Slide $install -Name 'Eyebrow' -Text 'ADMIN SETUP  |  RUN ONCE' | Out-Null
     Set-ShapeText -Slide $install -Name 'Title' -Text 'Install It in Claude Code' | Out-Null
     Set-ShapeText -Slide $install -Name 'Subtitle' -Text 'PR #22 must be merged before the organization uses the main-branch commands below.' -FontSize 17 | Out-Null
-    Set-Card $install 'TextBox 9' 'TextBox 10' '1  Add the marketplace' "/plugin marketplace add`rdillonmohr8777/claude-skills-repo" -Code
+    Set-Card $install 'TextBox 9' 'TextBox 10' '1  Add the marketplace' "/plugin marketplace add`rhttps://github.com/dillonmohr8777/`rclaude-skills-repo.git" -Code
     Set-Card $install 'TextBox 14' 'TextBox 15' '2  Install the plugin' "/plugin install alignhcm-brand-system@alignhcm-tools" -Code
     Set-Card $install 'TextBox 19' 'TextBox 20' '3  Reload Claude Code' '/reload-plugins' -Code
     Set-Card $install 'TextBox 24' 'TextBox 25' '4  Confirm availability' "Type / and search for:`ralignhcm-brand-system" -Code
