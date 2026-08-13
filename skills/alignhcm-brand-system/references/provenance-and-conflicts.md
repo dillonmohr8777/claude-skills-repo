@@ -90,10 +90,11 @@ all hand-painted values as drift.
 
 These values are not interchangeable. `brand_lint.py` requires a surface.
 
-`#E8832A` is documented but does not ship in the audited repository files, so
-it remains historical and unapproved for new work. `#E8760A` and `#414042`
-appear only in the generic `cool-data-elements` skill and are rejected for
-Align.
+`#E8832A` is documented but does not ship in the audited repository files. The
+owner verdict of 2026-08-13 closed this: it is historical evidence only and is
+not approved for new work on any surface. `#E8760A` and `#414042` appear only in
+the generic `cool-data-elements` skill and are rejected for Align. All three are
+enforced as errors by `brand_lint.py` and `validate_client_deck.py`.
 
 ## Typography ruling
 
@@ -132,8 +133,7 @@ Those gaps are addressed in this package revision.
    before replacing this authority.
 2. The full historical SmartCare GTM document and old carousel source HTML are
    still unavailable. Do not present reconstructed wording as approved copy.
-3. `#E8832A` still needs an explicit owner verdict before any new use.
-4. Web tokens were observed on 2026-07-15 and should be refreshed when the live
+3. Web tokens were observed on 2026-07-15 and should be refreshed when the live
    production theme changes.
-5. A client logo is intentionally resolved per deck from current official
+4. A client logo is intentionally resolved per deck from current official
    evidence. Never bundle or reuse one client's logo as another client's.
