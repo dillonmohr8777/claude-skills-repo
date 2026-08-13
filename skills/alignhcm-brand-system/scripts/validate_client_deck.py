@@ -18,7 +18,7 @@ PKG_R = "http://schemas.openxmlformats.org/package/2006/relationships"
 EXPECTED_GEOMETRY = (12191969, 6858000)
 CLIENT_LOGO_ZONE_EMU = (8839184, 3163824, 2651760, 912070)
 REQUIRED_DECK_COLOURS = {"#232E3E", "#E97722"}
-BANNED_COLOURS = {"#E8760A", "#414042"}
+BANNED_COLOURS = {"#E8760A", "#414042", "#E8832A"}
 
 
 def q(ns, tag):
