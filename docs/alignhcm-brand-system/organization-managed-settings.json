@@ -10,13 +10,5 @@
   },
   "enabledPlugins": {
     "alignhcm-brand-system@alignhcm-tools": true
-  },
-  "enabledMcpjsonServers": [
-    "microsoft_foundry"
-  ],
-  "permissions": {
-    "allow": [
-      "mcp__microsoft_foundry"
-    ]
   }
 }

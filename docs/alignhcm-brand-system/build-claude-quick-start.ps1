@@ -116,7 +116,7 @@ try {
     $install = $presentation.Slides.Item(3)
     Set-ShapeText -Slide $install -Name 'Eyebrow' -Text 'ADMIN SETUP  |  RUN ONCE' | Out-Null
     Set-ShapeText -Slide $install -Name 'Title' -Text 'Install It in Claude Code' | Out-Null
-    Set-ShapeText -Slide $install -Name 'Subtitle' -Text 'PR #22 must be merged before the organization uses the main-branch commands below.' -FontSize 17 | Out-Null
+    Set-ShapeText -Slide $install -Name 'Subtitle' -Text 'The marketplace is live. Use managed settings for organization rollout or the commands below as a manual fallback.' -FontSize 16 | Out-Null
     Set-Card $install 'TextBox 9' 'TextBox 10' '1  Add the marketplace' "/plugin marketplace add`rhttps://github.com/dillonmohr8777/`rclaude-skills-repo.git" -Code
     Set-Card $install 'TextBox 14' 'TextBox 15' '2  Install the plugin' "/plugin install alignhcm-brand-system@alignhcm-tools" -Code
     Set-Card $install 'TextBox 19' 'TextBox 20' '3  Reload Claude Code' '/reload-plugins' -Code
