@@ -1,0 +1,87 @@
+{
+  "course_id": "ai-productivity-os",
+  "title": "AI Productivity OS: Build Your Personal Automation Stack in 14 Days",
+  "audience": "Knowledge workers and solopreneurs comfortable with ChatGPT but who haven't built a system around it",
+  "outcome_statement": "By the end, you can run your week through a personal AI stack that captures, plans, executes, and reviews on your behalf.",
+  "learner_journey": "Module 1 grounds you in why most ChatGPT users plateau. Modules 2-5 build the four pillars (capture, plan, execute, automate). Module 6 wires them together into a daily review loop.",
+  "voice_reference": "Tim Ferriss-meets-Cal Newport",
+  "estimated_runtime_minutes": 240,
+  "price_usd": 197,
+  "modules": [
+    {
+      "id": "m1-foundations",
+      "index": 1,
+      "title": "Foundations: Why Most People Plateau",
+      "stage_purpose": "Frame the problem and the system mindset.",
+      "capstone_exercise": "Map your current workflow and identify the 3 biggest leakage points.",
+      "lessons": [
+        {
+          "id": "l1-the-plateau",
+          "title": "Why Your ChatGPT Routine Stopped Compounding",
+          "objective": "Diagnose two reasons knowledge workers plateau when using ChatGPT alone.",
+          "key_concepts": ["surface-level prompting", "missing capture loop", "no review cadence"],
+          "runtime_minutes": 8,
+          "prerequisites": []
+        },
+        {
+          "id": "l2-os-mindset",
+          "title": "Treat Your Tools Like an Operating System",
+          "objective": "Apply the OS metaphor to evaluate any productivity tool.",
+          "key_concepts": ["input layer", "process layer", "output layer", "review layer"],
+          "runtime_minutes": 7,
+          "prerequisites": ["l1-the-plateau"]
+        }
+      ]
+    },
+    {
+      "id": "m2-capture",
+      "index": 2,
+      "title": "Capture: Inbox-Zero with AI Triage",
+      "stage_purpose": "Get every input out of your head and into a system.",
+      "capstone_exercise": "Build a daily AI triage routine for your inbox and read-later queue.",
+      "lessons": [
+        {
+          "id": "l3-capture-points",
+          "title": "Map Your Capture Points",
+          "objective": "Identify every channel that delivers actionable input to you.",
+          "key_concepts": ["channel inventory", "leakage cost", "single inbox principle"],
+          "runtime_minutes": 9,
+          "prerequisites": ["l2-os-mindset"]
+        },
+        {
+          "id": "l4-ai-triage",
+          "title": "Build an AI Triage Function",
+          "objective": "Create a Claude-powered classifier that sorts incoming items.",
+          "key_concepts": ["classification prompt", "priority labels", "automation trigger"],
+          "runtime_minutes": 12,
+          "prerequisites": ["l3-capture-points"]
+        }
+      ]
+    },
+    {
+      "id": "m3-execute",
+      "index": 3,
+      "title": "Execute: Drafting, Coding, Deciding",
+      "stage_purpose": "Turn AI from a chat partner into a daily co-pilot.",
+      "capstone_exercise": "Build three reusable execution prompts and run them daily for one week.",
+      "lessons": [
+        {
+          "id": "l5-prompt-patterns",
+          "title": "Five Prompt Patterns That Compound",
+          "objective": "Apply five prompt patterns to your most-repeated work.",
+          "key_concepts": ["role priming", "structured output", "constraint stacking", "few-shot", "chain-of-thought"],
+          "runtime_minutes": 11,
+          "prerequisites": ["l4-ai-triage"]
+        },
+        {
+          "id": "l6-decision-copilot",
+          "title": "Use AI as a Decision Co-pilot",
+          "objective": "Evaluate a real decision using a structured AI co-pilot prompt.",
+          "key_concepts": ["devil's advocate", "weighted criteria", "premortem"],
+          "runtime_minutes": 10,
+          "prerequisites": ["l5-prompt-patterns"]
+        }
+      ]
+    }
+  ]
+}

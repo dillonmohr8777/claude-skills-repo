@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lesson.schema.json",
+  "title": "Lesson Script",
+  "description": "Lesson scripts are stored as Markdown files. This schema describes the metadata sidecar (lesson.meta.json) generated alongside each lesson.md.",
+  "type": "object",
+  "required": ["lesson_id", "module_id", "title", "objective", "hook_style", "word_count", "beats"],
+  "properties": {
+    "lesson_id": { "type": "string" },
+    "module_id": { "type": "string" },
+    "title": { "type": "string" },
+    "objective": { "type": "string" },
+    "hook_style": {
+      "enum": ["story", "statistic", "contrarian-question", "before-after", "mistake-confession", "scenario", "demo-tease"]
+    },
+    "word_count": { "type": "integer", "minimum": 200 },
+    "estimated_runtime_minutes": { "type": "integer" },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "present"],
+        "properties": {
+          "name": { "type": "string" },
+          "present": { "type": "boolean" },
+          "word_count": { "type": "integer" }
+        }
+      }
+    },
+    "verify_markers": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

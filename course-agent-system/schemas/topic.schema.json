@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "topic.schema.json",
+  "title": "Course Topic Candidate",
+  "type": "object",
+  "required": ["id", "title", "audience", "demand_signal", "estimated_price_usd", "production_difficulty"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "title": { "type": "string", "minLength": 8, "maxLength": 120 },
+    "audience": { "type": "string", "minLength": 8 },
+    "pain_quote": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["text", "source_url"],
+          "properties": {
+            "text": { "type": "string" },
+            "source_url": { "type": "string", "format": "uri" }
+          }
+        }
+      ]
+    },
+    "demand_signal": {
+      "type": "object",
+      "required": ["level", "evidence"],
+      "properties": {
+        "level": { "enum": ["low", "medium", "high"] },
+        "evidence": { "type": "string" }
+      }
+    },
+    "competitor_count": { "type": "integer", "minimum": 0 },
+    "competitors": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" },
+      "maxItems": 10
+    },
+    "gap": { "type": "string" },
+    "estimated_price_usd": { "type": "integer", "minimum": 9, "maximum": 5000 },
+    "production_difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "maxItems": 8
+    }
+  }
+}
