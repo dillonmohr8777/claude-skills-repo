@@ -1,4 +1,4 @@
-# Align HCM — carousel and motion systems
+# Align HCM carousel and motion systems
 
 Two animated surfaces with different token sets. Consolidated from the legacy
 `alignhcm-carousel-video` skill and from `gfx3.html` / `deck8.html`.
@@ -34,12 +34,12 @@ Do not restructure the arc without confirming first.
 
 ## Signature effects
 
-- **CTA shimmer** — looping sheen across the gradient button
-- **Arrow nudge** — small horizontal drift on the CTA arrow
-- **Text underline** — accent word animates `scaleX(0) → scaleX(1)`, 0.6s,
+- **CTA shimmer**: looping sheen across the gradient button
+- **Arrow nudge**: small horizontal drift on the CTA arrow
+- **Text underline**: accent word animates `scaleX(0) → scaleX(1)`, 0.6s,
   `transform-origin: left`
-- **Glass panels** — `backdrop-filter: blur(20–24px)`
-- **Ambient glow** — 120px blur blob, top or bottom corner, low opacity
+- **Glass panels**: `backdrop-filter: blur(20–24px)`
+- **Ambient glow**: 120px blur blob, top or bottom corner, low opacity
 
 ## Output format
 
@@ -57,11 +57,15 @@ recording the HTML.
 - Standard or premium aesthetic
 - CTA destination URL (defaults to the SmartCare page on alignhcm.com)
 
-> The original template spec and starting HTML
-> (`smartcare-carousel-template.md`, `may-6-smartcare-carousel.html`) are **not
-> in any repository** — verified missing as of 2026-07-16. The structure above
-> is what survived in the skill prose. Ask for the source HTML if an exact fork
-> is needed.
+> ⚠️ **The original carousel template spec and starting HTML are unavailable.**
+> `smartcare-carousel-template.md` and `may-6-smartcare-carousel.html` exist in
+> no repository, verified missing as of 2026-07-16. The structure above is
+> everything that survived.
+>
+> Carousels you build from this skill are therefore **net-new and require
+> review** before publishing. Ask the brand owner (see the ownership block in
+> `SKILL.md`) whether the source HTML can be recovered if an exact fork is
+> needed.
 
 ---
 
@@ -92,28 +96,28 @@ Plus a 96px data grid at 5.5% opacity and a radial vignette.
 ```
 
 Editorial display type is **Gelasio**; support type is **Inter**. This pair is
-specific to motion — `SOURCE-NOTES.md` is explicit that these are not the
+specific to motion. `SOURCE-NOTES.md` is explicit that these are not the
 current website fonts.
 
 ## Signature elements
 
-- **Glass diamonds** — 45°-rotated squares, 20% border radius,
+- **Glass diamonds**: 45°-rotated squares, 20% border radius,
   `backdrop-filter: blur(12px) saturate(135%)`, warm inner shadow, orange
   elliptical ground shadow
-- **Data chips** — blurred navy pills, wide-tracked Inter 700, green for
+- **Data chips**: blurred navy pills, wide-tracked Inter 700, green for
   positive delta, orange for the highlighted value
-- **Spark/bar boxes** — blurred navy cards; bars use a blue gradient, with the
+- **Spark/bar boxes**: blurred navy cards; bars use a blue gradient, with the
   emphasis bar in `#FF9A4D → #F47A25`
-- **Orbs** — thin steel-blue rings with a glowing orange node on the perimeter
-- **Ghost type** — oversized Gelasio, transparent fill, 2px steel stroke at
+- **Orbs**: thin steel-blue rings with a glowing orange node on the perimeter
+- **Ghost type**: oversized Gelasio, transparent fill, 2px steel stroke at
   10% opacity, `letter-spacing: -4px`
-- **Top bar** — 6px, `linear-gradient(90deg, #F47A25 0%, #F47A25 60%, #7FA9F0 100%)`
-- **Footer** — 48px, `rgba(7,12,22,.90)`, orange dot + orange brand word,
+- **Top bar**: 6px, `linear-gradient(90deg, #F47A25 0%, #F47A25 60%, #7FA9F0 100%)`
+- **Footer**: 48px, `rgba(7,12,22,.90)`, orange dot + orange brand word,
   wide-tracked steel support text
-- **Eyebrow** — 34×4px orange bar, then caps text in `#F4A96A` at `0.34em`
+- **Eyebrow**: 34×4px orange bar, then caps text in `#F4A96A` at `0.34em`
 
 ## Discipline
 
 Restrained camera movement, kinetic headings, dimensional data elements, and
-minimal end-card branding. The look is expensive because it is controlled — do
+minimal end-card branding. The look is expensive because it is controlled. Do
 not add motion for its own sake.

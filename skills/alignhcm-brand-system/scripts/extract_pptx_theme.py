@@ -4,9 +4,10 @@ Extract the exact brand system out of an Align HCM PowerPoint template.
 
 A .pptx / .potx / .thmx is an OPC zip. Everything needed to reproduce the deck
 brand -- theme colour slots, the major/minor font pair, slide dimensions, the
-layout inventory, and the colours actually painted on the master -- is sitting
-in XML inside it. This reads that directly, so there is no python-pptx
-dependency and no guessing.
+layout inventory, named picture zones, and the colours actually painted on the
+slides -- is sitting in XML inside it. This reads that directly, so there is no
+python-pptx dependency and no guessing. It also detects the important case in
+which a branded deck is hand-painted on top of the stock Office theme.
 
 Usage:
     python3 extract_pptx_theme.py <template.potx> [--json out.json] [--md out.md]
@@ -26,6 +27,8 @@ import xml.etree.ElementTree as ET
 
 A = "http://schemas.openxmlformats.org/drawingml/2006/main"
 P = "http://schemas.openxmlformats.org/presentationml/2006/main"
+R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+PKG_R = "http://schemas.openxmlformats.org/package/2006/relationships"
 
 # Slots as PowerPoint's own UI labels them, in the order the theme editor shows.
 SLOT_LABELS = [
@@ -187,15 +190,58 @@ def extract_used_fonts(zf):
     return counter.most_common()
 
 
+def extract_picture_inventory(zf):
+    """Named pictures and their placed boxes, useful for deterministic logo zones."""
+    pictures = []
+    slide_parts = sorted(n for n in zf.namelist()
+                         if re.match(r"ppt/slides/slide\d+\.xml$", n))
+    for slide_part in slide_parts:
+        rels_part = slide_part.replace("ppt/slides/", "ppt/slides/_rels/") + ".rels"
+        if rels_part not in zf.namelist():
+            continue
+        slide = ET.fromstring(zf.read(slide_part))
+        rels = ET.fromstring(zf.read(rels_part))
+        rel_map = {rel.get("Id"): rel.get("Target")
+                   for rel in rels.findall(_q(PKG_R, "Relationship"))}
+        for pic in slide.iter(_q(P, "pic")):
+            props = pic.find(f"./{_q(P, 'nvPicPr')}/{_q(P, 'cNvPr')}")
+            blip = pic.find(f"./{_q(P, 'blipFill')}/{_q(A, 'blip')}")
+            xfrm = pic.find(f"./{_q(P, 'spPr')}/{_q(A, 'xfrm')}")
+            off = xfrm.find(_q(A, "off")) if xfrm is not None else None
+            ext = xfrm.find(_q(A, "ext")) if xfrm is not None else None
+            if props is None or blip is None or off is None or ext is None:
+                continue
+            target = rel_map.get(blip.get(_q(R, "embed")))
+            pictures.append({
+                "slide": slide_part,
+                "name": props.get("name"),
+                "description": props.get("descr"),
+                "target": target,
+                "x_emu": int(off.get("x", 0)),
+                "y_emu": int(off.get("y", 0)),
+                "width_emu": int(ext.get("cx", 0)),
+                "height_emu": int(ext.get("cy", 0)),
+            })
+    return pictures
+
+
 def build(path):
     with zipfile.ZipFile(path) as zf:
+        theme = extract_theme(zf)
+        used_colours = extract_used_colours(zf)
+        stock_office = (
+            theme.get("colour_scheme_name") == "Office"
+            and theme.get("font_scheme_name") == "Office"
+        )
         data = {
             "source_file": path,
-            "theme": extract_theme(zf),
+            "authority_mode": "painted-slide-system" if stock_office and used_colours else "theme-system",
+            "theme": theme,
             "geometry": extract_geometry(zf),
             "layouts": extract_layouts(zf),
-            "used_colours": extract_used_colours(zf),
+            "used_colours": used_colours,
             "used_fonts": extract_used_fonts(zf),
+            "pictures": extract_picture_inventory(zf),
         }
     return data
 
@@ -206,6 +252,11 @@ def render_md(d):
     out.append("# Align HCM PowerPoint template - extracted tokens\n")
     out.append(f"Extracted from `{d['source_file']}` by "
                "`scripts/extract_pptx_theme.py`. Regenerate rather than hand-edit.\n")
+
+    out.append(f"\n**Authority mode:** `{d['authority_mode']}`\n")
+    if d["authority_mode"] == "painted-slide-system":
+        out.append("\nThe file uses the stock Office theme. Its explicit painted slide values and "
+                   "rendered slides are authoritative; Office theme slots are not Align tokens.\n")
 
     out.append("\n## Theme colour slots\n")
     out.append(f"Colour scheme: **{t['colour_scheme_name'] or 'unnamed'}**\n")
@@ -239,8 +290,8 @@ def render_md(d):
         out.append(f"\n| {i} | {l['name'] or '-'} | {ph} |")
 
     out.append("\n\n## Colours actually painted in the file\n")
-    out.append("\nBy frequency. Anything here that is NOT a theme slot above was "
-               "hand-applied to a shape and is a drift risk.\n")
+    out.append("\nBy frequency. In a painted-slide system these values are the measured design "
+               "authority. In a true custom-theme file, unexpected literals may indicate drift.\n")
     out.append("\n| Hex | Count |")
     out.append("\n|---|---|")
     for hexv, n in d["used_colours"]:
@@ -253,6 +304,18 @@ def render_md(d):
         out.append("\n|---|---|")
         for face, n in d["used_fonts"]:
             out.append(f"\n| {face} | {n} |")
+
+    named_pictures = [p for p in d["pictures"] if p.get("name")]
+    if named_pictures:
+        out.append("\n\n## Named picture zones\n")
+        out.append("\n| Slide | Picture name | Target | X in | Y in | W in | H in |")
+        out.append("\n|---|---|---|---:|---:|---:|---:|")
+        for p in named_pictures:
+            slide = p["slide"].rsplit("/", 1)[-1]
+            vals = [p[k] / EMU_PER_INCH for k in
+                    ("x_emu", "y_emu", "width_emu", "height_emu")]
+            out.append(f"\n| {slide} | {p['name']} | {p.get('target') or '-'} | "
+                       f"{vals[0]:.3f} | {vals[1]:.3f} | {vals[2]:.3f} | {vals[3]:.3f} |")
 
     out.append("\n")
     return "".join(out)

@@ -1,4 +1,4 @@
-# Align HCM — voice and copy rules
+# Align HCM voice and copy rules
 
 Consolidated from `brand-guidelines.md` (both copies) and the voice sections of
 the legacy `alignhcm-brand` and `alignhcm-carousel-video` skills.
@@ -14,7 +14,7 @@ Do not define go-live. Assume fluency and write to a peer.
 ## Tone
 
 Professional, consultative, expert-level. Never salesy. The posture is a senior
-practitioner explaining what actually happens after go-live — not a vendor
+practitioner explaining what actually happens after go-live, not a vendor
 pitching. Credibility comes from specificity, not enthusiasm.
 
 ---
@@ -75,18 +75,20 @@ Cavvy Energy, GTAA.
 **Stats that appear in approved copy:** 82%, 2–4 FTEs, $200K–$400K,
 $500K/month MRR.
 
-> ⚠️ The full SmartCare GTM strategy document — which held the approved
-> wireframes, wordsmithed headlines, and pricing math — was referenced by the
-> old `alignhcm-smartcare` skill at
-> `C:\Users\DillonMohr\.claude\clients\align-hcm\smartcare-gtm-strategy.md`
-> and **does not exist in any repository**. The summary above is what survived
-> in the skill prose. If you need exact approved page copy, ask for that
-> document. Do not reconstruct it from memory and present it as approved.
+> ⚠️ **The full SmartCare GTM strategy document is unavailable.** It held the
+> approved wireframes, wordsmithed headlines, and pricing math. The old
+> `alignhcm-smartcare` skill referenced it on a personal machine, and no copy
+> exists in any repository. The summary above is everything that survived.
+>
+> SmartCare copy you write from this skill is therefore **net-new and requires
+> review**. Do not present it as approved. If you need the exact approved page
+> copy, ask the brand owner (see the ownership block in `SKILL.md`) whether the
+> document can be recovered.
 
 ---
 
 ## When copy is missing
 
-If an asset needs something not covered here — exact email subject lines, blog
-outlines, specific ad copy — say so explicitly. Offer to write net-new and mark
+If an asset needs something not covered here, such as exact email subject lines,
+blog outlines, or specific ad copy, say so explicitly. Offer to write net-new and mark
 it as net-new. Do not fabricate approved-sounding copy.

@@ -1,0 +1,449 @@
+{
+  "source_file": "assets/templates/Align-HCM-Primary-Deck-Reference.pptx",
+  "authority_mode": "painted-slide-system",
+  "theme": {
+    "theme_part": "ppt/theme/theme1.xml",
+    "colour_scheme_name": "Office",
+    "font_scheme_name": "Office",
+    "colours": {
+      "dk1": {
+        "label": "Text/Background - Dark 1",
+        "value": "#000000"
+      },
+      "lt1": {
+        "label": "Text/Background - Light 1",
+        "value": "#FFFFFF"
+      },
+      "dk2": {
+        "label": "Text/Background - Dark 2",
+        "value": "#1F497D"
+      },
+      "lt2": {
+        "label": "Text/Background - Light 2",
+        "value": "#EEECE1"
+      },
+      "accent1": {
+        "label": "Accent 1",
+        "value": "#4F81BD"
+      },
+      "accent2": {
+        "label": "Accent 2",
+        "value": "#C0504D"
+      },
+      "accent3": {
+        "label": "Accent 3",
+        "value": "#9BBB59"
+      },
+      "accent4": {
+        "label": "Accent 4",
+        "value": "#8064A2"
+      },
+      "accent5": {
+        "label": "Accent 5",
+        "value": "#4BACC6"
+      },
+      "accent6": {
+        "label": "Accent 6",
+        "value": "#F79646"
+      },
+      "hlink": {
+        "label": "Hyperlink",
+        "value": "#0000FF"
+      },
+      "folHlink": {
+        "label": "Followed hyperlink",
+        "value": "#800080"
+      }
+    },
+    "fonts": {
+      "headings": {
+        "typeface": "Calibri",
+        "panose": null
+      },
+      "body": {
+        "typeface": "Calibri",
+        "panose": null
+      }
+    }
+  },
+  "geometry": {
+    "cx_emu": 12191969,
+    "cy_emu": 6858000,
+    "width_in": 13.333,
+    "height_in": 7.5,
+    "width_px_at_96dpi": 1280,
+    "height_px_at_96dpi": 720,
+    "aspect": "16:9"
+  },
+  "layouts": [
+    {
+      "part": "ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "placeholders": [
+        "ctrTitle",
+        "subTitle[1]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout10.xml",
+      "name": "Title and Vertical Text",
+      "type": "vertTx",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout11.xml",
+      "name": "Vertical Title and Text",
+      "type": "vertTitleAndTx",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout2.xml",
+      "name": "Title and Content",
+      "type": "obj",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout3.xml",
+      "name": "Section Header",
+      "type": "secHead",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout4.xml",
+      "name": "Two Content",
+      "type": "twoObj",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "body[2]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout5.xml",
+      "name": "Comparison",
+      "type": "twoTxTwoObj",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "body[2]",
+        "body[3]",
+        "body[4]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout6.xml",
+      "name": "Title Only",
+      "type": "titleOnly",
+      "placeholders": [
+        "title",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout7.xml",
+      "name": "Blank",
+      "type": "blank",
+      "placeholders": [
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout8.xml",
+      "name": "Content with Caption",
+      "type": "objTx",
+      "placeholders": [
+        "title",
+        "body[1]",
+        "body[2]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    },
+    {
+      "part": "ppt/slideLayouts/slideLayout9.xml",
+      "name": "Picture with Caption",
+      "type": "picTx",
+      "placeholders": [
+        "title",
+        "pic[1]",
+        "body[2]",
+        "dt[10]",
+        "ftr[11]",
+        "sldNum[12]"
+      ]
+    }
+  ],
+  "used_colours": [
+    [
+      "#C5CEDA",
+      112
+    ],
+    [
+      "#232E3E",
+      69
+    ],
+    [
+      "#E3E8EE",
+      68
+    ],
+    [
+      "#FFFFFF",
+      63
+    ],
+    [
+      "#2B3849",
+      31
+    ],
+    [
+      "#B05512",
+      22
+    ],
+    [
+      "#F6F8FA",
+      21
+    ],
+    [
+      "#EDF2F8",
+      17
+    ],
+    [
+      "#4A5C75",
+      17
+    ],
+    [
+      "#E97722",
+      15
+    ],
+    [
+      "#4A5563",
+      12
+    ],
+    [
+      "#C7D2DF",
+      10
+    ],
+    [
+      "#1D2735",
+      6
+    ],
+    [
+      "#55606E",
+      4
+    ],
+    [
+      "#94480F",
+      4
+    ],
+    [
+      "#26334A",
+      1
+    ],
+    [
+      "#2F4059",
+      1
+    ],
+    [
+      "#3A4E6B",
+      1
+    ],
+    [
+      "#465C7E",
+      1
+    ]
+  ],
+  "used_fonts": [
+    [
+      "Calibri",
+      131
+    ],
+    [
+      "Arial",
+      9
+    ],
+    [
+      "Cambria",
+      8
+    ]
+  ],
+  "pictures": [
+    {
+      "slide": "ppt/slides/slide1.xml",
+      "name": "AlignHCM_Logo",
+      "description": "align-hcm-logo.png",
+      "target": "../media/image1.png",
+      "x_emu": 822960,
+      "y_emu": 713232,
+      "width_emu": 2514600,
+      "height_emu": 1165939
+    },
+    {
+      "slide": "ppt/slides/slide1.xml",
+      "name": "CLIENT_LOGO",
+      "description": "Verified client logo",
+      "target": "../media/image2.png",
+      "x_emu": 8839184,
+      "y_emu": 3177899,
+      "width_emu": 2651760,
+      "height_emu": 883920
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "name": "ALIGN_ICON_S2_1",
+      "description": "icon-person.png",
+      "target": "../media/image3.png",
+      "x_emu": 1147572,
+      "y_emu": 2583179,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "name": "ALIGN_ICON_S2_2",
+      "description": "icon-shield.png",
+      "target": "../media/image4.png",
+      "x_emu": 6713204,
+      "y_emu": 2583179,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "name": "ALIGN_ICON_S2_3",
+      "description": "icon-config.png",
+      "target": "../media/image5.png",
+      "x_emu": 1147572,
+      "y_emu": 4668011,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "name": "ALIGN_ICON_S2_4",
+      "description": "icon-calendar.png",
+      "target": "../media/image6.png",
+      "x_emu": 6713204,
+      "y_emu": 4668011,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide3.xml",
+      "name": "ALIGN_ICON_S3_1",
+      "description": "icon-calendar.png",
+      "target": "../media/image6.png",
+      "x_emu": 1110996,
+      "y_emu": 5189220,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide5.xml",
+      "name": "ALIGN_ICON_S5_1",
+      "description": "icon-arrow-up.png",
+      "target": "../media/image7.png",
+      "x_emu": 6195059,
+      "y_emu": 2692908,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide5.xml",
+      "name": "ALIGN_ICON_S5_2",
+      "description": "icon-calendar.png",
+      "target": "../media/image6.png",
+      "x_emu": 1129284,
+      "y_emu": 5180076,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide6.xml",
+      "name": "ALIGN_ICON_S6_1",
+      "description": "icon-person.png",
+      "target": "../media/image3.png",
+      "x_emu": 1129284,
+      "y_emu": 5426964,
+      "width_emu": 265176,
+      "height_emu": 265176
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "name": "AlignHCM_Logo",
+      "description": "align-hcm-logo.png",
+      "target": "../media/image1.png",
+      "x_emu": 777240,
+      "y_emu": 2788920,
+      "width_emu": 2651760,
+      "height_emu": 1229536
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "name": "ALIGN_ICON_S7_1",
+      "description": "icon-person.png",
+      "target": "../media/image3.png",
+      "x_emu": 5042916,
+      "y_emu": 3662172,
+      "width_emu": 301752,
+      "height_emu": 301752
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "name": "ALIGN_ICON_S7_2",
+      "description": "icon-envelope.png",
+      "target": "../media/image8.png",
+      "x_emu": 5042916,
+      "y_emu": 4558284,
+      "width_emu": 301752,
+      "height_emu": 301752
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "name": "ALIGN_ICON_S7_3",
+      "description": "icon-phone.png",
+      "target": "../media/image9.png",
+      "x_emu": 5042916,
+      "y_emu": 5454396,
+      "width_emu": 301752,
+      "height_emu": 301752
+    }
+  ]
+}
