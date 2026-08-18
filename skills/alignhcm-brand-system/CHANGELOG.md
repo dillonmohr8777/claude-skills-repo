@@ -69,7 +69,8 @@ The reference deck changed, because the slide 5 possessive fix, the `sldSz`
 correction, and the icon naming are all edits inside it:
 
 - was `1BE9BDEE225E53C4F4E5F17B7D92CE5E98C15AE0709C10B9F61C331F3287A722`
-- now `42DD524F303AA0CB4FFCCCABD94B4311A31CFD4C808A0DC8C84573A7DEA2938C`
+- then `42DD524F303AA0CB4FFCCCABD94B4311A31CFD4C808A0DC8C84573A7DEA2938C` (slide 5 only)
+- now `BA3CD30112BC9EFB2A9D18483A2188559FD97BCD08CF47E02B0C9BEA675F18EA` (slides 2, 4, 6 possessives also fixed after visual render)
 
 Only six XML parts differ (`ppt/presentation.xml` and slides 2, 3, 5, 6, 7). All
 nine `ppt/media/*` artwork parts are byte-identical, so no artwork was altered.

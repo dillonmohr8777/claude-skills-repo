@@ -9,13 +9,13 @@ each part. Re-run this list before any rollout.
 python3 scripts/selftest.py
 ```
 
-22 checks, stdlib only, builds its own fixtures. Every check corresponds to a
+24 checks, stdlib only, builds its own fixtures. Every check corresponds to a
 real failure this package has had:
 
 | Group | Covers |
 |---|---|
-| Bundled assets | Lockup artwork byte-identical, recorded template hash matches the file, template still carries 15 placeholders |
-| Documented workflow | The `SKILL.md` command sequence runs and validates, missing placeholders are reported by slide and rejected, `--allow-unresolved` works, no possessive artifact in output |
+| Bundled assets | Lockup artwork byte-identical, recorded template hash matches the file, template still carries 15 placeholders, no hardcoded possessive after a token |
+| Documented workflow | The `SKILL.md` command sequence runs and validates, missing placeholders are reported by slide and rejected, `--allow-unresolved` works, the deck opens and paginates in a real renderer |
 | Linter | Banned colors caught inside a `.docx`, reference deck reads clean, unparseable Office file rejected, ledger in `tokens.md` matches `brand_lint.py` |
 | Validator | Geometry tolerance accepts a nominal rebuild and still rejects a wrong canvas, swapped icon detected, distorted client logo detected |
 | Portability | Stdlib only, all scripts compile, no em dashes, no personal or machine-specific paths, frontmatter valid, every referenced path resolves |
@@ -27,71 +27,68 @@ human review below.
 Verified to pass from an isolated copy of the skill folder with nothing else
 present, so it works for someone who receives only this directory.
 
-## Blocking, and not automatable
+The render check is skipped automatically where LibreOffice is not installed.
+Everything else runs anywhere Python 3 runs.
 
-### 1. Publish the fixed version to the account skill store
+## Done
 
-**This is the gate that matters most.** The copy people load today is the
-account-synced one, not this repository. As of the last check, that copy still
-contains every blocker:
+| Item | State |
+|---|---|
+| Fixed package installed as the live skill | Done. The synced copy was replaced and verified: the `.docx` gate now errors, zero personal dependencies, zero em dashes, self-test 24/24 against the live copy. A backup of the previous copy is at `/tmp/skill-backup`. |
+| `rfp-responder` off-brand color | Fixed. `#F5A623` and `#404040` replaced with `#E97722` and `#232E3E`, and a Step 0 added that loads the formal-document tokens and gates on `brand_lint.py`. Now version-controlled in this repository. |
+| Unverifiable integration promises | Removed. `SKILL.md` now claims only `rfp-responder`, which is real and wired. `INTEGRATION.md` keeps the paste-in block for future document skills. |
+| Deck renders correctly | Verified visually. A full seven-slide deck was built, rendered to PDF, and the slides were inspected. |
+| SmartCare and carousel disclosure | Settled. `SKILL.md` states plainly that both surfaces produce net-new copy requiring review. |
 
-| Check | Account-synced copy | This repository |
-|---|---|---|
-| `.docx` gate | `0 error(s)`, exit 0 on a banned color | 2 errors, exit 1 |
-| Personal dependencies | 2 in `SKILL.md` | 0 |
-| Em dashes in references | 23 | 0 |
-| Deck workflow | Fails validation every run | Passes |
+### What the visual render caught
 
-Merging the pull request does not change what anyone loads. The fixed package
-has to be uploaded wherever account skills are managed. Until then, sharing the
-skill name distributes the broken version.
+The review flagged a hardcoded possessive on slide 5. Rendering showed the same
+bug on slides 2, 4, and 6, which no XML-level check would have found: sentences
+read "Acme Foods's existing UKG Pro environment". All six occurrences are fixed,
+and the self-test now scans the template itself so the pattern cannot return.
 
-### 2. Fix `rfp-responder`
+This is the argument for keeping the render check: structural validation passed
+on all of them.
 
-It hardcodes `#F5A623` as "Align orange" and `#404040` as "Align dark gray".
-Neither appears in any audited Align production file. Every RFP response
-produced so far carries the unverified color. See `INTEGRATION.md` for the
-replacement lines. It is an account skill, so it cannot be fixed from this
-repository.
+## Still open, and genuinely needs a person
 
-### 3. Decide what happens to the five skills that do not exist
+### 1. Decide where this package lives
+
+It has now been revised twice by different routes, which is how two copies
+diverged in the first place. The live install done here is a local file
+replacement. If the account skill store pushes a sync, it will overwrite it. Pick
+one home and make the other a mirror:
+
+- **Account skill store as the source.** Upload this package there, and treat the
+  repository as the review and history trail.
+- **Repository as the source.** Distribute through the marketplace and stop
+  editing the account copy.
+
+Until this is decided, a future sync can silently reinstate the broken version.
+
+### 2. Confirm the brand facts
+
+The self-test proves internal consistency, not correctness. Worth a few minutes
+from someone who knows the brand:
+
+- The rendered deck matches what the master should look like.
+- Retiring `#E8832A` was right. It was retired on evidence of zero shipped usage,
+  which is a judgment call and reversible.
+- The web tokens are still current. Observed 2026-07-15, review date 2027-01-15.
+
+### 3. The five skills that could not be found
 
 `sow-generator`, `alignhcm-loi`, `alignhcm-legal-review`,
-`alignhcm-weekly-sales-report`, and `alignhcm-monthly-forecast-review` were
-named in review as consumers of this package but are not in this repository, the
-eight Align repositories, or the account skills. Either they live somewhere not
-yet searched, they are planned rather than built, or the names are wrong. The
-composition table in `SKILL.md` currently promises integrations that cannot be
-verified.
-
-### 4. Human brand review
-
-The self-test proves internal consistency, not correctness. A person who knows
-the brand should confirm:
-
-- The deck token table matches what the master actually renders. Open the
-  bundled reference, compare against `references/powerpoint-tokens.md`.
-- Retiring `#E8832A` is right. It was retired on evidence of zero shipped usage,
-  which is a judgment call the brand owner can reverse.
-- The web tokens are still current. They were observed 2026-07-15 and carry a
-  review date of 2027-01-15.
-- One real client deck produced end to end reads correctly at full size.
-
-### 5. Decide the SmartCare and carousel disclosure
-
-The historical SmartCare GTM document and the original carousel HTML are
-unrecoverable, so those two surfaces produce net-new copy requiring review.
-`SKILL.md` states this. Confirm that is acceptable for org-wide use, or recover
-the sources.
+`alignhcm-weekly-sales-report`, and `alignhcm-monthly-forecast-review` are not in
+this repository, the eight Align repositories, or the account skills. They are no
+longer claimed anywhere. If they exist somewhere unsearched, wire them up with
+the block in `INTEGRATION.md`.
 
 ## Recommended before wider rollout
 
 - **Pilot with one person outside the brand owner's team.** Have them produce a
   real client deck using only `SKILL.md`, with no verbal help. Anything they ask
   about is a documentation gap.
-- **Decide the update path.** This package has now been revised twice by
-  different routes. Pick one home, repository or account store, and make the
-  other a mirror, or the two will diverge again.
 - **Consider marketplace packaging.** Several skills in this repository carry
   `.claude-plugin/plugin.json`; this one does not. Adding it would make
   installation and versioning explicit rather than manual.

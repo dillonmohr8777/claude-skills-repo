@@ -56,7 +56,7 @@ EXPECTED_PLACEHOLDER_COUNT = 15
 
 STDLIB_ALLOWED = {
     "argparse", "collections", "hashlib", "importlib", "io", "json", "os",
-    "pathlib", "re", "struct", "subprocess", "sys", "tempfile", "zipfile",
+    "pathlib", "re", "shutil", "struct", "subprocess", "sys", "tempfile", "zipfile",
     "zlib", "xml",
 }
 
@@ -238,6 +238,49 @@ def _allow_unresolved():
                         "--engagement-title", "E", "--date", "D",
                         "--allow-unresolved")
         return code == 0, f"exited {code}"
+
+
+@check("template has no hardcoded possessive after a token")
+def _template_no_possessive():
+    """Caught by rendering, not by XML checks: a hardcoded 's after {{CLIENT}}
+    renders as "Acme Foods's" for any client name already ending in s."""
+    hits = []
+    with zipfile.ZipFile(TEMPLATE) as z:
+        for name in sorted(n for n in z.namelist()
+                           if re.fullmatch(r"ppt/slides/slide\d+\.xml", n)):
+            body = z.read(name).decode("utf8", "replace")
+            for token in ("{{CLIENT}}'s", "{{CLIENT}}&#8217;s", "{{CLIENT}}\u2019s"):
+                if token in body:
+                    hits.append(name.split("/")[-1])
+                    break
+    return not hits, f"possessive still on {sorted(set(hits))}" if hits else \
+        "no token is followed by a hardcoded possessive"
+
+
+@check("rendered deck opens and paginates")
+def _renders():
+    """Optional. Only runs where LibreOffice is installed. An XML-valid deck can
+    still fail to open, which no other check would notice."""
+    from shutil import which
+    if not which("soffice"):
+        return True, "skipped, LibreOffice not installed"
+    with tempfile.TemporaryDirectory() as tmp:
+        logo, deck = os.path.join(tmp, "l.png"), os.path.join(tmp, "d.pptx")
+        make_png(logo)
+        args = ["--output", deck, "--client-name", "Acme Foods", "--client-logo", logo,
+                "--engagement-title", "E", "--deck-type", "T", "--date", "D"]
+        for r in REPLACE_ARGS:
+            args += ["--replace", r]
+        run("prepare_client_deck.py", *args)
+        proc = subprocess.run(
+            ["soffice", f"-env:UserInstallation=file://{tmp}/lo", "--headless",
+             "--norestore", "--convert-to", "pdf", "--outdir", tmp, deck],
+            capture_output=True, text=True, timeout=400)
+        pdf = os.path.join(tmp, "d.pdf")
+        if not os.path.exists(pdf):
+            return False, f"LibreOffice could not open the deck: {proc.stdout.strip()[:120]}"
+        size = os.path.getsize(pdf)
+        return size > 20000, f"rendered {size // 1024} KB PDF"
 
 
 @check("no possessive artifact in output text")

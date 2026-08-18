@@ -170,24 +170,18 @@ reconstructed wording as approved copy.
 
 ## Composition with other skills
 
-These Align skills produce client-facing files and must load this package first:
+Any Align skill that produces a client-facing file must load this package
+before building. Wired up today:
 
-| Skill | What it builds |
-|---|---|
-| `sow-generator` | Statements of work |
-| `rfp-responder` | RFP and RFI responses |
-| `alignhcm-loi` | Letters of intent |
-| `alignhcm-legal-review` | Legal review documents |
-| `alignhcm-weekly-sales-report` | Weekly sales reporting |
-| `alignhcm-monthly-forecast-review` | Monthly forecast reviews |
+| Skill | What it builds | Status |
+|---|---|---|
+| `rfp-responder` | RFP and RFI responses | Loads the formal-document tokens at Step 0 |
 
-Each loads `references/tokens.md` (formal documents section) plus the bundled
-Align lockup before building its `.docx`, and gates on
-`brand_lint.py --surface document`.
+It loads `references/tokens.md` (formal documents section) plus the bundled
+Align lockup, and gates on `brand_lint.py --surface document`.
 
-> Only `rfp-responder` currently exists, and it is an account skill rather than
-> a file in this repository. See `INTEGRATION.md` for the exact line to add to
-> each skill and for the off-brand colors `rfp-responder` ships today.
+`INTEGRATION.md` carries the paste-in block for wiring up any further document
+skill, and records which previously-named skills could not be found.
 
 General composition:
 
