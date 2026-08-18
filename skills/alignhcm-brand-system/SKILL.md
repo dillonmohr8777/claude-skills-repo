@@ -155,6 +155,8 @@ deck never requires it.
 | `references/powerpoint-tokens.json` | Machine-readable form of the generated measurements |
 | `CHANGELOG.md` | Revision history, repository audit, and known limitations |
 | `INTEGRATION.md` | Cross-references owed by downstream Align document skills |
+| `RELEASE-READINESS.md` | What must be true before sharing this skill, and who can do each part |
+| `scripts/selftest.py` | 22 checks proving the documented workflow runs. Run before publishing any edit |
 
 ## Two surfaces produce net-new copy
 
