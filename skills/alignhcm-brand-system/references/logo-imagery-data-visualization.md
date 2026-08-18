@@ -24,12 +24,51 @@ the earlier package draft.
 1. Resolve the deck's client from the current brief and source files.
 2. Search attached approved assets and the canonical client project first.
 3. If absent, use the client's official brand kit or official website.
+   `scripts/fetch_client_logo.py --domain <site> --out <file>.png` automates
+   this: it ranks the candidates on the company's own site, prefers a reverse or
+   already-transparent mark, and refuses anything that will not hold up.
 4. Prefer source SVG or transparent high-resolution PNG. Convert without
    changing paths, proportions, colors, or clear space.
-5. Record the asset source locator. If identity or provenance is ambiguous,
-   stop before placing the mark.
+5. Record the asset source locator. The fetcher writes a `.source.json` beside
+   the PNG for this. If identity or provenance is ambiguous, stop before placing
+   the mark.
 6. Use the PowerPoint cover zone defined in `powerpoint-deck-system.md` and run
    `validate_client_deck.py` against the exact selected logo.
+
+### Legibility on the cover field
+
+The cover panel is navy `#232E3E`. A mark that looks correct on a white website
+can disappear there, and transparency alone does not fix it. Require at least
+**3:1** contrast between the mark's ink and the navy, which is what
+`fetch_client_logo.py` measures and enforces.
+
+When the only available mark is dark:
+
+1. Look for the client's reverse, white, or knockout variant. Most brand kits
+   ship one, and the fetcher already scores those highest.
+2. If none exists, place the primary mark on the approved light-background
+   plate with restrained clear space, as described in
+   `powerpoint-deck-system.md`.
+3. Never recolor, invert, or trace the client's mark to make it fit.
+
+### What automated cleanup may and may not do
+
+Permitted, because they do not alter the artwork:
+
+- Removing a flat background that the mark was flattened onto
+- Removing the pale halo that flattening leaves behind
+- Trimming transparent margins
+- Rasterising an official SVG at a larger size
+
+Not permitted:
+
+- Recoloring, inverting, or restyling the mark
+- Upscaling a small raster to fake resolution
+- Keying out a photographic or gradient background
+- Reconstructing or redrawing any part of the mark
+
+Any logo whose background was keyed is flagged `needs_human_review` in its
+provenance file. Look at it on the navy cover before the deck goes out.
 
 ## Photography and illustration
 

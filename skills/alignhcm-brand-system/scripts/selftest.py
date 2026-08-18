@@ -55,16 +55,26 @@ REPLACE_ARGS = [
 EXPECTED_PLACEHOLDER_COUNT = 15
 
 STDLIB_ALLOWED = {
-    "argparse", "collections", "hashlib", "importlib", "io", "json", "os",
-    "pathlib", "re", "shutil", "struct", "subprocess", "sys", "tempfile", "zipfile",
+    "argparse", "collections", "functools", "hashlib", "http", "importlib", "io",
+    "json", "logo_image", "os", "pathlib", "re", "shutil", "socketserver",
+    "struct", "subprocess", "sys", "tempfile", "threading", "urllib", "zipfile",
     "zlib", "xml",
 }
 
+# Pillow is optional acceleration only. It must never become required, so it is
+# allowed in the import scan but separately asserted to be guarded.
+OPTIONAL_IMPORTS = {"PIL"}
+
 results = []
+CHECKS = []
 
 
 def check(name):
-    """Register a check. The wrapped function returns (ok, detail)."""
+    """Register a check. The wrapped function returns (ok, detail).
+
+    Registration is explicit rather than discovered by name, so private helpers
+    can live alongside the checks without being mistaken for one.
+    """
     def wrap(fn):
         def run():
             try:
@@ -73,6 +83,7 @@ def check(name):
                 ok, detail = False, f"raised {type(exc).__name__}: {exc}"
             results.append((name, ok, detail))
         run.__name__ = fn.__name__
+        CHECKS.append(run)
         return run
     return wrap
 
@@ -470,6 +481,171 @@ def _logo_ratio():
 
 
 # ---------------------------------------------------------------------------
+# Logo fetching
+#
+# Served from a local fixture site rather than the live web, so these run
+# offline, deterministically, and without depending on any third party's
+# markup staying the same.
+# ---------------------------------------------------------------------------
+
+def _logo_png(path, w, h, painter):
+    raw = bytearray()
+    for y in range(h):
+        raw.append(0)
+        for x in range(w):
+            raw += bytes(painter(x, y))
+
+    def chunk(tag, body):
+        return (struct.pack(">I", len(body)) + tag + body
+                + struct.pack(">I", zlib.crc32(tag + body) & 0xFFFFFFFF))
+
+    pathlib.Path(path).write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(bytes(raw), 6))
+        + chunk(b"IEND", b""))
+
+
+def _dark_on_white(x, y):
+    if (x - 340) ** 2 + (y - 210) ** 2 < 130 ** 2:
+        return (35, 46, 62, 255)
+    if 520 <= x <= 1160 and 150 <= y <= 200:
+        return (35, 46, 62, 255)
+    return (255, 255, 255, 255)
+
+
+def _reverse_transparent(x, y):
+    if (x - 340) ** 2 + (y - 210) ** 2 < 130 ** 2:
+        return (255, 255, 255, 255)
+    if 520 <= x <= 1160 and 150 <= y <= 200:
+        return (255, 255, 255, 255)
+    return (0, 0, 0, 0)
+
+
+class _FixtureSite:
+    """A throwaway HTTP server over a directory, on an ephemeral port."""
+
+    def __init__(self, root, page):
+        import functools
+        import http.server
+        import socketserver
+        import threading
+        pathlib.Path(root, "index.html").write_text(page)
+
+        class Silent(http.server.SimpleHTTPRequestHandler):
+            def log_message(self, *a):  # keep the suite's output readable
+                pass
+
+        handler = functools.partial(Silent, directory=str(root))
+
+        class Quiet(socketserver.ThreadingMixIn, http.server.HTTPServer):
+            daemon_threads = True
+
+            def handle_error(self, *a):
+                pass
+
+        self.httpd = Quiet(("127.0.0.1", 0), handler)
+        self.port = self.httpd.server_address[1]
+        self.thread = threading.Thread(target=self.httpd.serve_forever, daemon=True)
+        self.thread.start()
+
+    @property
+    def url(self):
+        return f"http://127.0.0.1:{self.port}"
+
+    def close(self):
+        self.httpd.shutdown()
+        self.httpd.server_close()
+
+
+def _run_fetch(site_url, out, *extra):
+    env = dict(os.environ)
+    # The fixture is local; never send it through a proxy.
+    env["NO_PROXY"] = env["no_proxy"] = "127.0.0.1,localhost"
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPTS / "fetch_client_logo.py"),
+         "--domain", site_url, "--out", out, *extra],
+        capture_output=True, text=True, env=env, timeout=300)
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+@check("logo fetcher rejects a mark that vanishes on navy")
+def _fetch_rejects_low_contrast():
+    with tempfile.TemporaryDirectory() as tmp:
+        _logo_png(os.path.join(tmp, "logo.png"), 1400, 420, _dark_on_white)
+        site = _FixtureSite(tmp, '<html><body><img class="logo" src="/logo.png">'
+                                 '</body></html>')
+        try:
+            code, out = _run_fetch(site.url, os.path.join(tmp, "o.png"))
+        finally:
+            site.close()
+        if code == 0:
+            return False, "accepted a dark mark that would disappear on the cover"
+        return ("contrast" in out or "disappear" in out), f"exit {code}, contrast gate fired"
+
+
+@check("logo fetcher prefers a transparent reverse mark")
+def _fetch_prefers_reverse():
+    with tempfile.TemporaryDirectory() as tmp:
+        _logo_png(os.path.join(tmp, "logo.png"), 1400, 420, _dark_on_white)
+        _logo_png(os.path.join(tmp, "logo-reverse.png"), 1400, 420, _reverse_transparent)
+        site = _FixtureSite(
+            tmp,
+            '<html><body><img class="logo" src="/logo.png">'
+            '<img class="logo" src="/logo-reverse.png"></body></html>')
+        out = os.path.join(tmp, "o.png")
+        try:
+            code, log_text = _run_fetch(site.url, out, "--json")
+        finally:
+            site.close()
+        if code != 0:
+            return False, f"exit {code}: {log_text.strip()[-160:]}"
+        if "logo-reverse" not in log_text:
+            return False, "did not choose the reverse variant"
+        if "no keying needed" not in log_text:
+            return False, "keyed an already-transparent asset"
+        return os.path.exists(out + ".source.json"), "chose reverse, wrote provenance"
+
+
+@check("logo fetcher rejects a favicon as too small")
+def _fetch_rejects_favicon():
+    with tempfile.TemporaryDirectory() as tmp:
+        _logo_png(os.path.join(tmp, "favicon.png"), 64, 64,
+                  lambda x, y: (255, 255, 255, 255)
+                  if (x - 32) ** 2 + (y - 32) ** 2 < 26 ** 2 else (0, 0, 0, 0))
+        site = _FixtureSite(tmp, '<html><head><link rel="icon" href="/favicon.png">'
+                                 '</head><body></body></html>')
+        try:
+            code, out = _run_fetch(site.url, os.path.join(tmp, "o.png"))
+        finally:
+            site.close()
+        return code != 0 and "px wide" in out, f"exit {code}, size gate fired"
+
+
+@check("logo fetcher reports unreachable sites cleanly")
+def _fetch_unreachable():
+    with tempfile.TemporaryDirectory() as tmp:
+        # Port 9 is discard; nothing serves HTTP there.
+        code, out = _run_fetch("http://127.0.0.1:9", os.path.join(tmp, "o.png"))
+        return code == 4, f"exit {code} (expected 4)"
+
+
+@check("PNG codec round-trips")
+def _png_roundtrip():
+    spec = importlib.util.spec_from_file_location("li", SCRIPTS / "logo_image.py")
+    li = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(li)
+    with tempfile.TemporaryDirectory() as tmp:
+        p = os.path.join(tmp, "t.png")
+        _logo_png(p, 40, 20, _reverse_transparent)
+        img = li.decode_png(pathlib.Path(p).read_bytes())
+        again = li.decode_png(li.encode_png(img))
+        if (again.w, again.h) != (img.w, img.h):
+            return False, "dimensions changed on round-trip"
+        return again.px == img.px, "pixels identical after encode and decode"
+
+
+# ---------------------------------------------------------------------------
 # Portability and house rules
 # ---------------------------------------------------------------------------
 
@@ -481,10 +657,25 @@ def _stdlib_only():
             m = re.match(r"^\s*(?:import|from)\s+([A-Za-z_][\w.]*)", line)
             if m:
                 top = m.group(1).split(".")[0]
-                if top not in STDLIB_ALLOWED:
-                    third_party.add(f"{path.name}:{top}")
+                if top in OPTIONAL_IMPORTS or top in STDLIB_ALLOWED:
+                    continue
+                third_party.add(f"{path.name}:{top}")
     return not third_party, f"found {sorted(third_party)}" if third_party else \
-        f"{len(list(SCRIPTS.glob('*.py')))} scripts, no third-party imports"
+        f"{len(list(SCRIPTS.glob('*.py')))} scripts, no required third-party imports"
+
+
+@check("Pillow stays optional")
+def _pillow_optional():
+    """Every PIL import must be guarded, so the package still runs with no installs."""
+    unguarded = []
+    for path in sorted(SCRIPTS.glob("*.py")):
+        text = path.read_text()
+        for m in re.finditer(r"^([ \t]*)(?:from|import)\s+PIL", text, re.M):
+            indent = m.group(1)
+            if not indent:  # a top-level PIL import would make it mandatory
+                unguarded.append(f"{path.name}:{text[:m.start()].count(chr(10)) + 1}")
+    return not unguarded, f"unguarded PIL import at {unguarded}" if unguarded else \
+        "all PIL imports are guarded or lazy"
 
 
 @check("scripts compile")
@@ -571,9 +762,7 @@ def main():
                     help="show detail for passing checks too")
     args = ap.parse_args()
 
-    checks = [v for k, v in sorted(globals().items())
-              if k.startswith("_") and callable(v) and not k.startswith("__")]
-    for fn in checks:
+    for fn in CHECKS:
         fn()
 
     width = max(len(name) for name, _, _ in results)

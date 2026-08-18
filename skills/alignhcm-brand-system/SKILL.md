@@ -88,10 +88,39 @@ by hand in PowerPoint.
 
 1. Read the current deck brief and supporting source files. State the resolved
    client, engagement, audience, deck type, and date.
-2. Obtain the client's official logo from, in order: an attached approved
-   asset, the client's canonical project assets, the client's official brand
-   kit, or its official website. Prefer a transparent PNG or convert an official
-   SVG without modifying the artwork. Record the source locator.
+2. Obtain the client's official logo. If an approved asset is already attached
+   or lives in the client's project folder, use it. Otherwise fetch it from the
+   company's own site:
+
+   ```bash
+   python scripts/fetch_client_logo.py \
+     --domain acmefoods.com \
+     --name "Acme Foods" \
+     --out acme-logo.png
+   ```
+
+   It reads the company's site, ranks every candidate it finds, prefers a
+   reverse or transparent mark, keys out a flat background if it has to, trims
+   the margins, and checks the result will actually read on the navy cover. It
+   writes `acme-logo.png.source.json` recording the source URL and every change
+   made, which satisfies the source-locator rule.
+
+   The script **fails rather than handing back a poor mark**. Exit 2 means it
+   found something but it did not meet the bar, and the message says why:
+
+   | Exit | Meaning | What to do |
+   |---|---|---|
+   | 0 | Usable logo written | Continue. If the background was keyed, look at the cover before sending |
+   | 2 | Too small, opaque, or too dark for the navy field | Get the reverse mark from the client's brand kit or press page |
+   | 3 | Nothing usable found on the site | Source it manually |
+   | 4 | Site unreachable | Check the network, or source it manually |
+
+   A dark logo that reads at under 3:1 against the cover navy is rejected even
+   though it looks fine on white. That check exists because it is the failure
+   that survives everything else and only shows up on the finished slide.
+
+   Never accept a favicon, a screenshot, a search result, or a generated image
+   as the mark. The size gate blocks favicons automatically.
 3. Start from the bundled reference, filling all 15 placeholders. A complete
    worked example:
 
@@ -156,7 +185,9 @@ deck never requires it.
 | `CHANGELOG.md` | Revision history, repository audit, and known limitations |
 | `INTEGRATION.md` | Cross-references owed by downstream Align document skills |
 | `RELEASE-READINESS.md` | What must be true before sharing this skill, and who can do each part |
-| `scripts/selftest.py` | 22 checks proving the documented workflow runs. Run before publishing any edit |
+| `scripts/fetch_client_logo.py` | Finds, cleans, and quality-gates a client logo from the company's own site |
+| `scripts/logo_image.py` | PNG codec, background removal, defringe, trim, and legibility analysis |
+| `scripts/selftest.py` | 30 checks proving the documented workflow runs. Run before publishing any edit |
 
 ## Two surfaces produce net-new copy
 

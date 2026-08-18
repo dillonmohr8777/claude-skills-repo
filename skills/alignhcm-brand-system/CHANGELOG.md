@@ -75,6 +75,50 @@ correction, and the icon naming are all edits inside it:
 Only six XML parts differ (`ppt/presentation.xml` and slides 2, 3, 5, 6, 7). All
 nine `ppt/media/*` artwork parts are byte-identical, so no artwork was altered.
 
+## 2026-08-18 automated client logo sourcing
+
+The deck workflow required a logo file already found by hand. It now fetches one.
+
+`scripts/fetch_client_logo.py` reads the company's own site, ranks every logo
+candidate, takes the best, and cleans it. `scripts/logo_image.py` carries the
+imaging: a stdlib PNG codec, edge-connected background removal, defringing,
+trimming, resampling, and legibility analysis. Pillow is used when already
+installed for JPEG and WebP sources and better resampling, and is never
+required, which the suite now asserts.
+
+Ranking prefers assets needing no modification: SVG, then a transparent site
+logo, then og:image, then apple-touch-icon, then favicon. A URL naming a
+reverse, white, or knockout variant is scored higher, because the Align cover is
+navy and that is the variant that belongs on it.
+
+The quality gate is the substance. The script exits non-zero rather than
+returning a poor mark, on any of:
+
+- narrower than 600px after trimming, so it would be soft in the 2.9in zone
+- still fully opaque, so it would show as a rectangle on navy
+- an extreme aspect ratio, so it is probably not the mark
+- **under 3:1 contrast against the cover navy**
+
+That last one was found by rendering. A dark logo keyed to transparency looks
+correct in isolation and on a white page, then vanishes on the navy cover panel.
+Neither the structural checks nor a look at the PNG would catch it; only
+measuring the ink against the field it lands on does.
+
+Background removal is deliberately conservative. It floods inward from the
+border, so enclosed light areas such as the counter of a letter survive, and it
+declines entirely when the corners disagree, which is the signal for a
+photographic or gradient background.
+
+Every fetched logo gets a `.source.json` recording the source URL, the original
+and final dimensions, every processing step, the measured contrast, and whether
+a human still needs to look at it. That satisfies the existing source-locator
+rule, which was previously left to the operator.
+
+Five checks added, and check registration is now explicit rather than discovered
+by name so helpers cannot be mistaken for tests. Suite is 30 checks. The logo
+tests run against a local fixture site, so they work offline and do not depend
+on any third party's markup.
+
 ## 2026-08-13 exact-authority revision
 
 The primary PowerPoint file was supplied directly and became the deck authority.
