@@ -194,6 +194,7 @@ deck never requires it.
 | `CHANGELOG.md` | Revision history, repository audit, and known limitations |
 | `INTEGRATION.md` | Cross-references owed by downstream Align document skills |
 | `RELEASE-READINESS.md` | What must be true before sharing this skill, and who can do each part |
+| `IT-TEST-PLAN.md` | A 30 minute validation script for whoever is testing this before rollout |
 | `scripts/fetch_client_logo.py` | Finds, cleans, and quality-gates a client logo from the company's own site |
 | `scripts/logo_image.py` | PNG codec, background removal, defringe, trim, and legibility analysis |
 | `scripts/selftest.py` | 30 checks proving the documented workflow runs. Run before publishing any edit |
