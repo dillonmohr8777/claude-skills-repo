@@ -11,12 +11,14 @@ enough for a deck. It writes a `.source.json` beside the PNG recording where the
 artwork came from and what was done to it, because the skill requires a source
 locator for any placed mark.
 
-Ranking prefers assets that need no modification at all:
+Ranking is by role first, then by whether the asset needs modification:
 
-    SVG  >  transparent PNG  >  og:image  >  apple-touch-icon  >  favicon
+    header logo  >  og:image  >  apple-touch-icon  >  favicon
 
-An SVG is the ideal case. It is vector, almost always already transparent, and
-rasterises at whatever size the deck needs.
+with a bonus for vector and for already-transparent assets, and a further bonus
+for a URL naming a reverse or white variant. Role has to dominate: a favicon
+served as an SVG is still a favicon, and an earlier version that ranked every
+vector equally picked 32px icons over the real logo on every real site tried.
 
 Quality gate. The cover zone is 2.9 inches wide, so anything under
 `--min-width` (default 600px) after trimming is too soft to place and the script
@@ -51,14 +53,15 @@ UA = ("Mozilla/5.0 (compatible; AlignHCM-BrandSystem/1.0; "
       "+https://www.alignhcm.com/)")
 TIMEOUT = 25
 
-# Ordered best to worst. Score is the starting rank before size adjustments.
+# What role the asset plays on the page, best to worst. This is deliberately
+# separate from whether the asset is vector: a favicon is still a favicon when
+# it is an SVG, and must not outrank the header logo just for being one.
 KIND_SCORE = {
-    "svg": 1000,
     "site-logo-img": 700,
     "og-image": 500,
+    "logo-api": 450,
     "apple-touch-icon": 300,
     "icon": 200,
-    "logo-api": 450,
 }
 
 WELL_KNOWN = [
@@ -127,10 +130,9 @@ def discover(base, html):
         if "apple-touch-icon" in rel:
             add(href, "apple-touch-icon", _size_from_attr(sizes) or 180)
         elif "icon" in rel:
-            add(href, "svg" if href.lower().endswith(".svg") else "icon",
-                _size_from_attr(sizes))
+            add(href, "icon", _size_from_attr(sizes))
         elif "mask-icon" in rel and href.lower().endswith(".svg"):
-            add(href, "svg", 0)
+            add(href, "icon", 0)
 
     for prop in ("og:image", "twitter:image", "og:logo"):
         for m in re.finditer(
@@ -152,8 +154,7 @@ def discover(base, html):
             if srcset:
                 src = srcset.split(",")[-1].strip().split()[0]
         if src:
-            add(src, "svg" if src.lower().split("?")[0].endswith(".svg")
-                else "site-logo-img", _size_from_attr(tag))
+            add(src, "site-logo-img", _size_from_attr(tag))
 
     # Inline <svg> inside a logo-ish wrapper is common but not separately
     # fetchable, so it is intentionally out of scope here.
@@ -163,8 +164,7 @@ def discover(base, html):
 def probe_well_known(base):
     out = []
     for path in WELL_KNOWN:
-        out.append({"url": base + path,
-                    "kind": "svg" if path.endswith(".svg") else "site-logo-img",
+        out.append({"url": base + path, "kind": "site-logo-img",
                     "hint": 0, "speculative": True})
     return out
 
@@ -173,8 +173,43 @@ def probe_well_known(base):
 # Rasterising
 # ---------------------------------------------------------------------------
 
+def force_svg_size(svg_bytes, width):
+    """
+    Rewrite the SVG's own width and height to the size we want.
+
+    Only rsvg-convert and inkscape accept a width flag. LibreOffice rasterises
+    at the file's intrinsic size, so a 32px favicon stays 32px and the whole
+    point of preferring vector is lost. Setting the attributes in the file makes
+    every backend agree.
+    """
+    head_end = svg_bytes.find(b">")
+    if head_end == -1 or b"<svg" not in svg_bytes[:head_end + 1]:
+        return svg_bytes
+    head = svg_bytes[:head_end + 1].decode("utf8", "replace")
+
+    box = re.search(r'viewBox\s*=\s*["\']\s*[\d.eE+-]+[ ,]+[\d.eE+-]+[ ,]+'
+                    r'([\d.eE+-]+)[ ,]+([\d.eE+-]+)', head)
+    if box:
+        vw, vh = float(box.group(1)), float(box.group(2))
+    else:
+        w = re.search(r'\bwidth\s*=\s*["\']([\d.]+)', head)
+        h = re.search(r'\bheight\s*=\s*["\']([\d.]+)', head)
+        if not (w and h):
+            return svg_bytes
+        vw, vh = float(w.group(1)), float(h.group(1))
+    if vw <= 0 or vh <= 0:
+        return svg_bytes
+
+    height = max(1, round(width * vh / vw))
+    head = re.sub(r'\s\bwidth\s*=\s*["\'][^"\']*["\']', "", head)
+    head = re.sub(r'\s\bheight\s*=\s*["\'][^"\']*["\']', "", head)
+    head = head[:-1].rstrip() + f' width="{width}" height="{height}">'
+    return head.encode("utf8") + svg_bytes[head_end + 1:]
+
+
 def svg_to_png(svg_bytes, width):
     """Rasterise SVG via whatever converter exists. Returns PNG bytes or None."""
+    svg_bytes = force_svg_size(svg_bytes, width)
     with tempfile.TemporaryDirectory() as tmp:
         svg = os.path.join(tmp, "in.svg")
         with open(svg, "wb") as fh:
@@ -230,8 +265,8 @@ def evaluate(candidate, target_width):
     if is_svg:
         png = svg_to_png(data, target_width)
         if png is None:
-            return {"url": url, "kind": "svg", "error": "no SVG rasteriser available",
-                    "svg_bytes": data}
+            return {"url": url, "kind": candidate["kind"],
+                    "error": "no SVG rasteriser available"}
         data = png
         rasterised_from_svg = True
 
@@ -242,7 +277,7 @@ def evaluate(candidate, target_width):
 
     return {
         "url": final,
-        "kind": "svg" if rasterised_from_svg else candidate["kind"],
+        "kind": candidate["kind"],
         "img": img,
         "width": img.w,
         "height": img.h,
@@ -258,18 +293,26 @@ REVERSE_HINT = re.compile(r"reverse|reversed|white|light|inverse|inverted|knocko
 
 
 def score(entry, prefer_reverse=True):
+    """
+    Rank by role first, then by whether it needs modification, then by size.
+
+    Role dominates on purpose. A favicon served as SVG is still a favicon, and
+    an earlier version that scored every vector identically picked 32px icons
+    over the 512px header logo on every real site it was tried against.
+    """
     if "img" not in entry:
         return -1
     base = KIND_SCORE.get(entry["kind"], 100)
     if entry["vector"]:
-        base += 500
-    else:
-        base += min(entry["width"], 2000) // 10
-        if entry["has_alpha"]:
-            base += 200
-        ratio = entry["width"] / max(1, entry["height"])
-        if 0.95 < ratio < 1.05 and entry["width"] <= 256:
-            base -= 150  # a square small mark is almost certainly a favicon
+        base += 400  # scales to any size, usually already transparent
+    if entry["has_alpha"]:
+        base += 200  # no keying needed
+    # Size still matters for a vector, because the rasteriser available here may
+    # not honour a requested width and the intrinsic size is what we get.
+    base += min(entry["width"], 2000) // 10
+    ratio = entry["width"] / max(1, entry["height"])
+    if 0.95 < ratio < 1.05 and entry["width"] <= 256:
+        base -= 150  # a small square mark is almost certainly an icon
     if prefer_reverse and REVERSE_HINT.search(entry["url"]):
         base += 350
     return base

@@ -607,6 +607,62 @@ def _fetch_prefers_reverse():
         return os.path.exists(out + ".source.json"), "chose reverse, wrote provenance"
 
 
+@check("logo fetcher does not pick an SVG favicon over the real logo")
+def _fetch_svg_favicon_not_preferred():
+    """
+    Regression test for a bug found only against real company sites.
+
+    Every vector candidate used to score identically, so a 32px favicon served
+    as SVG tied with the 512px header logo and won on ordering. It happened on
+    all five real brands tried. Role now outranks vector-ness.
+    """
+    small = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" '
+             'width="32" height="32"><circle cx="12" cy="12" r="11" fill="#0FAAFF"/></svg>')
+    big = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" '
+           'width="960" height="240"><rect x="0" y="10" width="240" height="40" '
+           'fill="#0FAAFF"/></svg>')
+    with tempfile.TemporaryDirectory() as tmp:
+        pathlib.Path(tmp, "favicon.svg").write_text(small)
+        pathlib.Path(tmp, "logo.svg").write_text(big)
+        site = _FixtureSite(
+            tmp,
+            '<html><head><link rel="icon" href="/favicon.svg" sizes="32x32">'
+            '</head><body><img class="site-logo" src="/logo.svg" alt="logo">'
+            '</body></html>')
+        out = os.path.join(tmp, "o.png")
+        try:
+            code, text = _run_fetch(site.url, out)
+        finally:
+            site.close()
+        if "chosen: " not in text:
+            return False, "nothing was chosen"
+        chosen = text.split("chosen: ", 1)[1].splitlines()[0]
+        if "favicon" in chosen:
+            return False, "chose the SVG favicon over the header logo"
+        return True, f"chose {chosen.rsplit('/', 1)[-1]}, exit {code}"
+
+
+@check("SVG rasterises at the requested width")
+def _svg_forced_size():
+    """
+    Second regression from the real run: LibreOffice ignores a width flag and
+    rasterises at the file's intrinsic size, so vectors came out at 32px. The
+    size is now written into the SVG itself before conversion.
+    """
+    spec = importlib.util.spec_from_file_location(
+        "fcl", SCRIPTS / "fetch_client_logo.py")
+    fcl = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fcl)
+    src = (b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 12" '
+           b'width="24" height="12"><rect width="24" height="12"/></svg>')
+    out = fcl.force_svg_size(src, 1200).decode()
+    if 'width="1200"' not in out:
+        return False, f"width not forced: {out[:110]}"
+    if 'height="600"' not in out:
+        return False, f"aspect not preserved: {out[:110]}"
+    return True, "24x12 viewBox forced to 1200x600"
+
+
 @check("logo fetcher rejects a favicon as too small")
 def _fetch_rejects_favicon():
     with tempfile.TemporaryDirectory() as tmp:

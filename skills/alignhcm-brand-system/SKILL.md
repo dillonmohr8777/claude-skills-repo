@@ -99,11 +99,13 @@ by hand in PowerPoint.
      --out acme-logo.png
    ```
 
-   It reads the company's site, ranks every candidate it finds, prefers a
-   reverse or transparent mark, keys out a flat background if it has to, trims
-   the margins, and checks the result will actually read on the navy cover. It
-   writes `acme-logo.png.source.json` recording the source URL and every change
-   made, which satisfies the source-locator rule.
+   It reads the company's site and ranks every candidate by role first, so the
+   header logo beats an og:image and both beat a favicon, with bonuses for
+   vector, transparency, and reverse variants. It rasterises vectors at deck
+   size, keys out a flat background if it has to, trims the margins, and checks
+   the result will actually read on the navy cover. It writes
+   `acme-logo.png.source.json` recording the source URL and every change made,
+   which satisfies the source-locator rule.
 
    The script **fails rather than handing back a poor mark**. Exit 2 means it
    found something but it did not meet the bar, and the message says why:

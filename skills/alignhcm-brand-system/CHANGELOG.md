@@ -119,6 +119,45 @@ by name so helpers cannot be mistaken for tests. Suite is 30 checks. The logo
 tests run against a local fixture site, so they work offline and do not depend
 on any third party's markup.
 
+## 2026-08-18 real-company validation
+
+The logo fetcher was built against synthetic fixtures and passed. Running it
+against real brand artwork found two defects the fixtures could not.
+
+**Every vector candidate scored identically.** A 32px favicon served as SVG tied
+with the 512px header logo, and ties broke on discovery order, so the favicon
+won. It happened on all five real brands tried. The synthetic fixture missed it
+because its favicon was a PNG, which scored lower for an unrelated reason. Role
+now dominates scoring: a favicon is a favicon whether or not it is vector.
+
+**Vectors rasterised at intrinsic size.** Only rsvg-convert and inkscape accept
+a width flag; LibreOffice uses the file's own dimensions, so a 32px favicon
+stayed 32px and the reason for preferring vector was lost. The requested size is
+now written into the SVG before conversion, which every backend honours.
+
+**The reported contrast figure was misleading.** It was a mean, and a mark that
+is mostly dark brand colour with a light antialiased edge gets a flattering
+mean: real measurement showed 6.70:1 while 62% of the ink sat below 3:1. The
+headline number is now the median, computed from a histogram, which tracks the
+colour a reader actually sees. On the same logo it reports 2.60:1, matching the
+verdict and the eye.
+
+Results against real brand colours, with the mark on the navy cover field:
+
+| Company | Brand | Contrast | Verdict |
+|---|---|---|---|
+| SAP | `#0FAAFF` | 5.36:1 | accepted |
+| Siemens | `#009999` | 3.93:1 | accepted |
+| ADP | `#D0271D` | 2.60:1 | rejected |
+| Paychex | `#004B8D` | 1.56:1 | rejected |
+| FedEx | `#4D148C` | 1.18:1 | rejected |
+
+The rejections are correct. Dark blue, dark purple, and mid red on a navy field
+are genuinely hard to read, and each of those companies publishes a reverse
+lockup for exactly this case. The gate errs conservative and names the remedy.
+
+Two regression checks added, so the suite is 32.
+
 ## 2026-08-13 exact-authority revision
 
 The primary PowerPoint file was supplied directly and became the deck authority.

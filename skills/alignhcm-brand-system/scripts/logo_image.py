@@ -372,6 +372,8 @@ def ink_analysis(img, background, alpha_floor=128):
     readable contrast.
     """
     bg_lum = relative_luminance(*background)
+    bins = 512
+    hist = [0] * bins
     total = 0
     lum_sum = 0.0
     low = 0
@@ -381,15 +383,31 @@ def ink_analysis(img, background, alpha_floor=128):
         lum = relative_luminance(img.px[i], img.px[i + 1], img.px[i + 2])
         total += 1
         lum_sum += lum
+        hist[min(bins - 1, int(lum * bins))] += 1
         if contrast_ratio(lum, bg_lum) < 3.0:
             low += 1
     if not total:
-        return {"ink_pixels": 0, "mean_luminance": 0.0,
+        return {"ink_pixels": 0, "mean_luminance": 0.0, "median_luminance": 0.0,
                 "contrast": 0.0, "low_contrast_share": 1.0}
-    mean = lum_sum / total
+
+    # The headline figure is the median, not the mean. A mark that is mostly
+    # dark brand colour with a light antialiased edge has a mean pulled well
+    # above anything actually on the slide: measured on a real logo, the mean
+    # said 6.7:1 while 62% of the ink was below 3:1. The median tracks the
+    # colour a reader actually sees.
+    half = total // 2
+    seen = 0
+    median = 0.0
+    for idx, count in enumerate(hist):
+        seen += count
+        if seen > half:
+            median = (idx + 0.5) / bins
+            break
+
     return {
         "ink_pixels": total,
-        "mean_luminance": mean,
-        "contrast": contrast_ratio(mean, bg_lum),
+        "mean_luminance": lum_sum / total,
+        "median_luminance": median,
+        "contrast": contrast_ratio(median, bg_lum),
         "low_contrast_share": low / float(total),
     }
