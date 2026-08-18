@@ -17,6 +17,7 @@ no test assets to keep in the repo.
 import argparse
 import hashlib
 import importlib.util
+import json
 import io
 import os
 import pathlib
@@ -569,19 +570,30 @@ def _run_fetch(site_url, out, *extra):
     return proc.returncode, proc.stdout + proc.stderr
 
 
-@check("logo fetcher rejects a mark that vanishes on navy")
+@check("unplated dark mark is still rejected on navy")
 def _fetch_rejects_low_contrast():
+    """
+    The contrast gate still has to bite when plating is switched off. With the
+    default `--plate always` this same mark is accepted, because the plate is
+    what makes it readable.
+    """
     with tempfile.TemporaryDirectory() as tmp:
         _logo_png(os.path.join(tmp, "logo.png"), 1400, 420, _dark_on_white)
         site = _FixtureSite(tmp, '<html><body><img class="logo" src="/logo.png">'
                                  '</body></html>')
+        out = os.path.join(tmp, "o.png")
         try:
-            code, out = _run_fetch(site.url, os.path.join(tmp, "o.png"))
+            bare_code, bare_out = _run_fetch(site.url, out, "--plate", "never")
+            plated_code, _ = _run_fetch(site.url, out)
         finally:
             site.close()
-        if code == 0:
-            return False, "accepted a dark mark that would disappear on the cover"
-        return ("contrast" in out or "disappear" in out), f"exit {code}, contrast gate fired"
+        if bare_code == 0:
+            return False, "accepted a dark mark placed bare on the cover"
+        if "contrast" not in bare_out and "disappear" not in bare_out:
+            return False, "rejected, but not for contrast"
+        if plated_code != 0:
+            return False, "the plate did not rescue the same mark"
+        return True, f"bare exit {bare_code}, plated exit {plated_code}"
 
 
 @check("logo fetcher prefers a transparent reverse mark")
@@ -661,6 +673,110 @@ def _svg_forced_size():
     if 'height="600"' not in out:
         return False, f"aspect not preserved: {out[:110]}"
     return True, "24x12 viewBox forced to 1200x600"
+
+
+def _plate_case(painter, extra=()):
+    """Fetch a logo from a fixture site and return the parsed provenance."""
+    with tempfile.TemporaryDirectory() as tmp:
+        _logo_png(os.path.join(tmp, "logo.png"), 900, 300, painter)
+        site = _FixtureSite(tmp, '<html><body><img class="site-logo" '
+                                 'src="/logo.png"></body></html>')
+        out = os.path.join(tmp, "o.png")
+        try:
+            code, text = _run_fetch(site.url, out, "--json", *extra)
+        finally:
+            site.close()
+        # The JSON summary is on stdout and the log on stderr, so the payload is
+        # followed by trailing text. raw_decode stops at the end of the object.
+        payload = {}
+        decoder = json.JSONDecoder()
+        for start, ch in enumerate(text):
+            if ch != "{":
+                continue
+            try:
+                payload = decoder.raw_decode(text[start:])[0]
+                break
+            except ValueError:
+                continue
+        return code, payload, text
+
+
+def _dark_mark(x, y):
+    """A dark navy mark on white, the case that needs a light plate."""
+    if 60 <= x <= 840 and 100 <= y <= 200:
+        return (20, 30, 45, 255)
+    return (255, 255, 255, 255)
+
+
+def _light_mark(x, y):
+    """A near-white mark on transparency, the case that needs a dark plate."""
+    if 60 <= x <= 840 and 100 <= y <= 200:
+        return (245, 248, 252, 255)
+    return (0, 0, 0, 0)
+
+
+@check("dark mark gets a light plate bordered in its own colour")
+def _plate_dark_mark():
+    code, payload, text = _plate_case(_dark_mark)
+    if code != 0:
+        return False, f"exit {code}: {text.strip()[-160:]}"
+    plate = payload.get("plate", {})
+    if not plate.get("applied"):
+        return False, "no plate applied"
+    if plate["polarity"] != "light" or plate["fill"] != "#FFFFFF":
+        return False, f"expected a light plate, got {plate['polarity']} {plate['fill']}"
+    if plate["mark_contrast_on_plate"] < 3.0:
+        return False, f"mark only {plate['mark_contrast_on_plate']}:1 on its plate"
+    return True, (f"{plate['fill']} plate, {plate['border_width_px']}px "
+                  f"{plate['border']} border, mark at "
+                  f"{plate['mark_contrast_on_plate']}:1")
+
+
+@check("light mark gets a dark plate bordered in its own colour")
+def _plate_light_mark():
+    code, payload, text = _plate_case(_light_mark)
+    if code != 0:
+        return False, f"exit {code}: {text.strip()[-160:]}"
+    plate = payload.get("plate", {})
+    if not plate.get("applied"):
+        return False, "no plate applied"
+    if plate["polarity"] != "dark":
+        return False, f"expected a dark plate, got {plate['polarity']}"
+    if plate["mark_contrast_on_plate"] < 3.0:
+        return False, f"mark only {plate['mark_contrast_on_plate']}:1 on its plate"
+    return True, (f"{plate['fill']} plate, {plate['border_width_px']}px "
+                  f"{plate['border']} border, mark at "
+                  f"{plate['mark_contrast_on_plate']}:1")
+
+
+@check("border colour is taken from the mark")
+def _plate_border_from_mark():
+    def crimson(x, y):
+        if 60 <= x <= 840 and 100 <= y <= 200:
+            return (0xC0, 0x1E, 0x2E, 255)
+        return (255, 255, 255, 255)
+
+    code, payload, _ = _plate_case(crimson)
+    if code != 0:
+        return False, f"exit {code}"
+    plate = payload.get("plate", {})
+    src = plate.get("border_source", "")
+    if not src.startswith("#"):
+        return False, "no border source recorded"
+    r, g, b = (int(src[1:][i:i + 2], 16) for i in (0, 2, 4))
+    # Should land on the crimson, not on the white background it sat on.
+    if not (r > 140 and g < 90 and b < 110):
+        return False, f"border source {src} is not the mark's colour"
+    return True, f"border taken from the mark at {src}"
+
+
+@check("--plate never places the mark bare")
+def _plate_never():
+    code, payload, _ = _plate_case(_light_mark, extra=("--plate", "never"))
+    plate = payload.get("plate", {})
+    if plate.get("applied"):
+        return False, "plated despite --plate never"
+    return code == 0, f"exit {code}, no plate applied"
 
 
 @check("logo fetcher rejects a favicon as too small")

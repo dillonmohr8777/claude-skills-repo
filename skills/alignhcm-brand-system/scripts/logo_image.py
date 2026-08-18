@@ -411,3 +411,137 @@ def ink_analysis(img, background, alpha_floor=128):
         "contrast": contrast_ratio(median, bg_lum),
         "low_contrast_share": low / float(total),
     }
+
+
+# ---------------------------------------------------------------------------
+# Brand plate
+#
+# A prospect's mark is designed for their own background, not for Align navy.
+# Rather than rejecting a dark logo or recolouring it, the mark is placed on a
+# plate: a rounded card whose fill is the opposite polarity to the mark, edged
+# in a thick border taken from the mark's own dominant colour. The artwork is
+# never altered, only surrounded, which keeps the client's brand intact while
+# guaranteeing the cover reads.
+# ---------------------------------------------------------------------------
+
+def _saturation(r, g, b):
+    hi, lo = max(r, g, b), min(r, g, b)
+    return 0.0 if hi == 0 else (hi - lo) / float(hi)
+
+
+def dominant_colour(img, alpha_floor=128, sat_floor=0.25):
+    """
+    The colour a viewer would name as the mark's colour.
+
+    Colours are bucketed in a coarse RGB cube and the modal bucket wins, then
+    the true average of that bucket is returned so the result is an actual
+    colour from the artwork rather than a quantised approximation. Saturated
+    buckets are considered first: most marks carry grey or black supporting
+    text that would otherwise outvote the brand hue. A mark that is genuinely
+    neutral, a pure white or pure black lockup, falls back to all pixels.
+    """
+    step = 32
+    sat_buckets = {}
+    all_buckets = {}
+    for i in range(0, len(img.px), 4):
+        if img.px[i + 3] < alpha_floor:
+            continue
+        r, g, b = img.px[i], img.px[i + 1], img.px[i + 2]
+        key = (r // step, g // step, b // step)
+        entry = all_buckets.setdefault(key, [0, 0, 0, 0])
+        entry[0] += 1
+        entry[1] += r
+        entry[2] += g
+        entry[3] += b
+        if _saturation(r, g, b) >= sat_floor:
+            s = sat_buckets.setdefault(key, [0, 0, 0, 0])
+            s[0] += 1
+            s[1] += r
+            s[2] += g
+            s[3] += b
+
+    total = sum(v[0] for v in all_buckets.values())
+    if not total:
+        return (255, 255, 255)
+    saturated = sum(v[0] for v in sat_buckets.values())
+    pool = sat_buckets if saturated > total * 0.05 else all_buckets
+    best = max(pool.values(), key=lambda v: v[0])
+    n = best[0]
+    return (best[1] // n, best[2] // n, best[3] // n)
+
+
+def _rounded_coverage(x, y, w, h, radius, inset):
+    """
+    Antialiased coverage of a rounded rectangle at a pixel centre.
+
+    Uses the signed distance to the shape and a one pixel ramp, which gives a
+    clean edge without supersampling the whole canvas.
+    """
+    hw = w / 2.0 - inset
+    hh = h / 2.0 - inset
+    r = max(0.0, radius - inset)
+    if hw <= 0 or hh <= 0:
+        return 0.0
+    px = abs(x + 0.5 - w / 2.0)
+    py = abs(y + 0.5 - h / 2.0)
+    dx = px - (hw - r)
+    dy = py - (hh - r)
+    if dx <= 0 and dy <= 0:
+        d = max(dx, dy) - r
+    else:
+        ex, ey = max(dx, 0.0), max(dy, 0.0)
+        d = (ex * ex + ey * ey) ** 0.5 - r
+    return min(1.0, max(0.0, 0.5 - d))
+
+
+def make_plate(img, border, fill, pad, border_width, radius=None):
+    """
+    Composite the mark onto a bordered plate.
+
+    `pad` is clear space between the border and the artwork, in pixels.
+    Returns a new Raster; the source is not modified.
+    """
+    inner = pad + border_width
+    w = img.w + inner * 2
+    h = img.h + inner * 2
+    if radius is None:
+        radius = max(8, min(w, h) * 0.10)
+
+    out = Raster(w, h)
+    fr, fg, fb = fill
+    br, bg, bb = border
+
+    for y in range(h):
+        row = y * w * 4
+        for x in range(w):
+            outer_a = _rounded_coverage(x, y, w, h, radius, 0.0)
+            if outer_a <= 0.0:
+                continue
+            inner_a = _rounded_coverage(x, y, w, h, radius, border_width)
+            # Blend border into fill across the inner edge, so the ring is smooth.
+            r = int(br + (fr - br) * inner_a)
+            g = int(bg + (fg - bg) * inner_a)
+            b = int(bb + (fb - bb) * inner_a)
+            o = row + x * 4
+            out.px[o] = r
+            out.px[o + 1] = g
+            out.px[o + 2] = b
+            out.px[o + 3] = int(255 * outer_a)
+
+    # Source-over composite of the mark, centred.
+    for y in range(img.h):
+        for x in range(img.w):
+            sr, sg, sb, sa = img.at(x, y)
+            if sa == 0:
+                continue
+            dx, dy = x + inner, y + inner
+            o = (dy * w + dx) * 4
+            if sa == 255:
+                out.px[o:o + 4] = bytes((sr, sg, sb, 255))
+                continue
+            a = sa / 255.0
+            out.px[o] = int(sr * a + out.px[o] * (1 - a))
+            out.px[o + 1] = int(sg * a + out.px[o + 1] * (1 - a))
+            out.px[o + 2] = int(sb * a + out.px[o + 2] * (1 - a))
+            out.px[o + 3] = max(out.px[o + 3], sa)
+    return out

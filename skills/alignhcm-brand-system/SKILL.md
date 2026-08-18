@@ -117,9 +117,16 @@ by hand in PowerPoint.
    | 3 | Nothing usable found on the site | Source it manually |
    | 4 | Site unreachable | Check the network, or source it manually |
 
-   A dark logo that reads at under 3:1 against the cover navy is rejected even
-   though it looks fine on white. That check exists because it is the failure
-   that survives everything else and only shows up on the finished slide.
+   **Every client mark goes on a plate.** A dark logo gets a white card with a
+   thick border in its own brand colour; a light or white logo gets a near-black
+   card with a border in its own colour. Polarity is decided by measuring the
+   mark against both fills, and the border is sampled from the artwork, so the
+   treatment is consistent across every client without anyone choosing it. The
+   plate surrounds the mark and never modifies it.
+
+   Use `--plate auto` to plate only when the bare mark would fail on navy, or
+   `--plate never` to place it directly. With `never`, a mark under 3:1 against
+   the navy is rejected outright, because on the finished slide it disappears.
 
    Never accept a favicon, a screenshot, a search result, or a generated image
    as the mark. The size gate blocks favicons automatically.

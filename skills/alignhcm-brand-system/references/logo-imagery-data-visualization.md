@@ -42,14 +42,23 @@ can disappear there, and transparency alone does not fix it. Require at least
 **3:1** contrast between the mark's ink and the navy, which is what
 `fetch_client_logo.py` measures and enforces.
 
-When the only available mark is dark:
+This is solved structurally rather than case by case: **every client mark goes
+on a plate**, whose fill is the opposite polarity to the mark and whose thick
+border is sampled from the mark's own dominant colour. A dark logo gets a white
+plate with a border in its brand colour. A white logo gets a near-black plate
+with a border in its own light colour. See `powerpoint-deck-system.md` for the
+table and `scripts/fetch_client_logo.py --plate` for the control.
 
-1. Look for the client's reverse, white, or knockout variant. Most brand kits
-   ship one, and the fetcher already scores those highest.
-2. If none exists, place the primary mark on the approved light-background
-   plate with restrained clear space, as described in
-   `powerpoint-deck-system.md`.
-3. Never recolor, invert, or trace the client's mark to make it fit.
+Because the plate guarantees the field, a mark that would have been rejected for
+contrast is now usable. The gate still applies to size, aspect, and to any mark
+whose background could not be keyed.
+
+Still true regardless:
+
+1. Prefer the client's reverse, white, or knockout variant when one exists. The
+   fetcher scores those highest and they need the least treatment.
+2. Never recolor, invert, or trace the client's mark to make it fit. The plate
+   surrounds the artwork; it never modifies it.
 
 ### What automated cleanup may and may not do
 

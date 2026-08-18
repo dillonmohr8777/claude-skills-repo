@@ -51,10 +51,27 @@ The cover has two distinct brand zones:
 
 The client logo belongs below `PREPARED FOR` on the navy panel. Contain it
 inside the maximum box, center it on both axes, preserve aspect ratio, and do
-not crop, trace, recolor, add effects, or place it on a white card unless the
-official mark is unreadable on navy. Prefer the client's official reverse or
-white mark. If only a dark mark exists, use the approved light-background logo
-variant and a restrained clear-space field.
+not crop, trace, recolor, or add effects to the artwork.
+
+**Every client mark sits on a plate.** A prospect's logo is designed for their
+own background, not for Align navy, so it is placed on a rounded card rather
+than directly on the panel. The rule is universal, which keeps covers consistent
+from one client to the next:
+
+| Mark | Plate fill | Border |
+|---|---|---|
+| Dark mark | White `#FFFFFF` | Thick, in the mark's own dominant colour |
+| Light or white mark | Near-black `#0B0E12` | Thick, in the mark's own dominant colour |
+
+Polarity is chosen by measuring the mark against both fills and taking the one
+it reads better on, so mid-tone marks are handled sensibly rather than by a
+fixed cutoff. The border colour is sampled from the artwork itself and is only
+lightened or darkened if it would otherwise disappear into the fill; its hue is
+never changed. `scripts/fetch_client_logo.py` applies all of this.
+
+This surrounds the client's mark. It never alters it. Prefer the client's
+official reverse or white variant when one exists; the fetcher already ranks
+those highest, and a reverse mark on a dark plate is the cleanest result.
 
 Normalize by optical height, not bounding-box width. A wide wordmark should
 not visually overpower the Align logo. Client branding does not enter the

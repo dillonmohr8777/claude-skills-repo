@@ -318,11 +318,98 @@ def score(entry, prefer_reverse=True):
     return base
 
 
+# Plate fills. White for dark marks, near-black for light ones. The dark fill is
+# deliberately not the Align cover navy, so the plate reads as a deliberate card
+# rather than a hole punched in the panel.
+PLATE_LIGHT = (255, 255, 255)
+PLATE_DARK = (11, 14, 18)
+
+
+def ensure_visible(colour, against, target=2.0):
+    """
+    Nudge a colour's lightness until it separates from the plate fill.
+
+    Hue is preserved by scaling the channels together, so the border stays
+    recognisably the client's colour. Only lightness moves, and only as far as
+    it must. A mark whose dominant colour is already distinct is untouched.
+    """
+    lum_against = li.relative_luminance(*against)
+    r, g, b = colour
+    if li.contrast_ratio(li.relative_luminance(r, g, b), lum_against) >= target:
+        return colour, False
+    darken = lum_against > 0.5  # light plate needs a darker border, and vice versa
+    for _ in range(24):
+        if darken:
+            r, g, b = int(r * 0.88), int(g * 0.88), int(b * 0.88)
+        else:
+            r = min(255, int(r * 1.14) + 6)
+            g = min(255, int(g * 1.14) + 6)
+            b = min(255, int(b * 1.14) + 6)
+        if li.contrast_ratio(li.relative_luminance(r, g, b), lum_against) >= target:
+            break
+    return (r, g, b), True
+
+
+def choose_plate(img):
+    """
+    Decide plate polarity from how the mark actually reads, not a fixed cutoff.
+
+    The mark is measured against both candidate fills and the one it reads
+    better on wins, which handles mid-tone marks sensibly instead of forcing a
+    luminance threshold that is wrong near the middle.
+    """
+    median = li.ink_analysis(img, PLATE_LIGHT)["median_luminance"]
+    on_light = li.contrast_ratio(median, li.relative_luminance(*PLATE_LIGHT))
+    on_dark = li.contrast_ratio(median, li.relative_luminance(*PLATE_DARK))
+    if on_light >= on_dark:
+        return PLATE_LIGHT, "light", on_light
+    return PLATE_DARK, "dark", on_dark
+
+
+def apply_plate(img, notes):
+    """Put the mark on a bordered plate sized from the artwork itself."""
+    fill, polarity, contrast_on_fill = choose_plate(img)
+    raw_border = li.dominant_colour(img)
+    border, adjusted = ensure_visible(raw_border, fill)
+
+    short = min(img.w, img.h)
+    border_width = max(6, round(short * 0.045))
+    pad = max(10, round(short * 0.09))
+    radius = max(10, round(min(img.w + 2 * pad, img.h + 2 * pad) * 0.12))
+
+    plated = li.make_plate(img, border, fill, pad, border_width, radius)
+
+    def hexof(c):
+        return "#%02X%02X%02X" % c
+
+    notes.append(
+        f"placed on a {polarity} plate {hexof(fill)} with a {border_width}px "
+        f"{hexof(border)} border taken from the mark"
+        + (f" (lightened or darkened from {hexof(raw_border)} to stay visible)"
+           if adjusted else ""))
+    return plated, {
+        "applied": True,
+        "polarity": polarity,
+        "fill": hexof(fill),
+        "border": hexof(border),
+        "border_source": hexof(raw_border),
+        "border_adjusted": adjusted,
+        "border_width_px": border_width,
+        "pad_px": pad,
+        "mark_contrast_on_plate": round(contrast_on_fill, 2),
+    }
+
+
 def process(entry, min_width, target_width, aggressive):
     """Clean the chosen raster. Returns (image, notes)."""
     img = entry["img"]
     notes = []
 
+    # Whether the asset still carries an unremovable background box has to be
+    # judged here, before trimming. Trimming crops to the mark's bounding box,
+    # after which a perfectly good transparent logo whose ink fills that box is
+    # indistinguishable from one that still has a solid backing plate.
+    opaque_risk = False
     if not entry["has_alpha"]:
         img, removed = li.remove_background(img)
         if removed > 0.01:
@@ -331,7 +418,8 @@ def process(entry, min_width, target_width, aggressive):
             if fringed:
                 notes.append(f"defringed {fringed} edge pixels")
         else:
-            notes.append("background is not flat; left unmodified")
+            notes.append("background is not flat and could not be keyed")
+            opaque_risk = True
     else:
         notes.append("source already transparent; no keying needed")
 
@@ -345,7 +433,7 @@ def process(entry, min_width, target_width, aggressive):
         img = li.scale_to_width(img, target_width)
         notes.append(f"resampled down to {target_width}px wide")
 
-    return img, notes
+    return img, notes, {"opaque_risk": opaque_risk}
 
 
 def main():
@@ -361,6 +449,11 @@ def main():
                     help="rasterise vectors at this width (default 1200)")
     ap.add_argument("--resample", action="store_true",
                     help="also downscale oversized rasters to --target-width")
+    ap.add_argument("--plate", choices=("always", "auto", "never"), default="always",
+                    help="put the mark on a bordered plate. 'always' (default) "
+                         "treats every client the same way; 'auto' plates only "
+                         "when the bare mark would fail on navy; 'never' places "
+                         "the mark directly")
     ap.add_argument("--cover-bg", default="232E3E",
                     help="hex of the field the mark sits on, for the legibility "
                          "check (default 232E3E, the Align cover navy)")
@@ -403,36 +496,64 @@ def main():
     best = max(scored, key=lambda e: e["score"])
     log(f"chosen: {best['url']}")
 
-    img, notes = process(best, args.min_width, args.target_width, args.resample)
+    img, notes, meta = process(best, args.min_width, args.target_width, args.resample)
     for note in notes:
         log(f"  {note}")
 
+    # Size and shape are judged on the mark itself, before any plate is added,
+    # so plate padding cannot disguise a logo that was too small to use.
     problems = []
     if img.w < args.min_width:
         problems.append(
             f"only {img.w}px wide after trimming; the cover zone needs at least "
             f"{args.min_width}px to stay sharp")
-    if not li.has_real_alpha(img):
-        problems.append("still fully opaque; it will show as a rectangle on navy")
     ratio = img.w / max(1, img.h)
     if ratio > 12 or ratio < 0.08:
         problems.append(f"extreme aspect ratio {ratio:.1f}:1; likely not the mark")
 
-    # Legibility on the cover field. A transparent background is not enough: a
-    # dark mark keyed onto the navy panel is invisible, which is the most common
-    # way an auto-fetched logo fails once it is actually on the slide.
     bg = tuple(int(args.cover_bg.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
-    ink = li.ink_analysis(img, bg)
-    log(f"  legibility on #{args.cover_bg.lstrip('#').upper()}: "
-        f"contrast {ink['contrast']:.2f}:1, "
-        f"{ink['low_contrast_share'] * 100:.0f}% of ink below 3:1")
-    if ink["contrast"] < 3.0 or ink["low_contrast_share"] > 0.5:
+    bare = li.ink_analysis(img, bg)
+    log(f"  bare on #{args.cover_bg.lstrip('#').upper()}: "
+        f"contrast {bare['contrast']:.2f}:1, "
+        f"{bare['low_contrast_share'] * 100:.0f}% of ink below 3:1")
+
+    # The plate rule. A prospect's mark is designed for their background, not
+    # for Align navy, so rather than rejecting it or recolouring it, it goes on
+    # a card of the opposite polarity edged in its own colour. `auto` plates
+    # only when the bare mark would fail; `always` plates every client for a
+    # consistent cover across decks.
+    plate = {"applied": False}
+    needs_plate = bare["contrast"] < 3.0 or bare["low_contrast_share"] > 0.5
+    if args.plate == "always" or (args.plate == "auto" and needs_plate):
+        img, plate = apply_plate(img, notes)
+        for note in notes[-1:]:
+            log(f"  {note}")
+    elif needs_plate:
         problems.append(
-            f"the mark reads at only {ink['contrast']:.2f}:1 against the navy cover "
-            f"field, and {ink['low_contrast_share'] * 100:.0f}% of its ink falls "
-            f"below 3:1. It will disappear on the slide. Look for the client's "
-            f"reverse or white logo variant, or place this one on the approved "
-            f"light-background plate described in powerpoint-deck-system.md.")
+            f"the mark reads at only {bare['contrast']:.2f}:1 against the navy cover "
+            f"field, and {bare['low_contrast_share'] * 100:.0f}% of its ink falls "
+            f"below 3:1. It will disappear on the slide. Re-run without "
+            f"--plate never, or use the client's reverse variant.")
+
+    if meta["opaque_risk"] and not plate["applied"]:
+        problems.append(
+            "the background could not be keyed, so the mark will show as a "
+            "rectangle on navy. A plate would cover this; re-run without "
+            "--plate never.")
+
+    # Final legibility, measured against whatever the mark now sits on.
+    if plate["applied"]:
+        fill = tuple(int(plate["fill"][1:][i:i + 2], 16) for i in (0, 2, 4))
+        final = li.ink_analysis(img, fill)
+        log(f"  on plate {plate['fill']}: mark contrast "
+            f"{plate['mark_contrast_on_plate']:.2f}:1")
+        if plate["mark_contrast_on_plate"] < 3.0:
+            problems.append(
+                f"even on a {plate['polarity']} plate the mark only reaches "
+                f"{plate['mark_contrast_on_plate']:.2f}:1; the artwork may be a "
+                f"gradient or photographic lockup that needs manual treatment")
+    else:
+        final = bare
 
     payload = {
         "client": args.name or host,
@@ -444,10 +565,12 @@ def main():
         "final_size": [img.w, img.h],
         "processing": notes,
         "legibility": {
-            "background": "#" + args.cover_bg.lstrip("#").upper(),
-            "contrast": round(ink["contrast"], 2),
-            "low_contrast_share": round(ink["low_contrast_share"], 3),
+            "cover_background": "#" + args.cover_bg.lstrip("#").upper(),
+            "bare_contrast": round(bare["contrast"], 2),
+            "bare_low_contrast_share": round(bare["low_contrast_share"], 3),
+            "final_contrast": round(final["contrast"], 2),
         },
+        "plate": plate,
         "needs_human_review": any("removed flat background" in n for n in notes),
         "problems": problems,
         "passed": not problems,

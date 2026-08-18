@@ -158,6 +158,56 @@ lockup for exactly this case. The gate errs conservative and names the remedy.
 
 Two regression checks added, so the suite is 32.
 
+## 2026-08-18 universal client logo plate
+
+Contrast rejection was the wrong end of the problem. A prospect's mark is
+designed for their own background, so measuring it against Align navy and
+refusing it just moved the work back to a person. Every client mark now goes on
+a plate instead.
+
+| Mark | Plate fill | Border |
+|---|---|---|
+| Dark | White `#FFFFFF` | Thick, sampled from the mark |
+| Light or white | Near-black `#0B0E12` | Thick, sampled from the mark |
+
+Polarity is chosen by measuring the mark against both candidate fills and taking
+the one it reads better on, rather than a fixed luminance cutoff that would be
+wrong near the middle. The border colour comes from `dominant_colour`, which
+buckets ink in a coarse RGB cube and prefers saturated buckets, so grey
+supporting text cannot outvote the brand hue. On real artwork it recovers
+`#0FAAFF` for SAP, `#4D148C` for FedEx, and `#009999` for Siemens exactly. If
+that colour would vanish into the plate fill, its lightness is nudged until it
+separates, and its hue is left alone.
+
+The plate is drawn with an antialiased rounded rectangle computed from the
+signed distance to the shape, so no supersampling is needed. Border width, pad,
+and corner radius all scale from the mark's short edge.
+
+All five real brands that previously failed now pass:
+
+| Company | Bare on navy | Plate | Mark on plate |
+|---|---|---|---|
+| ADP | 2.60:1 | white, `#D0271D` border | 5.27:1 |
+| Paychex | 1.56:1 | white, `#004B8D` border | 8.80:1 |
+| FedEx | 1.18:1 | white, `#4D148C` border | 11.66:1 |
+| SAP | 5.36:1 | near-black, `#0FAAFF` border | 7.56:1 |
+| Siemens | 3.93:1 | near-black, `#009999` border | 5.54:1 |
+
+`--plate` takes `always` (default), `auto`, or `never`. The contrast gate still
+bites under `never`, and the size, aspect, and unkeyable-background gates apply
+in every mode.
+
+This supersedes the earlier rule in `powerpoint-deck-system.md` that a client
+mark went on a card only when it was otherwise unreadable. Both reference files
+are updated.
+
+Fixed while testing: the fully-opaque check ran after trimming, and trimming
+crops to the mark's bounding box, so any transparent logo whose ink filled that
+box was reported as still having a background plate. It now runs before the trim
+and only fires when keying was actually attempted and failed.
+
+Four checks added, so the suite is 36.
+
 ## 2026-08-13 exact-authority revision
 
 The primary PowerPoint file was supplied directly and became the deck authority.
