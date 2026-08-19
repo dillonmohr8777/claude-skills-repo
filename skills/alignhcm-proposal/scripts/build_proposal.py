@@ -191,6 +191,9 @@ def main():
     ap.add_argument("--allow-invalid", action="store_true")
     ap.add_argument("--no-supersede", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--allow-contested", action="store_true",
+                    help="render facts that shipped Align documents disagree "
+                         "about, instead of failing")
     args = ap.parse_args()
 
     try:
@@ -221,8 +224,8 @@ def main():
         report.error("investment",
                      f"phase hours total {money(amount)} but the spec states "
                      f"{money(float(stated))}")
-    if facts.stale():
-        report.warn("facts", f"company facts were due for review on {facts.review_by}")
+    facts.check(report, args.allow_contested)
+    facts.scan_forbidden_claims(parts, report)
 
     moved = []
     if not args.no_supersede and report.passed:

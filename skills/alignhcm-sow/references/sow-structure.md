@@ -1,31 +1,75 @@
-# The nine sections, and why each exists
+# The thirteen sections, and why each exists
 
-The SOW skeleton is fixed. Knowing what each section is for makes it obvious
-which ones need real attention per deal and which can take the default.
+This is not an invented skeleton. It is Align's real SOW template, section for
+section, from `AlignHCM-Sales/Shared Documents/General/1 - All Things Sales/
+Templates/SOWs/Align HCM UKG Pro Launch SOW Template v1.docx`, cross-checked
+against executed contracts for World Central Kitchen, Interfor, CHFA, Ashley
+Furniture, and Redberry.
+
+Knowing what each section is for makes it obvious which need real attention per
+deal and which take the standard language.
 
 | # | Section | Purpose | Per-deal attention |
 |---|---|---|---|
-| 1 | Introduction | Names the parties, the platform, and the governing agreement. Establishes that out-of-scope work is handled under section 6 | Low |
-| 2 | Scope of Services | The workstreams. This is the document | **High** |
-| 3 | Align Responsibilities | What Align commits to. Named PM, weekly cadence, unit testing before UAT, production support | Low, unless the deal differs |
-| 4 | Client Responsibilities | The participation the schedule assumes. Understating this is the single most common cause of a slipped go-live | **High** |
-| 5 | Assumptions | What the price depends on. Every assumption here is a future change order avoided | **High** |
-| 6 | Change Control | Written change order, executive review, signature before work. The section that protects both sides | Low |
-| 7 | Investment | The table, computed from workstream hours | **High**, and check `expected_total` |
-| 8 | Term | Start, end, and termination | Low |
-| 9 | Acceptance | Signature blocks | Low |
+| - | Preamble | Names the parties and subordinates the SOW to the MSA. Also states the pricing model and the change-order gate | Fixed |
+| 1 | Client Details | Licensed employees, target dates, BNs, provinces, CBAs, countries, locations, clocks, legacy systems | **High** |
+| 2 | Services in Scope | Which applications are being implemented | **High** |
+| 3 | Service Assumptions | Per application, exactly what Align will do and to what limit | **Highest** |
+| 4 | Project Management Process | Planning, schedule, action log, status meetings, risk, closure | Fixed |
+| 5 | Launch Methodology | WELCOME, REQUIREMENTS, BUILD, TEST, GO-LIVE | Fixed |
+| 6 | Launch Parameters | Training, change management, data conversion, dual maintenance, integrations, travel | **High** |
+| 7 | Roles, Responsibilities, and Deliverables | Per phase, what Align delivers and what the Client delivers | Medium |
+| 8 | Resources | Named Align roles and named Client roles | Fixed |
+| 9 | Out of Scope | Customizations, non-platform hardware, training, vendor requests, translations, plus anything deal-specific | Medium |
+| 10 | Change Requests | Change order rate, go-live push cost, post-signoff design and build changes | **High** |
+| 11 | Additional Terms | Working location, standard hours, the sign-off escalation clock, vendor coordination, travel | Fixed |
+| 12 | Fees, Payment Terms, Expenses and Billing | The money, plus the IP assignment and the pricing expiry | **High** |
+| 13 | Acknowledgements | MSA precedence and the signature blocks | Fixed |
 
-## Sections 4 and 5 deserve real thought
+## Section 3 is the document
 
-Client responsibilities and assumptions are where a SOW either protects the
-project or does not. The methodology reference in `alignhcm-pm-runbook` carries
-the client level of effort by phase, in hours per week per workstream. Put the
-real numbers in section 4 rather than the defaults when the client's capacity is
-already a known risk.
+Every quantity in Service Assumptions is a future change order avoided. The real
+template writes limits explicitly: "configure up to 5 attestation workflows each
+containing up to 4 questions", "up to 20 data views", "1 x Employee Master File
+Conversion and 2 x Payroll Balance Conversion per region". A scope line without
+a number is a scope line the client will read generously.
+
+The builder refuses an application listed in scope with an empty assumptions
+list, for that reason.
+
+## Two legal entities, and the tool will not guess
+
+Align signs as **Align HCM, Inc.** or **Align HCM Services LLC**. Both appear in
+executed contracts. Which one applies is a legal decision that depends on the
+contracting arrangement, so `align_entity` is required and validated against
+exactly those two strings. A near-miss such as "Align HCM Services, LLC" is
+rejected rather than quietly printed onto a signature page.
+
+## Load-bearing sentences
+
+Five sentences do the legal work. The self-test asserts each one survives into
+the rendered file:
+
+1. The SOW is subject to the Align Master Services Agreement or other existing
+   underlying agreement.
+2. Additional work proceeds only after a supplemental Change Order approved in
+   advance.
+3. Where the MSA and the SOW conflict, the MSA prevails.
+4. Work product becomes the Client's property effective upon payment.
+5. Sign-off escalates after five business days and is deemed accepted two
+   business days after that.
+
+Losing any of them produces a document that reads fine and protects nobody.
+
+## Phase names differ from the PM runbook on purpose
+
+A SOW uses the UKG Launch labels: WELCOME, REQUIREMENTS, BUILD, TEST, GO-LIVE.
+`alignhcm-pm-runbook` uses Align's internal five-phase names: Project Readiness,
+Analysis and Design, Configuration and Build, Acceptance and Parallel Testing,
+Go-Live and Transition. They map one to one. Do not "fix" one to match the other.
 
 ## What this document is not
 
 It is not the proposal. The proposal argues; the SOW records what was agreed. If
-the SOW's scope and investment do not match the accepted proposal, one of the
-two is wrong, and it is worth finding out which before signature rather than
-after.
+the SOW's scope and fees do not match the accepted proposal, one of the two is
+wrong, and it is worth finding out which before signature rather than after.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Prove the alignhcm-intro-deck skill works. Run before publishing any edit."""
-import json, os, sys, tempfile
+import importlib, json, os, pathlib, sys, tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
 import selftest_common as S   # noqa: E402
 
@@ -110,6 +110,105 @@ def _supersede():
         archived = os.listdir(arch) if os.path.isdir(arch) else []
         return (len(live) == 1 and live[0].endswith("_v2" + EXT)
                 and len(archived) == 1), f"{len(live)} live, {len(archived)} archived"
+
+
+def _modules():
+    """Load the builder and core by name, so the stdlib-only scan stays honest."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    return (importlib.import_module("build_intro_deck"),
+            importlib.import_module("alignhcm_core"))
+
+
+@S.check("a deck mixing SmartCare vocabularies is refused")
+def _tier_vocabulary():
+    """
+    The August 2026 Portsmouth proposal shipped both naming systems in one
+    deck. Whichever set Align settles on, using both at once is a defect.
+    """
+    B, C = _modules()
+
+    mixed = C.Report("mixed")
+    B.check_tier_vocabulary(
+        [["Stabilize", "x", "y"], ["Optimize", "x", "y"], ["Transform", "x", "y"]],
+        mixed)
+    clean = C.Report("clean")
+    B.check_tier_vocabulary(
+        [["Stabilize", "x", "y"], ["Optimize", "x", "y"],
+         ["Optimize Plus", "x", "y"]], clean)
+    catalog = C.Report("catalog")
+    B.check_tier_vocabulary(
+        [["Stabilize", "x", "y"], ["Essentials", "x", "y"],
+         ["Accelerate", "x", "y"], ["Transform", "x", "y"]], catalog)
+
+    if mixed.passed:
+        return False, "a mixed table was accepted"
+    if not clean.passed:
+        return False, "the client-facing set was rejected"
+    if not catalog.passed:
+        return False, "the catalog set was rejected"
+    return True, "mixed rejected, both single vocabularies accepted"
+
+
+@S.check("the shipped tier table is one vocabulary")
+def _shipped_tiers():
+    B, C = _modules()
+    root = pathlib.Path(__file__).resolve().parent.parent
+    tiers = B.load_tiers(str(root / "references" / "smartcare-tiers.md"))
+    rep = C.Report("shipped")
+    B.check_tier_vocabulary(tiers, rep)
+    names = [t[0] for t in tiers]
+    return rep.passed, f"{names}"
+
+
+@S.check("a contested company fact is refused")
+def _contested_fact():
+    """
+    Shipped Align documents disagree on headquarters, team size, geography, and
+    review count. Reading one of those into a client document picks a side
+    silently, which is how two prospects end up with two versions of Align.
+    """
+    B, C = _modules()
+    root = pathlib.Path(__file__).resolve().parent.parent
+    facts = C.Facts(str(root / "scripts" / "_core" / "company-facts.md"))
+    if not [k for k, s in facts.status.items() if s == "contested"]:
+        return False, "company-facts.md marks nothing as contested"
+
+    blocked = C.Report("blocked")
+    facts.get("TEAM_SIZE")
+    facts.check(blocked, allow_contested=False)
+    if blocked.passed:
+        return False, "reading TEAM_SIZE did not fail the build"
+
+    allowed = C.Report("allowed")
+    facts.check(allowed, allow_contested=True)
+    if not allowed.passed:
+        return False, "--allow-contested did not permit it"
+
+    clean = C.Facts(str(root / "scripts" / "_core" / "company-facts.md"))
+    for key in ("OFFICES", "TEAM_CLAIM", "RATING_CLAIM", "CUSTOMERS_SERVED",
+                "PROJECTS_DELIVERED", "FOUNDED"):
+        clean.get(key)
+    rep = C.Report("defaults")
+    clean.check(rep, allow_contested=False)
+    return rep.passed, "contested blocked, override works, defaults clean"
+
+
+@S.check("the deck never claims delivery is fully onshore")
+def _onshore_claim():
+    """
+    Align's own RFP response discloses team members in the Philippines. A deck
+    that claims 100% onshore contradicts a document Align has already given a
+    client under evaluation.
+    """
+    spec = json.loads(json.dumps(SPEC))
+    spec["both_sides"] = ("Our delivery is 100% onshore, with no handoff to "
+                          "another region at any phase.")
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), spec)
+        code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
+        return code == 2 and "100% onshore" in out, f"exit {code}"
 
 
 if __name__ == "__main__":

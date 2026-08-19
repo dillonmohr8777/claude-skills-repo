@@ -119,6 +119,38 @@ def load_tiers(path):
     return rows
 
 
+# Two SmartCare vocabularies are live at once. Which one Align chooses is a
+# commercial decision; a single document using both is a defect under either
+# choice, and that has already shipped once. See references/smartcare-tiers.md.
+CLIENT_VOCABULARY = {"optimize", "optimize plus"}
+CATALOG_VOCABULARY = {"essentials", "accelerate", "transform"}
+
+
+def check_tier_vocabulary(tiers, report):
+    """
+    Fail a deck that mixes the client-facing tier names with the catalog's.
+    Stabilize is exempt: it means the same thing in both.
+    """
+    names = {row[0].strip().lower() for row in tiers}
+    client_side = sorted(names & CLIENT_VOCABULARY)
+    catalog_side = sorted(names & CATALOG_VOCABULARY)
+    if client_side and catalog_side:
+        report.error(
+            "smartcare",
+            f"the tier table mixes vocabularies: {client_side} are client-deck "
+            f"names and {catalog_side} are SmartCare Services Catalog names. "
+            f"A deck that uses both describes two different products. Pick one "
+            f"set in references/smartcare-tiers.md.")
+        return
+    unknown = sorted(names - CLIENT_VOCABULARY - CATALOG_VOCABULARY - {"stabilize"})
+    if unknown:
+        report.warn(
+            "smartcare",
+            f"tier name(s) {unknown} match neither the client-facing set nor "
+            f"the catalog set. If this is a deliberate rename, add it to "
+            f"references/smartcare-tiers.md and to this check.")
+
+
 def build_slides(spec, facts, tiers):
     client = spec["client_name"]
     sector = spec["sector"]
@@ -135,17 +167,20 @@ def build_slides(spec, facts, tiers):
 
     add(P.cards(
         "Who we are", "Who Is Align HCM",
+        # Deliberately uses OFFICES / TEAM_CLAIM / RATING_CLAIM rather than
+        # HQ, TEAM_SIZE, or REVIEW_COUNT. Those three are contested across
+        # shipped Align documents; these formulations are true under all of
+        # them. See the contested section of company-facts.md.
         [(f"Founded {facts.get('FOUNDED', '2018')}",
-          f"HQ in {facts.get('HQ')}, with a second office in "
-          f"{facts.get('SECOND_OFFICE')}."),
-         (f"{facts.get('TEAM_SIZE')} team",
-          facts.get("TEAM_DESCRIPTOR", "")),
+          f"Offices in {facts.get('OFFICES')}."),
+         ("Certified team",
+          f"{facts.get('TEAM_CLAIM')}. Delivery is "
+          f"{facts.get('DELIVERY_MODEL')}."),
          (f"{facts.get('CUSTOMERS_SERVED')} customers",
           f"Served since founding. {facts.get('PROJECTS_DELIVERED')} projects "
           f"delivered."),
-         (f"{facts.get('CLIENT_RATING')} rating",
-          f"Across {facts.get('REVIEW_COUNT')} reviews, "
-          f"{facts.get('RATING_SOURCE')}.")]))
+         ("Client rating",
+          f"{facts.get('RATING_CLAIM')}.")]))
 
     add(P.statement(
         "The partner", "The Partner Who Understands Both Sides",
@@ -218,6 +253,9 @@ def main():
     ap.add_argument("--allow-invalid", action="store_true")
     ap.add_argument("--no-supersede", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--allow-contested", action="store_true",
+                    help="render facts that shipped Align documents disagree "
+                         "about, instead of failing")
     args = ap.parse_args()
 
     try:
@@ -244,12 +282,14 @@ def main():
     core.scan_residue(parts, client, report, extra_terms=spec.get("forbid_terms", ()))
     core.scan_banned_colours(parts, report)
     core.check_filename(name, report)
-    if facts.stale():
-        report.warn("facts", f"company facts were due for review on {facts.review_by}")
+    facts.check(report, args.allow_contested)
+    facts.scan_forbidden_claims(parts, report)
     if not tiers:
         report.warn("smartcare",
                     "references/smartcare-tiers.md has no tier table, so the "
                     "SmartCare slide was omitted")
+    else:
+        check_tier_vocabulary(tiers, report)
 
     moved = []
     if not args.no_supersede and report.passed:

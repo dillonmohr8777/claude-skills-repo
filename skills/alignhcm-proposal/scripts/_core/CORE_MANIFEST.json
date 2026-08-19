@@ -1,9 +1,9 @@
 {
   "core_version": "1.0.0",
   "files": {
-    "alignhcm_core.py": "e8cf7d8dcbefba298bbb7a9f0ea0335c5bbde048accd865822ffdf36b82d01c5",
+    "alignhcm_core.py": "983bc6f1bd0b17efc2da55bdfcab37e15aae81a74baff776cd781d5ce1cc720e",
     "alignhcm_pptx.py": "29d8520b963a997c9d24a0a96b65eec4986256b712e6ca46ef02f96f3e20f002",
-    "company-facts.md": "1b55cf92ff01a0aa4c9451b43d6b6871883c51f601aa9efa9ed60794ebef450b",
+    "company-facts.md": "10a0e09dc17f4036dad449a93876bb75a3eb3ff179d356fcc5ac42f3eff5153b",
     "selftest_common.py": "7a9bf743baa469ef176050f01cd087c16c8cb305d2736251456084a0ce13758c"
   }
 }

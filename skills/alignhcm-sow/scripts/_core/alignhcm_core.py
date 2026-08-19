@@ -444,22 +444,99 @@ class Facts:
     def __init__(self, path):
         self.path = path
         self.values = {}
+        self.status = {}
+        self.forbidden = {}
         self.review_by = None
+        self.used = set()
         self._load()
+
+    # The file is prose with several tables in it. Parse by section rather than
+    # by shape: a "| `TOKEN` | value |" pattern also matches rows in the
+    # explanatory tables, and matching those silently corrupts the ledger.
+    VALUES_HEADING = "## canonical values"
+    CLAIMS_HEADING = "## claims these skills will never generate"
 
     def _load(self):
         if not os.path.exists(self.path):
             return
+        section = None
         for line in open(self.path, encoding="utf8"):
-            m = re.match(r"^\|\s*`([A-Z0-9_]+)`\s*\|\s*([^|]+?)\s*\|", line)
-            if m:
-                self.values[m.group(1)] = m.group(2).strip()
+            stripped = line.strip()
+            if stripped.startswith("## "):
+                low = stripped.lower()
+                if low.startswith(self.VALUES_HEADING):
+                    section = "values"
+                elif low.startswith(self.CLAIMS_HEADING):
+                    section = "claims"
+                else:
+                    section = None
+                continue
+
             m2 = re.match(r"^review_by:\s*(\S+)", line)
             if m2:
                 self.review_by = m2.group(1)
+                continue
+
+            if section == "values":
+                m = re.match(
+                    r"^\|\s*`([A-Z0-9_]+)`\s*\|\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|",
+                    line)
+                if m:
+                    self.values[m.group(1)] = m.group(2).strip()
+                    self.status[m.group(1)] = (m.group(3).strip().lower()
+                                               or "single source")
+            elif section == "claims":
+                f = re.match(r"^\|\s*`([^`]+)`\s*\|\s*([^|]+?)\s*\|", line)
+                if f:
+                    self.forbidden[f.group(1).strip().lower()] = f.group(2).strip()
 
     def get(self, key, default=None):
+        """Record the read, so the builder can report what it actually used."""
+        self.used.add(key)
         return self.values.get(key, default)
+
+    def contested_used(self):
+        """(key, value) for every contested fact this build actually rendered."""
+        return sorted((k, self.values[k]) for k in self.used
+                      if self.status.get(k) == "contested")
+
+    def single_source_used(self):
+        return sorted((k, self.values[k]) for k in self.used
+                      if self.status.get(k) == "single source")
+
+    def check(self, report, allow_contested=False):
+        """
+        A contested fact is one that shipped Align documents disagree about.
+        Rendering it into a client-facing file picks a side silently, which is
+        how two prospects end up holding two different versions of Align.
+        """
+        if self.stale():
+            report.warn("facts",
+                        f"company facts were due for review on {self.review_by}")
+        contested = self.contested_used()
+        if contested:
+            detail = "; ".join(f"{k} = {v}" for k, v in contested)
+            if allow_contested:
+                report.warn("facts",
+                            f"rendered {len(contested)} contested fact(s): {detail}")
+            else:
+                report.error(
+                    "facts",
+                    f"this document renders {len(contested)} contested fact(s) "
+                    f"({detail}). Shipped Align documents disagree on these; see "
+                    f"the contested section of company-facts.md. Settle the value "
+                    f"and change its status to verified, or pass "
+                    f"--allow-contested to ship it anyway.")
+        return report
+
+    def scan_forbidden_claims(self, parts, report):
+        """Fail on claims Align's own documents contradict."""
+        text = " ".join(visible_text(parts).split()).lower()
+        for phrase, why in self.forbidden.items():
+            if phrase in text:
+                report.error("claims",
+                             f'the document asserts "{phrase}": {why}')
+        return report
 
     def as_replacements(self):
         return [("{{" + k + "}}", v) for k, v in self.values.items()]

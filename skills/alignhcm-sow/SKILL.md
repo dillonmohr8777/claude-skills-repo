@@ -1,17 +1,26 @@
 ---
 name: alignhcm-sow
-description: Generate an Align HCM Statement of Work as a branded Word document from a deal spec. Use whenever a SOW, statement of work, scope document, or services agreement is needed for an Align HCM client or prospect, on any platform (UKG Pro, UKG WFM, Dayforce, HiBob, Paylocity), for implementation, migration, optimization, managed services, or SmartCare. Handles scope, workstreams, responsibilities, assumptions, change control, investment tables, and signature blocks. Checks that no previous client's content survived, that the numbers add up, and writes under a deterministic filename so versions stop competing. Do not use for proposals (use alignhcm-proposal) or RFP responses (use rfp-responder).
+description: Generate an Align HCM Statement of Work as a branded Word document from a deal spec, using Align's real thirteen-section SOW template. Use whenever a SOW, statement of work, scope document, or services agreement is needed for an Align HCM client or prospect, on any platform (UKG Pro, UKG WFM, Dayforce, HiBob, Paylocity), for implementation, migration, optimization, managed services, or SmartCare. Handles client details, applications in scope, per-application service assumptions, launch methodology and parameters, roles, out of scope, change requests, additional terms, fees on either a fixed fee or time and materials basis, and the acknowledgement and signature blocks. Checks that the MSA clauses survived, that no previous client's content did, that the signing entity is real, that the numbers add up, and writes under a deterministic filename so versions stop competing. Do not use for proposals (use alignhcm-proposal) or RFP responses (use rfp-responder).
 ---
 
 # Align HCM Statement of Work
 
 The most-produced document at Align, and the one with the worst version
 problem. SharePoint currently holds four SOWs for one client, including
-`Prime_Communications_SOW2.docx`, `Prime_Communications_SOW_revisedMoe15Aug2025.docx`,
-and an `/OLD/` folder with three more. Nobody can tell which is real.
+`Prime_Communications_SOW2.docx`,
+`Prime_Communications_SOW_revisedMoe15Aug2025.docx`, and an `/OLD/` folder with
+three more. Nobody can tell which is real.
 
 This produces one file, named so the current version is obvious, and moves the
 previous one aside.
+
+## The structure is Align's, not invented
+
+Thirteen sections, matching
+`1 - All Things Sales/Templates/SOWs/Align HCM UKG Pro Launch SOW Template v1.docx`
+and cross-checked against executed contracts for World Central Kitchen,
+Interfor, CHFA, Ashley Furniture, and Redberry. Section list and rationale:
+`references/sow-structure.md`.
 
 ## Build one
 
@@ -28,40 +37,68 @@ than hand-patched.
 ```json
 {
   "client_legal_name": "Northwind Traders, Inc.",
-  "align_entity": "Align HCM Services, LLC",
-  "platform": "Dayforce",
+  "align_entity": "Align HCM Services LLC",
+  "platform": "UKG Pro",
   "engagement_title": "Full Suite Launch",
-  "rate": 200,
-  "workstreams": [
-    {"name": "Core HR and Payroll", "hours": 680,
-     "description": "Company structure, pay and tax codes, payroll configuration.",
-     "deliverables": ["Configured org levels", "Two parallel payroll cycles"]}
+  "pricing_model": "fixed_fee",
+  "pricing_valid_through": "31 December 2026",
+  "scope_items": [
+    {"application": "UKG Pro Pay and People Center - US",
+     "assumptions": [
+       "Implement HR, Payroll, Benefits, ESS/MSS, and standard interfaces.",
+       "Support one launch of UKG Pro Pay and UKG Pro People Center."]}
+  ],
+  "milestones": [
+    {"label": "Contract Execution", "amount": 1000},
+    {"label": "Month 2 Fees", "amount": 89750}
   ]
 }
 ```
 
-Every other section has a sensible Align default and can be overridden:
-`scope_summary`, `align_responsibilities`, `client_responsibilities`,
-`assumptions`, `investment_notes`, `term`, `status`, `date`.
-
-Set `expected_total` to the number the deal team agreed. The build fails if the
-workstream table does not reach it, which catches the single error a client
-always finds.
+Optional and worth filling: `client_details`, `launch_parameters`,
+`phase_deliverables`, `out_of_scope`, `additional_terms`, `change_order_rate`,
+`currency`, `expected_total`, `scope_summary`, `investment_notes`, `status`,
+`date`, `forbid_terms`.
 
 Full field reference: `references/spec-reference.md`.
+
+## Two things it will not guess
+
+**The signing entity.** Align signs as `Align HCM, Inc.` or
+`Align HCM Services LLC`. Both appear in executed contracts, and which applies
+is a legal decision. `align_entity` must be exactly one of those two strings.
+A near-miss such as "Align HCM Services, LLC" is rejected before anything is
+written, rather than printed onto a signature page.
+
+**Scope without limits.** An application listed in scope with an empty
+`assumptions` list is rejected. Every quantity in Service Assumptions is a
+future change order avoided; the real template writes them explicitly, down to
+"configure up to 5 attestation workflows each containing up to 4 questions".
+
+## Pricing works two ways
+
+`"pricing_model": "fixed_fee"` renders the payment milestone table Align's
+template uses. `"time_and_materials"` renders hours times rate per workstream.
+Either way the total is computed, never typed, so the table cannot disagree
+with itself. Set `expected_total` to the number the deal team agreed and the
+build fails if the rows do not reach it.
 
 ## What it refuses to ship
 
 | Check | Why |
 |---|---|
-| Another client's name anywhere | The worst failure in a reused template. Word-boundary matched against known Align sample and prior-engagement names |
+| A missing MSA clause | Five sentences do the legal work. The build asserts each survived into the rendered file |
+| Another client's name anywhere | The worst failure in a reused template. Word-boundary matched |
+| An invented signing entity | Puts the wrong company on a contract |
+| An application in scope with no assumptions | Turns a fixed fee into an argument |
 | Unresolved `{{TOKEN}}` | Reaches the client as a literal placeholder |
-| Client name absent entirely | Means nothing was actually filled |
-| Investment total disagrees with `expected_total` | Arithmetic errors survive review; they do not survive a client |
+| Fee total disagrees with `expected_total` | Arithmetic errors survive review; they do not survive a client |
 | Off-brand colour | Same never-use list as the rest of the Align system |
+| No `pricing_valid_through` | Warns. A quote with no expiry can be executed months later at stale rates |
 
 Failing exits 2 and the document is still written, so you can look at it.
-`--allow-invalid` keeps it and exits 0.
+`--allow-invalid` keeps it and exits 0. A spec that is incomplete or names a
+fake entity exits 3 and writes nothing.
 
 ## Naming
 
@@ -81,9 +118,9 @@ build warns if it sees them.
 ## Company facts
 
 Numbers about Align come from `scripts/_core/company-facts.md`, not from
-whichever prior SOW was copied. Two shipped decks disagreed on team size and
-review count; that file is the fix. It carries a review date and the build warns
-when it lapses.
+whichever prior SOW was copied. Shipped documents disagree on team size and
+review count; that file is the fix. It carries a review date and the build
+warns when it lapses.
 
 ## Files
 
@@ -92,7 +129,7 @@ when it lapses.
 | `scripts/build_sow.py` | The generator |
 | `scripts/_core/` | Shared Align document engine, vendored. Do not edit here |
 | `references/spec-reference.md` | Every spec field, with examples |
-| `references/sow-structure.md` | The nine sections and why each exists |
+| `references/sow-structure.md` | The thirteen sections and why each exists |
 | `scripts/selftest.py` | Proves the documented workflow runs |
 
 ## Composition
@@ -100,6 +137,6 @@ when it lapses.
 - **`alignhcm-brand-system`** owns colour, type, and logo rules. This skill
   applies them; that skill defines them.
 - **`alignhcm-proposal`** comes first in the deal. A SOW turns an accepted
-  proposal into a contract, so scope and investment should match it.
-- **`alignhcm-pm-runbook`** picks up after signature. The SOW's workstreams
-  become the status report's workstreams.
+  proposal into a contract, so scope and fees should match it.
+- **`alignhcm-pm-runbook`** picks up after signature. The SOW's scope becomes
+  the status report's workstreams.
