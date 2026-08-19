@@ -122,11 +122,26 @@ whichever prior SOW was copied. Shipped documents disagree on team size and
 review count; that file is the fix. It carries a review date and the build
 warns when it lapses.
 
+## Marks
+
+Every document carries the exact Align lockup, vendored and SHA-256 pinned, so
+a re-exported or substituted logo fails the build rather than shipping. Full
+rules, including where a client mark belongs and where it does not:
+`scripts/_core/marks.md`.
+
+**No client logo, ever.** A SOW is a contract. Putting the counterparty's logo
+on a document you drafted is presumptuous, and in procurement it raises a
+trademark-use question nobody wants to answer mid-deal. Their legal name goes
+in the parties block. The self-test asserts the only image in a generated SOW
+is Align's own mark, even when the spec supplies one.
+
 ## Files
 
 | Path | Purpose |
 |---|---|
 | `scripts/build_sow.py` | The generator |
+| `scripts/_core/marks.md` | Which logo goes on what, and why |
+| `scripts/_core/brand-voice.md` | Voice rules every Align document shares |
 | `scripts/_core/` | Shared Align document engine, vendored. Do not edit here |
 | `references/spec-reference.md` | Every spec field, with examples |
 | `references/sow-structure.md` | The thirteen sections and why each exists |

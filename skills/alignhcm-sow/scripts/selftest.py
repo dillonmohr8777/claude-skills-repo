@@ -247,5 +247,36 @@ def _renders():
         return bool(pdfs), f"rendered {pdfs[0] if pdfs else 'nothing'}"
 
 
+@S.check("a contract never carries the counterparty's logo")
+def _no_client_mark_on_contract():
+    """
+    A SOW is a contract. Putting the other side's logo on a document you
+    drafted is presumptuous, and in procurement it is a trademark-use question
+    nobody wants to answer mid-deal. Their legal name goes in the parties
+    block. This asserts the only image in the file is Align's own mark, even
+    when the spec tries to supply one.
+    """
+    import hashlib, zipfile, importlib
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
+    media = importlib.import_module("alignhcm_media")
+    root = pathlib.Path(__file__).resolve().parent.parent
+    art = root / "scripts" / "_core" / "align-hcm-deck-lockup.png"
+
+    spec = json.loads(json.dumps(SPEC))
+    spec["client_mark"] = {"file": str(art)}   # ignored on purpose
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), spec)
+        code, out = S.run_script("build_sow.py", "--spec", path, "--out-dir", tmp)
+        docs = [f for f in os.listdir(tmp) if f.endswith(".docx")]
+        if code != 0 or not docs:
+            return False, f"exit {code}: {out.strip()[-140:]}"
+        z = zipfile.ZipFile(os.path.join(tmp, docs[0]))
+        shas = [hashlib.sha256(z.read(n)).hexdigest()
+                for n in z.namelist() if "/media/" in n]
+        if shas != [media.LOCKUP_SHA]:
+            return False, f"{len(shas)} image(s); expected only the Align mark"
+        return True, "only the Align lockup is embedded"
+
+
 if __name__ == "__main__":
     sys.exit(S.run("alignhcm-sow"))

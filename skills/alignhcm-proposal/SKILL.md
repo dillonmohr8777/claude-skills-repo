@@ -74,11 +74,39 @@ Exits 2 with the reason; `--allow-invalid` overrides.
 
 Naming and superseding work exactly as in `alignhcm-sow`.
 
+## Marks
+
+Every document carries the exact Align lockup, vendored and SHA-256 pinned, so
+a re-exported or substituted logo fails the build rather than shipping. Full
+rules, including where a client mark belongs and where it does not:
+`scripts/_core/marks.md`.
+
+### The client mark decision cannot be skipped
+
+The build stops until the spec answers whether a prospect or client is
+involved:
+
+```json
+"client_mark": {"domain": "acme.com"}        fetch, clean, remove background, plate
+"client_mark": {"file": "acme-logo.png"}     same pipeline, file you already have
+"client_mark": {"ready": "acme-plated.png"}  already pipeline output
+"client_mark": "none"                        deliberately none
+```
+
+`"none"` is a normal answer. Silence is not, because silence is how a deck goes
+out with an empty client panel or the previous prospect's mark still in it.
+
+A fetched mark goes through the brand system's pipeline: background removed,
+trimmed, upscaled, contrast measured, then placed on a bordered plate in the
+client's own brand colour. It is fitted, never stretched.
+
 ## Files
 
 | Path | Purpose |
 |---|---|
 | `scripts/build_proposal.py` | The generator |
+| `scripts/_core/marks.md` | Which logo goes on what, and why |
+| `scripts/_core/brand-voice.md` | Voice rules every Align document shares |
 | `scripts/_core/` | Shared Align document engine, vendored |
 | `references/spec-reference.md` | Every spec field, with examples |
 | `scripts/selftest.py` | Proves the documented workflow runs |

@@ -16,6 +16,8 @@ import datetime
 import re
 import zipfile
 
+import alignhcm_media as media
+
 NAVY = "232E3E"
 ORANGE = "E97722"
 CONTRAST_ORANGE = "B05512"
@@ -38,8 +40,30 @@ def esc(text):
 # Block constructors. A document is a list of these.
 # ---------------------------------------------------------------------------
 
-def title(text, subtitle=None, meta=None):
-    return {"type": "title", "text": text, "subtitle": subtitle, "meta": meta}
+def title(text, subtitle=None, meta=None, *, suppress_eyebrow=False):
+    """`suppress_eyebrow` drops the typographic ALIGN HCM line, which is
+    redundant and looks like a second logo once a masthead is present."""
+    return {"type": "title", "text": text, "subtitle": subtitle, "meta": meta,
+            "suppress_eyebrow": suppress_eyebrow}
+
+
+def masthead(source, width_in=1.9, *, fill=None):
+    """
+    The Align lockup on a navy band across the top of the page.
+
+    The bundled lockup is a reverse mark: the wordmark is light grey, built for
+    dark backgrounds. Dropped straight onto white paper it is washed out and
+    off-brand. The band is not decoration, it is what makes the supplied
+    artwork legible without altering it.
+    """
+    return {"type": "masthead", "source": source, "width_in": width_in,
+            "fill": fill or NAVY}
+
+
+def logo(source, width_in=1.9, *, name="AlignHCM_Logo", after=120):
+    """An inline image, scaled to `width_in` inches with aspect preserved."""
+    return {"type": "logo", "source": source, "width_in": width_in,
+            "name": name, "after": after}
 
 
 def heading(text, level=1):
@@ -115,12 +139,64 @@ def _para(runs, *, before=0, after=120, border_bottom=None, indent=None,
     return f'<w:p>{"".join(props)}{"".join(runs)}</w:p>'
 
 
+DRAWING_NS = ('xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/'
+              'wordprocessingDrawing"')
+A_NS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+PIC_NS = "http://schemas.openxmlformats.org/drawingml/2006/picture"
+
+
+def _drawing(digest, cx, cy, name):
+    ident = media.size(digest)[0]  # any stable int is fine for docPr
+    return (
+        f'<w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:drawing>'
+        f'<wp:inline distT="0" distB="0" distL="0" distR="0" {DRAWING_NS}>'
+        f'<wp:extent cx="{cx}" cy="{cy}"/>'
+        f'<wp:docPr id="{ident}" name="{esc(name)}"/>'
+        f'<a:graphic xmlns:a="{A_NS}"><a:graphicData uri="{PIC_NS}">'
+        f'<pic:pic xmlns:pic="{PIC_NS}">'
+        f'<pic:nvPicPr><pic:cNvPr id="{ident}" name="{esc(name)}"/>'
+        '<pic:cNvPicPr/></pic:nvPicPr>'
+        f'<pic:blipFill><a:blip r:embed="{media.token(digest)}"/>'
+        '<a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
+        f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/>'
+        '</a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
+        '</pic:pic></a:graphicData></a:graphic></wp:inline>'
+        '</w:drawing></w:r></w:p>')
+
+
 def _render_block(block):
     kind = block["type"]
 
+    if kind == "masthead":
+        digest = media.register(block["source"])
+        box = int(block["width_in"] * media.EMU_PER_INCH)
+        cx, cy = media.fit(digest, box, box * 4)
+        inner = _drawing(digest, cx, cy, "AlignHCM_Logo")
+        return (
+            '<w:tbl><w:tblPr>'
+            '<w:tblW w:w="9360" w:type="dxa"/>'
+            '<w:tblLayout w:type="fixed"/>'
+            '<w:tblCellMar>'
+            '<w:top w:w="220" w:type="dxa"/><w:left w:w="260" w:type="dxa"/>'
+            '<w:bottom w:w="220" w:type="dxa"/><w:right w:w="260" w:type="dxa"/>'
+            '</w:tblCellMar></w:tblPr>'
+            '<w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid>'
+            '<w:tr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/>'
+            f'<w:shd w:val="clear" w:color="auto" w:fill="{block["fill"]}"/>'
+            '</w:tcPr>' + inner + '</w:tc></w:tr></w:tbl>'
+            + _para([], after=200))
+
+    if kind == "logo":
+        digest = media.register(block["source"])
+        box = int(block["width_in"] * media.EMU_PER_INCH)
+        cx, cy = media.fit(digest, box, box * 4)
+        return _drawing(digest, cx, cy, block["name"])
+
     if kind == "title":
-        out = [_para([_run("ALIGN HCM", bold=True, color=ORANGE, size=18,
-                           caps=True, spacing=60)], after=60)]
+        out = []
+        if not block.get("suppress_eyebrow"):
+            out.append(_para([_run("ALIGN HCM", bold=True, color=ORANGE, size=18,
+                                   caps=True, spacing=60)], after=60))
         out.append(_para([_run(block["text"], bold=True, color=NAVY, size=52,
                                font=HEADING_FONT)], after=80))
         if block.get("subtitle"):
@@ -279,10 +355,11 @@ def build(blocks, path, *, footer_text="alignhcm.com  ·  Confidential",
     body = "".join(_render_block(b) for b in blocks)
     document = (
         f'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        f'<w:document xmlns:w="{W_NS}"><w:body>{body}'
+        f'<w:document xmlns:w="{W_NS}" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        f'<w:body>{body}'
         '<w:sectPr>'
-        '<w:footerReference w:type="default" r:id="rId2" '
-        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/>'
+        '<w:footerReference w:type="default" r:id="rId2"/>'
         '<w:pgSz w:w="12240" w:h="15840"/>'
         '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" '
         'w:header="720" w:footer="720" w:gutter="0"/>'
@@ -296,11 +373,30 @@ def build(blocks, path, *, footer_text="alignhcm.com  ·  Confidential",
             '<dc:creator>Align HCM</dc:creator>'
             '</cp:coreProperties>')
 
+    # Pictures were emitted as {IMG:sha} tokens; bind them to relationships.
+    _, media_names = media.plan([document])
+    mapping, rels = {}, [DOC_RELS.replace("</Relationships>", "")]
+    for i, digest in enumerate(media_names, 3):
+        mapping[digest] = f"rId{i}"
+        rels.append(f'<Relationship Id="rId{i}" '
+                    'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+                    f'Target="media/{media_names[digest]}"/>')
+    rels.append("</Relationships>")
+    document = media.substitute(document, mapping)
+    content_types = CONTENT_TYPES
+    if media_names:
+        content_types = CONTENT_TYPES.replace(
+            '<Default Extension="xml" ContentType="application/xml"/>',
+            '<Default Extension="xml" ContentType="application/xml"/>\n'
+            '<Default Extension="png" ContentType="image/png"/>')
+
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", CONTENT_TYPES)
+        z.writestr("[Content_Types].xml", content_types)
         z.writestr("_rels/.rels", ROOT_RELS)
         z.writestr("word/document.xml", document)
-        z.writestr("word/_rels/document.xml.rels", DOC_RELS)
+        z.writestr("word/_rels/document.xml.rels", "".join(rels))
+        for digest, part in media_names.items():
+            z.writestr(f"word/media/{part}", media.data_for(digest))
         z.writestr("word/styles.xml", STYLES)
         z.writestr("word/footer1.xml", _footer(footer_text))
         z.writestr("docProps/core.xml", core)

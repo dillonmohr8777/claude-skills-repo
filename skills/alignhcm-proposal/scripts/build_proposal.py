@@ -25,7 +25,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
-import alignhcm_core as core          # noqa: E402
+import alignhcm_core as core
+import alignhcm_media as media
+import client_mark          # noqa: E402
 import alignhcm_pptx as P             # noqa: E402
 
 SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -72,7 +74,7 @@ def investment_rows(spec):
     return rows, hours_total, money_total
 
 
-def build_slides(spec, facts):
+def build_slides(spec, facts, lockup=None, client_logo=None):
     client = spec["client_name"]
     today = spec.get("date") or datetime.date.today().strftime("%B %Y")
     rows, hours_total, money_total = investment_rows(spec)
@@ -83,7 +85,8 @@ def build_slides(spec, facts):
         dark.append(is_dark)
 
     add(P.cover(client, f"{spec['platform']} {spec['engagement_title']}",
-                "Services Proposal", [f"Prepared for {client}", today]), True)
+                "Services Proposal", [f"Prepared for {client}", today],
+                lockup=lockup, client_logo=client_logo), True)
 
     agenda = [("1", "Current State and Challenges"),
               ("2", "Phased Approach"),
@@ -191,6 +194,8 @@ def main():
     ap.add_argument("--allow-invalid", action="store_true")
     ap.add_argument("--no-supersede", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--allow-low-quality-mark", action="store_true",
+                    help="accept a client mark that failed the quality gate")
     ap.add_argument("--allow-contested", action="store_true",
                     help="render facts that shipped Align documents disagree "
                          "about, instead of failing")
@@ -205,7 +210,19 @@ def main():
     facts = core.Facts(os.path.join(SKILL_ROOT, "scripts", "_core",
                                     "company-facts.md"))
     client = spec["client_name"]
-    slides, count, hours, amount = build_slides(spec, facts)
+    # The client mark decision is required. See client_mark.DECISION_HELP.
+    try:
+        client_logo, mark_prov = client_mark.resolve(
+            spec, os.path.join(args.out_dir, "_assets"), name=client,
+            log=lambda m: print(m, file=sys.stderr),
+            allow_low_quality=args.allow_low_quality_mark)
+    except client_mark.MarkError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
+    print(client_mark.describe(mark_prov), file=sys.stderr)
+
+    lockup = media.align_lockup(os.path.join(SKILL_ROOT, "scripts", "_core"))
+    slides, count, hours, amount = build_slides(spec, facts, lockup, client_logo)
 
     os.makedirs(args.out_dir, exist_ok=True)
     version = core.next_version(args.out_dir, client, "Proposal", ".pptx")

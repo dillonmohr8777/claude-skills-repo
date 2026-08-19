@@ -14,6 +14,8 @@ Units are EMU. 914400 per inch. The canvas is 13.333 x 7.5 in.
 
 import zipfile
 
+import alignhcm_media as media
+
 EMU = 914400
 SLIDE_W = 12192000
 SLIDE_H = 6858000
@@ -91,6 +93,35 @@ def _run(text, *, size, color, bold=False, font=BODY_FONT, spacing=None,
             f'<a:t>{esc(text)}</a:t></a:r>')
 
 
+def picture(source, x, y, box_w, box_h, *, name="Picture", align="left",
+            valign="middle"):
+    """
+    Place a PNG inside a box without distorting it.
+
+    The box is a bounding box, not a target size. The mark is scaled to fit and
+    then positioned inside it, because a stretched logo is both ugly and, for a
+    client's mark, a trademark problem.
+    """
+    digest = media.register(source)
+    cx, cy = media.fit(digest, box_w, box_h)
+    if align == "center":
+        x = x + (box_w - cx) // 2
+    elif align == "right":
+        x = x + (box_w - cx)
+    if valign == "middle":
+        y = y + (box_h - cy) // 2
+    elif valign == "bottom":
+        y = y + (box_h - cy)
+    return (f'<p:pic><p:nvPicPr><p:cNvPr id="{_next_id()}" name="{esc(name)}"/>'
+            '<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/>'
+            '</p:nvPicPr>'
+            f'<p:blipFill><a:blip r:embed="{media.token(digest)}"/>'
+            '<a:stretch><a:fillRect/></a:stretch></p:blipFill>'
+            f'<p:spPr><a:xfrm><a:off x="{int(x)}" y="{int(y)}"/>'
+            f'<a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+            '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>')
+
+
 def textbox(x, y, cx, cy, paragraphs, *, anchor="t", wrap=True):
     """`paragraphs` is a list of (runs_html, space_before_pt, line_spacing_pct)."""
     body = "".join(
@@ -140,12 +171,28 @@ def _eyebrow(text, y, dark, x=MARGIN):
 # Slide kinds
 # ---------------------------------------------------------------------------
 
-def cover(title_text, subtitle, eyebrow, meta_lines):
-    """Navy split cover. The right panel is where a client mark belongs."""
+def cover(title_text, subtitle, eyebrow, meta_lines, *, lockup=None,
+          client_logo=None):
+    """
+    Navy split cover.
+
+    `lockup` is the Align mark and goes at the master's AlignHCM_Logo geometry.
+    `client_logo` is the prospect's, cleaned and plated by the brand system, and
+    goes in the right panel at the master's CLIENT_LOGO geometry. Both are
+    fitted, never stretched.
+    """
     split = round(SLIDE_W * 0.66)
     out = [rect(0, 0, SLIDE_W, SLIDE_H, NAVY),
            rect(split, 0, SLIDE_W - split, SLIDE_H, DEEP_NAVY),
            rect(split - 12700, 0, 25400, SLIDE_H, ORANGE)]
+    if lockup:
+        x, y, w, h = media.box_emu(media.ALIGN_LOGO_BOX)
+        out.append(picture(lockup, x, y, w, h, name="AlignHCM_Logo",
+                           align="left", valign="top"))
+    if client_logo:
+        x, y, w, h = media.box_emu(media.CLIENT_LOGO_BOX)
+        out.append(picture(client_logo, x, y, w, h, name="CLIENT_LOGO",
+                           align="center", valign="middle"))
     out.append(_eyebrow(eyebrow, round(3.2 * EMU), True))
     out.append(textbox(MARGIN, round(3.6 * EMU), split - MARGIN - round(0.5 * EMU),
                        round(1.3 * EMU),
@@ -269,13 +316,52 @@ def phases(eyebrow, title_text, steps, marker_index=None):
     return "".join(out)
 
 
-def data_table(eyebrow, title_text, headers, rows, widths=None):
+SMARTCARE_ASSET = "smartcare-lockup.png"
+
+
+def smartcare_lockup(x, y, *, dark=False, asset=None, height_in=0.44):
+    """
+    The SmartCare mark.
+
+    Align has no SmartCare logo. Not in the master deck, not in SharePoint, not
+    in any reachable brand kit. Rather than invent artwork and pass it off as a
+    logo, this draws the typographic lockup the client decks already use:
+    "Smart" in the document's ink, "Care" in Align orange, with a short orange
+    rule. It is type, not a trademark someone made up this afternoon.
+
+    Drop a real `smartcare-lockup.png` into `scripts/_core/` and pass it as
+    `asset` and that is used instead, with no other change.
+    """
+    if asset:
+        return picture(asset, x, y, round(3.2 * EMU), round(height_in * EMU),
+                       name="SmartCare_Lockup", align="left", valign="middle")
+
+    ink = WHITE if dark else NAVY
+    h = round(height_in * EMU)
+    return "".join([
+        textbox(x, y, round(2.6 * EMU), h,
+                [para([_run("Smart", size=20, color=ink, bold=True,
+                            font=HEADING_FONT, spacing=-0.3),
+                       _run("Care", size=20, color=ORANGE, bold=True,
+                            font=HEADING_FONT, spacing=-0.3)])]),
+        rect(x + 25400, y + h - 12700, round(0.62 * EMU), 25400, ORANGE),
+    ])
+
+
+def data_table(eyebrow, title_text, headers, rows, widths=None, *,
+               smartcare=False, smartcare_asset=None):
     """A light table with a navy header and alternating rows."""
     out = [rect(0, 0, SLIDE_W, SLIDE_H, PAPER), _eyebrow(eyebrow, MARGIN, False)]
     out.append(textbox(MARGIN, round(1.05 * EMU), CONTENT_W, round(0.8 * EMU),
                        [para(_run(title_text, size=26, color=NAVY, bold=True,
                                   font=HEADING_FONT))]))
     out.append(rect(MARGIN, round(1.9 * EMU), round(0.9 * EMU), 38100, ORANGE))
+    if smartcare:
+        # Right-aligned against the title, so it reads as a service mark on the
+        # slide rather than competing with the Align lockup.
+        out.append(smartcare_lockup(SLIDE_W - MARGIN - round(2.6 * EMU),
+                                    round(1.05 * EMU), dark=False,
+                                    asset=smartcare_asset))
 
     cols = len(headers)
     widths = widths or [1.0 / cols] * cols
@@ -389,6 +475,7 @@ def build(slides, path, *, title="Align HCM"):
           '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">',
           '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>',
           '<Default Extension="xml" ContentType="application/xml"/>',
+          '<Default Extension="png" ContentType="image/png"/>',
           '<Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>',
           '<Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>',
           '<Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/>',
@@ -423,10 +510,28 @@ def build(slides, path, *, title="Align HCM"):
                      'Target="theme/theme1.xml"/>')
     pres_rels.append("</Relationships>")
 
-    slide_rel = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-                 '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-                 '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" '
-                 'Target="../slideLayouts/slideLayout1.xml"/></Relationships>')
+    # Pictures were emitted as {IMG:sha} tokens. Turn them into media parts and
+    # per-slide relationships now that the whole deck is known.
+    _, media_names = media.plan(slides)
+    resolved, slide_rels = [], []
+    for shapes in slides:
+        digests = []
+        for d in media.digests_in(shapes):
+            if d not in digests:
+                digests.append(d)
+        mapping = {d: f"rId{i + 2}" for i, d in enumerate(digests)}
+        resolved.append(media.substitute(shapes, mapping))
+        rels = ['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+                '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">',
+                '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" '
+                'Target="../slideLayouts/slideLayout1.xml"/>']
+        for d, rid in mapping.items():
+            rels.append(f'<Relationship Id="{rid}" '
+                        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+                        f'Target="../media/{media_names[d]}"/>')
+        rels.append("</Relationships>")
+        slide_rels.append("".join(rels))
+    slides = resolved
 
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("[Content_Types].xml", "".join(ct))
@@ -452,9 +557,11 @@ def build(slides, path, *, title="Align HCM"):
                    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="../slideMasters/slideMaster1.xml"/>'
                    '</Relationships>')
         z.writestr("ppt/theme/theme1.xml", _THEME)
+        for digest, part in media_names.items():
+            z.writestr(f"ppt/media/{part}", media.data_for(digest))
         for i, shapes in enumerate(slides, 1):
             z.writestr(f"ppt/slides/slide{i}.xml", _slide_xml(shapes))
-            z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rel)
+            z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels[i - 1])
         z.writestr("docProps/core.xml",
                    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
                    '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '

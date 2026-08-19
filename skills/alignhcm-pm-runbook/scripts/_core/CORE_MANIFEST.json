@@ -2,8 +2,15 @@
   "core_version": "1.0.0",
   "files": {
     "alignhcm_core.py": "983bc6f1bd0b17efc2da55bdfcab37e15aae81a74baff776cd781d5ce1cc720e",
-    "alignhcm_docx.py": "7f170374c4fb614f25d2f410813ef47aeb8745ff725ef8180a73f724fbf9646a",
+    "alignhcm_media.py": "ef9f9f92d8f868166ccef3be52af266bf45deb0e56c920034a96362784d783de",
+    "align-hcm-deck-lockup.png": "3a0340d27bfe44b21277f4a689796b1c31338f5fd74134786209f5b736d22a07",
+    "brand-voice.md": "8b4acb281fe159b67b90c976a0024befd4add4afca6a6b09847b74e9c531a3bb",
+    "marks.md": "4b363ae6c44dcbb7c8be0ec9bb2a6907c3dbea07930f1b2d9142dce201e0e936",
     "company-facts.md": "10a0e09dc17f4036dad449a93876bb75a3eb3ff179d356fcc5ac42f3eff5153b",
-    "selftest_common.py": "7a9bf743baa469ef176050f01cd087c16c8cb305d2736251456084a0ce13758c"
+    "selftest_common.py": "695c09b98547c1d8433c93a6c9b4faa802c59655cafed77a82f6adf656107cd8",
+    "client_mark.py": "d900b73ec21f75e89611c2679931a2be28b3aca5a90311aae6fe7c4e77068b1e",
+    "logo_image.py": "c57382338e4274522d7bb6f0a6e6937143086dda4d1693bf6ca2db812f3ade2a",
+    "fetch_client_logo.py": "439d5e2854976566918aa3a3f6f76892ee8b90c21991bc05f9f9ba24287dcbd2",
+    "alignhcm_docx.py": "8bd67fd23ffaf978bdc6e3cf95e318227fe6c3fe48ac8f7586043367ef27521b"
   }
 }

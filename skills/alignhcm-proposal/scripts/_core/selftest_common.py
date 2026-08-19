@@ -7,6 +7,7 @@ package properties: vendored core integrity, no third-party imports, no em
 dashes, valid frontmatter, and every referenced file present.
 """
 
+import ast
 import hashlib
 import json
 import os
@@ -16,12 +17,13 @@ import subprocess
 import sys
 
 STDLIB_ALLOWED = {
-    "argparse", "collections", "datetime", "functools", "hashlib", "http",
+    "argparse", "ast", "collections", "datetime", "functools", "hashlib", "http",
     "importlib", "io", "json", "os", "pathlib", "re", "shutil", "socketserver",
     "struct", "subprocess", "sys", "tempfile", "threading", "urllib", "zipfile",
     "zlib", "xml",
     # The vendored core, imported by sibling scripts.
-    "alignhcm_core", "alignhcm_docx", "alignhcm_pptx", "selftest_common",
+    "alignhcm_core", "alignhcm_docx", "alignhcm_pptx", "alignhcm_media",
+    "selftest_common", "client_mark", "logo_image", "fetch_client_logo",
 }
 
 RESULTS = []
@@ -90,14 +92,52 @@ def _core_integrity():
 
 @check("scripts are stdlib only")
 def _stdlib_only():
-    third = set()
+    """
+    No hard third-party dependency, so nothing needs installing.
+
+    An import guarded by try/except ImportError is allowed: logo_image uses
+    Pillow when it happens to be present for better resampling and falls back
+    to its own codec when it is not. That is an accelerator, not a dependency,
+    and banning it would mean deleting working code for a rule it does not break.
+    """
+    third, optional = set(), set()
     for path in sorted((_root() / "scripts").rglob("*.py")):
-        for line in path.read_text().splitlines():
-            m = re.match(r"^\s*(?:import|from)\s+([A-Za-z_][\w.]*)", line)
-            if m and m.group(1).split(".")[0] not in STDLIB_ALLOWED:
-                third.add(f"{path.name}:{m.group(1)}")
-    return not third, (f"found {sorted(third)}" if third else
-                       "no third-party imports")
+        tree = ast.parse(path.read_text())
+        guarded = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Try) and any(
+                    _catches_import_error(h) for h in node.handlers):
+                for child in ast.walk(node):
+                    if isinstance(child, (ast.Import, ast.ImportFrom)):
+                        guarded.add(id(child))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names = [a.name for a in node.names]
+            elif isinstance(node, ast.ImportFrom):
+                names = [node.module or ""]
+            else:
+                continue
+            for name in names:
+                root = name.split(".")[0]
+                if not root or root in STDLIB_ALLOWED:
+                    continue
+                (optional if id(node) in guarded else third).add(
+                    f"{path.name}:{root}")
+    if third:
+        return False, f"hard third-party import(s): {sorted(third)}"
+    detail = "no third-party imports"
+    if optional:
+        detail = f"none required; optional and guarded: {sorted(optional)}"
+    return True, detail
+
+
+def _catches_import_error(handler):
+    exc = handler.type
+    if exc is None:
+        return False
+    names = [exc] if not isinstance(exc, ast.Tuple) else list(exc.elts)
+    return any(getattr(n, "id", None) in ("ImportError", "ModuleNotFoundError")
+               for n in names)
 
 
 @check("scripts compile")
@@ -171,6 +211,46 @@ def _portable():
                 offenders.append(f"{path.name}~{pattern}")
     return not offenders, ("; ".join(offenders) if offenders else
                            "no absolute or personal paths")
+
+
+@check("the vendored Align lockup is the approved mark")
+def _lockup_pinned():
+    """
+    Shipping the exact artwork and proving it is still the exact artwork are
+    the same problem. This is the byte-for-byte mark from ppt/media/image1.png
+    of the Align master deck.
+    """
+    core = _root() / "scripts" / "_core"
+    sys.path.insert(0, str(core))
+    import importlib
+    media = importlib.import_module("alignhcm_media")
+    try:
+        path = media.align_lockup(str(core))
+    except media.ImageError as exc:
+        return False, str(exc)
+    size = media.size(media.register(path))
+    return True, f"sha256 pinned, {size[0]}x{size[1]}"
+
+
+@check("a substituted lockup is refused")
+def _lockup_tamper():
+    core = _root() / "scripts" / "_core"
+    sys.path.insert(0, str(core))
+    import importlib, shutil
+    media = importlib.import_module("alignhcm_media")
+    target = core / media.LOCKUP_NAME
+    backup = target.read_bytes()
+    try:
+        # A visually similar but different PNG is exactly the failure mode:
+        # someone re-exports the logo and the deck quietly changes.
+        target.write_bytes(backup[:-40] + b"\x00" * 40)
+        try:
+            media.align_lockup(str(core))
+            return False, "a modified lockup was accepted"
+        except media.ImageError:
+            return True, "modified artwork rejected"
+    finally:
+        target.write_bytes(backup)
 
 
 @check("company facts carry a review date")

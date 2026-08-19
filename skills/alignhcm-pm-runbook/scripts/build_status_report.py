@@ -32,6 +32,8 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
 import alignhcm_core as core          # noqa: E402
 import alignhcm_docx as D             # noqa: E402
+import alignhcm_media as media        # noqa: E402
+import client_mark                    # noqa: E402
 
 SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REQUIRED = ["client", "project", "pm", "reporting_period", "overall_status",
@@ -63,18 +65,26 @@ def load_spec(path):
     return spec
 
 
-def build_blocks(spec):
+def build_blocks(spec, lockup=None, client_logo=None):
     client = spec["client"]
     status = spec["overall_status"]
     period = spec["reporting_period"]
 
-    blocks = [
+    blocks = []
+    if lockup:
+        blocks.append(D.masthead(lockup))
+    if client_logo:
+        # A live client, not a prospect. Their mark on a weekly readout is
+        # ordinary and welcome; it is the SOW where it does not belong.
+        blocks.append(D.logo(client_logo, width_in=1.4, name="CLIENT_LOGO"))
+    blocks += [
         D.title(f"Project Status Report",
                 f"{client} · {spec['project']}",
                 meta=[("Reporting period", period),
                       ("Project manager", spec["pm"]),
                       ("Target go-live", spec["go_live"]),
-                      ("Overall status", status.upper())]),
+                      ("Overall status", status.upper())],
+                suppress_eyebrow=bool(lockup)),
 
         D.heading("1. Overall status"),
         D.para(STATUS_MEANING[status], bold=True,
@@ -214,7 +224,21 @@ def main():
         return 3
 
     client = spec["client"]
-    blocks = build_blocks(spec)
+    # A status report goes to a client who has already signed, so the mark is
+    # optional here rather than a required decision. Omitting it is the default.
+    client_logo = None
+    if spec.get("client_mark") not in (None, "none", False):
+        try:
+            client_logo, prov = client_mark.resolve(
+                spec, os.path.join(args.out_dir, "_assets"), name=client,
+                log=lambda m: print(m, file=sys.stderr))
+            print(client_mark.describe(prov), file=sys.stderr)
+        except client_mark.MarkError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 3
+
+    lockup = media.align_lockup(os.path.join(SKILL_ROOT, "scripts", "_core"))
+    blocks = build_blocks(spec, lockup, client_logo)
 
     os.makedirs(args.out_dir, exist_ok=True)
     artifact = "Status-" + core.slugify(spec["reporting_period"])

@@ -23,12 +23,36 @@ SKILLS = HERE.parent
 
 # Which core files each skill needs. Keeping this explicit means a deck skill
 # does not ship a Word writer it never calls.
+# The lockup is vendored as content, not referenced, so the manifest hash
+# covers it. Shipping the exact artwork and proving it is still the exact
+# artwork are the same problem.
+_COMMON = ["alignhcm_core.py", "alignhcm_media.py", "align-hcm-deck-lockup.png",
+           "brand-voice.md", "marks.md", "company-facts.md",
+           "selftest_common.py"]
+
+# The client-mark pipeline. Not vendored into alignhcm-sow on purpose: a SOW is
+# a contract, and a counterparty's logo does not belong on a contract you
+# drafted. Their legal name goes in the parties block.
+_CLIENT_MARK = ["client_mark.py", "logo_image.py", "fetch_client_logo.py"]
+
 TARGETS = {
-    "alignhcm-sow": ["alignhcm_core.py", "alignhcm_docx.py", "company-facts.md", "selftest_common.py"],
-    "alignhcm-proposal": ["alignhcm_core.py", "alignhcm_pptx.py", "company-facts.md", "selftest_common.py"],
-    "alignhcm-intro-deck": ["alignhcm_core.py", "alignhcm_pptx.py", "company-facts.md", "selftest_common.py"],
-    "alignhcm-pm-runbook": ["alignhcm_core.py", "alignhcm_docx.py", "company-facts.md", "selftest_common.py"],
+    "alignhcm-sow": _COMMON + ["alignhcm_docx.py"],
+    "alignhcm-proposal": _COMMON + _CLIENT_MARK + ["alignhcm_pptx.py"],
+    "alignhcm-intro-deck": _COMMON + _CLIENT_MARK + ["alignhcm_pptx.py"],
+    "alignhcm-pm-runbook": _COMMON + _CLIENT_MARK + ["alignhcm_docx.py"],
 }
+
+# Logo policy belongs to the brand system, so those two files are pulled from
+# there rather than duplicated here. One canonical copy, two consumers.
+BRAND_SCRIPTS = SKILLS / "alignhcm-brand-system" / "scripts"
+SOURCES = {
+    "logo_image.py": BRAND_SCRIPTS / "logo_image.py",
+    "fetch_client_logo.py": BRAND_SCRIPTS / "fetch_client_logo.py",
+}
+
+
+def source_for(name):
+    return SOURCES.get(name, HERE / name)
 
 
 def sha(path):
@@ -49,7 +73,7 @@ def main():
         manifest = {"core_version": _core_version(), "files": {}}
 
         for name in files:
-            src = HERE / name
+            src = source_for(name)
             dst = core_dir / name
             digest = sha(src)
             manifest["files"][name] = digest

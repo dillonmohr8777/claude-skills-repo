@@ -9,6 +9,7 @@ SCRIPT = "build_proposal.py"
 EXT = ".pptx"
 
 SPEC = {
+    "client_mark": "none",
     "client_name": "Northwind Traders", "platform": "UKG Pro",
     "engagement_title": "Optimization Program", "rate": 200,
     "expected_total": 536400,

@@ -9,6 +9,7 @@ SCRIPT = "build_intro_deck.py"
 EXT = ".pptx"
 
 SPEC = {
+    "client_mark": "none",
     "client_name": "Northwind Traders", "platform": "Dayforce",
     "sector": "Senior Living and Care",
     "heard_from_team": [
@@ -209,6 +210,107 @@ def _onshore_claim():
         path = S.write_json(os.path.join(tmp, "s.json"), spec)
         code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
         return code == 2 and "100% onshore" in out, f"exit {code}"
+
+
+def _media_shas(path):
+    import hashlib, zipfile
+    z = zipfile.ZipFile(path)
+    return {hashlib.sha256(z.read(n)).hexdigest()
+            for n in z.namelist() if "/media/" in n}
+
+
+@S.check("the exact Align lockup lands on the cover")
+def _lockup_on_cover():
+    spec = json.loads(json.dumps(SPEC))
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), spec)
+        code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
+        deck = [f for f in os.listdir(tmp) if f.endswith(".pptx")]
+        if code != 0 or not deck:
+            return False, f"exit {code}: {out.strip()[-140:]}"
+        shas = _media_shas(os.path.join(tmp, deck[0]))
+        B, C = _modules()
+        import importlib
+        media = importlib.import_module("alignhcm_media")
+        return media.LOCKUP_SHA in shas, f"{len(shas)} image(s) embedded"
+
+
+@S.check("the build refuses to guess whether a prospect is involved")
+def _mark_decision_required():
+    """
+    The failure this prevents is a deck going out with an empty client panel,
+    or with the previous prospect's mark still in it, because nobody was asked.
+    """
+    spec = json.loads(json.dumps(SPEC))
+    spec.pop("client_mark")
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), spec)
+        code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
+        wrote = [f for f in os.listdir(tmp) if f.endswith(".pptx")]
+        asked = "Is a prospect or client involved" in out
+        return code == 3 and not wrote and asked, f"exit {code}, asked={asked}"
+
+
+@S.check("a supplied client mark is cleaned, plated, and placed")
+def _client_mark_placed():
+    """
+    Uses the Align lockup as stand-in artwork. What matters is that a supplied
+    file goes through the same background removal, trim, contrast measurement,
+    and plate as a fetched one, and then reaches the cover.
+    """
+    root = pathlib.Path(__file__).resolve().parent.parent
+    art = root / "scripts" / "_core" / "align-hcm-deck-lockup.png"
+    spec = json.loads(json.dumps(SPEC))
+    spec["client_mark"] = {"file": str(art)}
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), spec)
+        code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
+        deck = [f for f in os.listdir(tmp) if f.endswith(".pptx")]
+        if code != 0 or not deck:
+            return False, f"exit {code}: {out.strip()[-160:]}"
+        shas = _media_shas(os.path.join(tmp, deck[0]))
+        import importlib
+        media = importlib.import_module("alignhcm_media")
+        if media.LOCKUP_SHA not in shas:
+            return False, "the Align lockup went missing"
+        if len(shas) < 2:
+            return False, "no separate client mark was embedded"
+        plated = os.path.join(tmp, "_assets", "client-mark.png")
+        side = plated + ".source.json"
+        if not os.path.exists(side):
+            return False, "no provenance written for the client mark"
+        with open(side) as fh:
+            prov = json.load(fh)
+        return prov["plate"]["applied"], (
+            f"plate {prov['plate'].get('polarity')}, "
+            f"border {prov['plate'].get('border')}")
+
+
+@S.check("the SmartCare mark appears on the SmartCare slide")
+def _smartcare_mark():
+    """
+    Align has no SmartCare logo, so this is the typographic lockup. It still
+    has to actually reach the slide, and it must not leak onto slides that have
+    nothing to do with SmartCare.
+    """
+    import zipfile
+    with tempfile.TemporaryDirectory() as tmp:
+        path = S.write_json(os.path.join(tmp, "s.json"), SPEC)
+        code, out = S.run_script(SCRIPT, "--spec", path, "--out-dir", tmp)
+        deck = [f for f in os.listdir(tmp) if f.endswith(".pptx")]
+        if code != 0 or not deck:
+            return False, f"exit {code}"
+        z = zipfile.ZipFile(os.path.join(tmp, deck[0]))
+        hits = []
+        for n in sorted(z.namelist()):
+            if "/slides/slide" in n and n.endswith(".xml"):
+                xml = z.read(n).decode("utf8", "replace")
+                if ">Smart</a:t>" in xml and ">Care</a:t>" in xml:
+                    hits.append(n)
+        if len(hits) != 1:
+            return False, f"lockup on {len(hits)} slide(s), expected exactly 1"
+        xml = z.read(hits[0]).decode("utf8", "replace")
+        return "SmartCare" in xml, f"on {hits[0].split('/')[-1]}"
 
 
 if __name__ == "__main__":

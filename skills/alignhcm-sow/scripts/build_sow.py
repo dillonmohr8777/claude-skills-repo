@@ -30,6 +30,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
 import alignhcm_core as core          # noqa: E402
 import alignhcm_docx as D             # noqa: E402
+import alignhcm_media as media        # noqa: E402
 
 SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -305,7 +306,7 @@ def fee_table(spec):
             [4000, 1500, 1600, 2100], total)
 
 
-def build_blocks(spec):
+def build_blocks(spec, lockup=None):
     client = spec["client_legal_name"]
     entity = spec["align_entity"]
     today = spec.get("date") or datetime.date.today().strftime("%B %Y")
@@ -313,13 +314,17 @@ def build_blocks(spec):
     model_phrase = ("a fixed fee proposal" if spec["pricing_model"] == "fixed_fee"
                     else "a time and materials proposal")
 
-    blocks = [
+    blocks = []
+    if lockup:
+        blocks.append(D.masthead(lockup))
+    blocks += [
         D.title("Statement of Work",
                 f"{spec['platform']} {spec['engagement_title']}",
                 meta=[("Prepared for", client),
                       ("Prepared by", entity),
                       ("Date", today),
-                      ("Status", spec.get("status", "Draft for review"))]),
+                      ("Status", spec.get("status", "Draft for review"))],
+                suppress_eyebrow=bool(lockup)),
 
         # The preamble carries the MSA subordination and the change-order
         # promise. Every Align SOW opens with it; losing it is what turns a
@@ -536,7 +541,8 @@ def main():
                                     "company-facts.md"))
 
     client = spec["client_legal_name"]
-    blocks, total = build_blocks(spec)
+    lockup = media.align_lockup(os.path.join(SKILL_ROOT, "scripts", "_core"))
+    blocks, total = build_blocks(spec, lockup)
 
     os.makedirs(args.out_dir, exist_ok=True)
     version = core.next_version(args.out_dir, client, "SOW", ".docx")

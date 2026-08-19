@@ -88,11 +88,24 @@ weeks of a project. `references/paper-differences.md` has the comparison.
 | Within 24 hours of the call | Issue the status report |
 | Monthly | Executive check-in with the client sponsor |
 
+## Marks
+
+Every document carries the exact Align lockup, vendored and SHA-256 pinned, so
+a re-exported or substituted logo fails the build rather than shipping. Full
+rules, including where a client mark belongs and where it does not:
+`scripts/_core/marks.md`.
+
+The client's mark is optional on a status report and off by default. The report
+goes to a client who has already signed, so nobody needs to be stopped for it.
+Add `"client_mark": {"domain": "acme.com"}` to include it.
+
 ## Files
 
 | Path | Purpose |
 |---|---|
 | `scripts/build_status_report.py` | The status report generator |
+| `scripts/_core/marks.md` | Which logo goes on what, and why |
+| `scripts/_core/brand-voice.md` | Voice rules every Align document shares |
 | `scripts/_core/` | Shared Align document engine, vendored |
 | `references/methodology.md` | Five phases, gates, client level of effort |
 | `references/paper-differences.md` | UKG paper vs Align paper |

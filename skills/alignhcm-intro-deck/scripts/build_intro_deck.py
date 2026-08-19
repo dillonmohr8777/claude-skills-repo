@@ -26,7 +26,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_core"))
-import alignhcm_core as core          # noqa: E402
+import alignhcm_core as core
+import alignhcm_media as media
+import client_mark          # noqa: E402
 import alignhcm_pptx as P             # noqa: E402
 
 SKILL_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -151,7 +153,8 @@ def check_tier_vocabulary(tiers, report):
             f"references/smartcare-tiers.md and to this check.")
 
 
-def build_slides(spec, facts, tiers):
+def build_slides(spec, facts, tiers, lockup=None, client_logo=None,
+                 smartcare_asset=None):
     client = spec["client_name"]
     sector = spec["sector"]
     today = spec.get("date") or datetime.date.today().strftime("%B %Y")
@@ -163,7 +166,8 @@ def build_slides(spec, facts, tiers):
 
     add(P.cover(client, f"{spec['platform']} Implementation Services",
                 "Partner Introduction",
-                [f"Prepared for {client}", today]), True)
+                [f"Prepared for {client}", today],
+                lockup=lockup, client_logo=client_logo), True)
 
     add(P.cards(
         "Who we are", "Who Is Align HCM",
@@ -227,7 +231,8 @@ def build_slides(spec, facts, tiers):
     if tiers:
         add(P.data_table("After go-live", "SmartCare: What Happens After Go-Live",
                          ["Tier", "When it applies", "What it covers"],
-                         tiers, widths=[0.16, 0.26, 0.58]))
+                         tiers, widths=[0.16, 0.26, 0.58],
+                         smartcare=True, smartcare_asset=smartcare_asset))
 
     add(P.cards("Why Align HCM", f"Why Organizations Like {client} Choose Align",
                 [(w["title"], w["detail"]) for w in spec["why_us"]],
@@ -253,6 +258,8 @@ def main():
     ap.add_argument("--allow-invalid", action="store_true")
     ap.add_argument("--no-supersede", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--allow-low-quality-mark", action="store_true",
+                    help="accept a client mark that failed the quality gate")
     ap.add_argument("--allow-contested", action="store_true",
                     help="render facts that shipped Align documents disagree "
                          "about, instead of failing")
@@ -269,7 +276,27 @@ def main():
     tiers = load_tiers(os.path.join(SKILL_ROOT, "references", "smartcare-tiers.md"))
 
     client = spec["client_name"]
-    slides, count = build_slides(spec, facts, tiers)
+
+    # The client mark decision is required. See client_mark.DECISION_HELP.
+    try:
+        client_logo, mark_prov = client_mark.resolve(
+            spec, os.path.join(args.out_dir, "_assets"), name=client,
+            log=lambda m: print(m, file=sys.stderr),
+            allow_low_quality=args.allow_low_quality_mark)
+    except client_mark.MarkError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
+    print(client_mark.describe(mark_prov), file=sys.stderr)
+
+    lockup = media.align_lockup(core_dir)
+    # A real SmartCare mark is used when one is dropped in; otherwise the
+    # typographic lockup is drawn. Align has no SmartCare logo today.
+    smartcare_asset = os.path.join(core_dir, P.SMARTCARE_ASSET)
+    if not os.path.exists(smartcare_asset):
+        smartcare_asset = None
+
+    slides, count = build_slides(spec, facts, tiers, lockup, client_logo,
+                                 smartcare_asset)
 
     os.makedirs(args.out_dir, exist_ok=True)
     version = core.next_version(args.out_dir, client, "Introduction", ".pptx")
