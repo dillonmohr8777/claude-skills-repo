@@ -7,22 +7,30 @@ change to make and where.
 
 ## Status
 
+Rechecked 2026-08-19 against this repository, the attached Align repositories,
+and the synced account skills.
+
 | Skill | Where it lives | Status |
 |---|---|---|
-| `rfp-responder` | Account skill store, synced to `~/.claude/skills/synced/` | **Exists. Needs the edit below, plus a color fix.** |
-| `sow-generator` | Not found | Does not exist in this repository, in any of the eight Align repositories, or in the synced account skills |
-| `alignhcm-loi` | Not found | Same |
-| `alignhcm-legal-review` | Not found | Same |
-| `alignhcm-weekly-sales-report` | Not found | Same |
-| `alignhcm-monthly-forecast-review` | Not found | Same |
+| `rfp-responder` | Account skill store, synced to `~/.claude/skills/synced/` | **Exists, and the colour fix has landed there.** The live copy uses `#E97722` and `#232E3E`; no `#F5A623` or `#404040` remains. Still needs the cross-reference line below |
+| `sow-generator` | Superseded | Does not exist and does not need to. `alignhcm-sow` covers it, against Align's real thirteen-section template |
+| `alignhcm-loi` | Never existed | Not in this repository, the Align repositories, or the account skills. Nothing claims it |
+| `alignhcm-legal-review` | Never existed | Same |
+| `alignhcm-weekly-sales-report` | Never existed | Same. `alignhcm-pm-runbook` produces a weekly *project* status report, which is a different document from a sales report |
+| `alignhcm-monthly-forecast-review` | Never existed | Same |
 
-The composition table in `SKILL.md` already names all six, so the pointer from
-this package outward is in place. What remains is the pointer inward, from each
-of those skills back to this one.
+Treat the four that never existed as never built rather than as missing, and
+stop looking for them. If one turns up somewhere unsearched, wire it up with the
+block below.
 
-`rfp-responder` cannot be edited from this repository: it is an account skill,
-synced read-only into the session, and a local edit would be overwritten on the
-next sync. It has to be edited wherever account skills are managed.
+The composition tables in each `SKILL.md` name the skills that do exist, so the
+pointer outward from this package is in place. What remains is the pointer
+inward, from `rfp-responder` back to this one.
+
+`rfp-responder` cannot be edited from this repository as a matter of policy: it
+is an account skill, and a local edit is overwritten whenever the account store
+syncs. Make the edit wherever account skills are managed, then confirm with
+`python3 skills/verify_install.py`.
 
 ## The line to add
 

@@ -794,6 +794,53 @@ def _fetch_rejects_favicon():
         return code != 0 and "px wide" in out, f"exit {code}, size gate fired"
 
 
+def _run_doctor(site_url):
+    env = dict(os.environ)
+    env["NO_PROXY"] = env["no_proxy"] = "127.0.0.1,localhost"
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPTS / "fetch_client_logo.py"),
+         "--domain", site_url, "--doctor"],
+        capture_output=True, text=True, env=env, timeout=300)
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+@check("doctor confirms a working site")
+def _doctor_ok():
+    with tempfile.TemporaryDirectory() as tmp:
+        _logo_png(os.path.join(tmp, "logo.png"), 900, 300, _reverse_transparent)
+        site = _FixtureSite(tmp, '<html><body><img class="site-logo" '
+                                 'src="/logo.png"></body></html>')
+        try:
+            code, out = _run_doctor(site.url)
+        finally:
+            site.close()
+        return code == 0 and "Egress works" in out, f"exit {code}"
+
+
+@check("doctor separates a blocked network from a site with no logo")
+def _doctor_blocked():
+    """
+    The failure this exists for: the page loads, every asset download is
+    refused, and the plain run says "no decodable logo candidate found". That
+    reads as "this company has no usable logo" when the truth is the opposite.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        # The markup points at a port where nothing listens, so the page
+        # parses and every subresource fetch fails at the network layer.
+        site = _FixtureSite(tmp, '<html><body><img class="site-logo" '
+                                 'src="http://127.0.0.1:9/logo.png"></body></html>')
+        try:
+            code, out = _run_doctor(site.url)
+            plain, ptext = _run_fetch(site.url, os.path.join(tmp, "o.png"))
+        finally:
+            site.close()
+        if code != 5 or "egress restriction" not in out:
+            return False, f"doctor exit {code}: {out.strip()[-120:]}"
+        if plain != 5 or "network layer" not in ptext:
+            return False, f"plain run exit {plain}, did not name the cause"
+        return True, "both report egress, not missing artwork"
+
+
 @check("logo fetcher reports unreachable sites cleanly")
 def _fetch_unreachable():
     with tempfile.TemporaryDirectory() as tmp:

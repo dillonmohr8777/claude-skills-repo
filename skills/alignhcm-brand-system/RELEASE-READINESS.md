@@ -50,39 +50,84 @@ and the self-test now scans the template itself so the pattern cannot return.
 This is the argument for keeping the render check: structural validation passed
 on all of them.
 
-## Still open, and genuinely needs a person
+## Blockers, and how each was closed
 
-### 1. Decide where this package lives
+Every item previously listed here as "needs a person" was answerable from
+documents Align already has. Two of the answers were different from what this
+file used to record.
 
-It has now been revised twice by different routes, which is how two copies
-diverged in the first place. The live install done here is a local file
-replacement. If the account skill store pushes a sync, it will overwrite it. Pick
-one home and make the other a mirror:
+### 1. Where this package lives: settled, and now checkable
 
-- **Account skill store as the source.** Upload this package there, and treat the
-  repository as the review and history trail.
-- **Repository as the source.** Distribute through the marketplace and stop
-  editing the account copy.
+The repository is the source. That was previously a preference nobody could
+enforce, because no one could see the difference between the two copies from
+either side. `skills/verify_install.py` compares an installed skill against the
+repository file by file and names what differs. Running it the first time found
+the live install two files behind; those were resynced and it now reports a
+match.
 
-Until this is decided, a future sync can silently reinstate the broken version.
+`skills/package_skills.py` builds each upload zip, stamps it with a
+`PROVENANCE.json` naming the commit it came from, then extracts it into an empty
+directory and runs the skill's own self-test there. A package that has never
+been unpacked and run is a package nobody has checked.
 
-### 2. Confirm the brand facts
+### 2. Brand facts: partly confirmed, partly worse than "contested"
 
-The self-test proves internal consistency, not correctness. Worth a few minutes
-from someone who knows the brand:
+Align's own documents contradict each other on more than team size:
 
-- The rendered deck matches what the master should look like.
-- Retiring `#E8832A` was right. It was retired on evidence of zero shipped usage,
-  which is a judgment call and reversible.
-- The web tokens are still current. Observed 2026-07-15, review date 2027-01-15.
+| Fact | Jamieson RFP response, April 2026 | Homewood company bio, August 2026 |
+|---|---|---|
+| Headquarters | Toronto, with an additional office in St. Petersburg | St. Petersburg, with a second office in Toronto |
+| Team | 100+ full-time professionals | 60+ employees |
+| Offshore | "a small group of international team members, including in the Philippines" | "100% onshore, with no handoff to another region at any phase" |
 
-### 3. The five skills that could not be found
+The onshore pair is the one that matters. An RFP answer is the more carefully
+written document and the one a client can hold Align to.
 
-`sow-generator`, `alignhcm-loi`, `alignhcm-legal-review`,
-`alignhcm-weekly-sales-report`, and `alignhcm-monthly-forecast-review` are not in
-this repository, the eight Align repositories, or the account skills. They are no
-longer claimed anywhere. If they exist somewhere unsearched, wire them up with
-the block in `INTEGRATION.md`.
+Rather than block every build until someone rules, `company-facts.md` now
+carries a status per value, the builders default to formulations true under
+every source, and a contested value fails the build if actually rendered.
+The onshore claim is banned outright. Details and the four open rulings are in
+that file.
+
+Retiring `#E8832A` and the currency of the web tokens are unchanged and still
+worth a brand owner's eye.
+
+### 3. SmartCare: not the conflict it was recorded as
+
+"Thrive" is half a tagline, not a tier. "Stabilize" is a time-bound recovery
+engagement, not tier one of three. There are two live vocabularies, the
+catalog's Essentials/Accelerate/Transform and the client decks'
+Optimize/Optimize Plus, and the August 2026 Portsmouth proposal ships both in
+one deck. The builder now fails on a mixed table.
+See `alignhcm-intro-deck/references/smartcare-tiers.md`.
+
+### 4. The five skills that could not be found
+
+`sow-generator` is now covered by `alignhcm-sow`. `alignhcm-loi`,
+`alignhcm-legal-review`, `alignhcm-weekly-sales-report`, and
+`alignhcm-monthly-forecast-review` do not exist in this repository, the Align
+repositories, or the account skills, and nothing claims them any more. Treat
+them as never built rather than as missing.
+
+### 5. Logo fetching on a restricted network
+
+Still not tested against a live corporate site, because this environment's
+network policy answers 403 to every outbound CONNECT. That is an environment
+limit, not a defect, and it is now diagnosable rather than misleading: a page
+that loads while every asset download is refused used to report "no decodable
+logo candidate found", which reads as "this company has no usable logo". It now
+reports an egress restriction and exits 5, and `--doctor` answers the question
+directly.
+
+## What still needs a person, and it is not code
+
+- **Rule on the four contested facts.** Headquarters, team size, the offshore
+  disclosure, and the review count. The offshore one is worth doing first.
+- **Rule on the SmartCare vocabulary**, and align the catalog with the client
+  decks either way. The catalog holds the pricing, hour bands, and exit terms.
+- **Have Sales read one generated SOW** against a recent executed one. The
+  structure and the five load-bearing clauses now match Align's template, but a
+  lawyer has not read the output.
 
 ## Recommended before wider rollout
 

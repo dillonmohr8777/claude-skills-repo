@@ -114,8 +114,23 @@ by hand in PowerPoint.
    |---|---|---|
    | 0 | Usable logo written | Continue. If the background was keyed, look at the cover before sending |
    | 2 | Too small, opaque, or too dark for the navy field | Get the reverse mark from the client's brand kit or press page |
-   | 3 | Nothing usable found on the site | Source it manually |
+   | 3 | Nothing usable found on the site | Source it manually. The message lists what was examined and why each was rejected |
    | 4 | Site unreachable | Check the network, or source it manually |
+   | 5 | The network refused the downloads | Not a property of the client's site. Run `--doctor`, then either fix egress or supply the file by hand |
+
+   Exit 3 and exit 5 used to look identical, and they lead to opposite actions.
+   A page that loads while every asset download is blocked reported "nothing
+   usable found", which reads as "this company has no logo". It now says so.
+
+   On a restricted network, ask directly rather than guessing:
+
+   ```bash
+   python scripts/fetch_client_logo.py --domain acme.com --doctor
+   ```
+
+   It reports the proxy in effect, whether the homepage loads, how many
+   candidates the markup advertises, how many actually download, and a verdict
+   naming which of the two problems you have.
 
    **Every client mark goes on a plate.** A dark logo gets a white card with a
    thick border in its own brand colour; a light or white logo gets a near-black

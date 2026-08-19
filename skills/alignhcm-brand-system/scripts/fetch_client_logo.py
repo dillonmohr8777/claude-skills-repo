@@ -247,14 +247,28 @@ def svg_to_png(svg_bytes, width):
 # Pipeline
 # ---------------------------------------------------------------------------
 
-def evaluate(candidate, target_width):
-    """Download and decode a candidate. Returns a dict or None."""
+def evaluate(candidate, target_width, problems=None):
+    """
+    Download and decode a candidate. Returns a dict or None.
+
+    On failure it records why into `problems`, because "no logo found" and
+    "the network refused every download" look identical from the outside and
+    lead to opposite next steps.
+    """
     url = candidate["url"]
     try:
         data, ctype, final = get(url)
-    except (urllib.error.URLError, urllib.error.HTTPError, OSError, ValueError):
+    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as exc:
+        if problems is not None:
+            problems.append(("network", url, f"{type(exc).__name__}: {exc}"))
+        return None
+    except ValueError as exc:
+        if problems is not None:
+            problems.append(("url", url, str(exc)))
         return None
     if not data or len(data) < 64:
+        if problems is not None:
+            problems.append(("empty", url, f"{len(data) if data else 0} bytes"))
         return None
 
     is_svg = (b"<svg" in data[:2048].lower()
@@ -436,12 +450,75 @@ def process(entry, min_width, target_width, aggressive):
     return img, notes, {"opaque_risk": opaque_risk}
 
 
+def doctor(base, host):
+    """
+    Answer one question: can this machine fetch from this site at all?
+
+    Worth its own mode because a locked-down network and a site with no usable
+    logo both end with an empty hand, and the fixes are opposite. One needs a
+    proxy exception; the other needs the file supplied by hand.
+    """
+    print(f"logo fetch doctor for {host}")
+    proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
+    print(f"  proxy env      {proxy or 'not set'}")
+
+    try:
+        html_bytes, ctype, final = get(base + "/")
+    except Exception as exc:
+        print(f"  homepage       UNREACHABLE ({type(exc).__name__}: {exc})")
+        print()
+        print("This machine cannot reach the site. Nothing about the company's "
+              "artwork can be concluded from here.")
+        print("Either run the fetch from a network that permits outbound HTTPS "
+              "to the client's domain, or download the logo by hand and pass "
+              "it to prepare_client_deck.py with --client-logo.")
+        return 5
+    html = html_bytes.decode("utf8", "replace")
+    print(f"  homepage       OK ({len(html_bytes):,} bytes, {ctype or 'no type'})")
+
+    candidates = discover(base, html) + probe_well_known(base)
+    print(f"  candidates     {len(candidates)} found in markup and well-known paths")
+    if not candidates:
+        print()
+        print("The page loaded but advertises no logo candidate. That is a "
+              "property of the site, not of this machine.")
+        return 3
+
+    problems, reached = [], 0
+    for cand in candidates[:6]:
+        entry = evaluate(cand, 1200, problems)
+        if entry is not None:
+            reached += 1
+    print(f"  downloads      {reached} of {min(len(candidates), 6)} "
+          f"probed candidate(s) decoded")
+    for kind, url, why in problems[:4]:
+        print(f"    {kind:8} {url[:64]}  {why[:50]}")
+
+    print()
+    if reached:
+        print("Egress works and at least one candidate decodes. A normal run "
+              "should succeed; if it does not, the failure is the quality gate "
+              "rather than the network.")
+        return 0
+    blocked = [x for x in problems if x[0] == "network"]
+    if blocked and len(blocked) == len(problems):
+        print("The homepage loads but every asset download is refused. This is "
+              "an egress restriction on subresources, not a site without a logo.")
+        return 5
+    print("Candidates downloaded but none decoded. This is an artwork problem, "
+          "not a network one. Supply the logo by hand.")
+    return 3
+
+
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--domain", required=True,
                     help="company domain or URL, e.g. acme.com")
-    ap.add_argument("--out", required=True, help="output PNG path")
+    ap.add_argument("--out", help="output PNG path (not needed with --doctor)")
+    ap.add_argument("--doctor", action="store_true",
+                    help="report whether this machine can reach the site and "
+                         "download an asset from it, then stop")
     ap.add_argument("--name", help="company name, recorded in the provenance file")
     ap.add_argument("--min-width", type=int, default=600,
                     help="reject anything narrower after trimming (default 600)")
@@ -461,8 +538,12 @@ def main():
                     help="write the file even if it fails the quality gate")
     ap.add_argument("--json", action="store_true", help="machine-readable summary")
     args = ap.parse_args()
+    if not args.doctor and not args.out:
+        ap.error("--out is required unless you pass --doctor")
 
     base, host = normalise_domain(args.domain)
+    if args.doctor:
+        return doctor(base, host)
 
     try:
         html_bytes, _, final_url = get(base + "/")
@@ -479,8 +560,9 @@ def main():
     candidates += probe_well_known(base)
 
     scored = []
+    problems = []
     for cand in sorted(candidates, key=lambda c: -KIND_SCORE.get(c["kind"], 0)):
-        entry = evaluate(cand, args.target_width)
+        entry = evaluate(cand, args.target_width, problems)
         if entry is None or "img" not in entry:
             continue
         entry["score"] = score(entry)  # reverse variants are preferred for navy
@@ -490,7 +572,21 @@ def main():
             f"{entry['url'][:70]}")
 
     if not scored:
-        log("error: no decodable logo candidate found")
+        blocked = [p for p in problems if p[0] == "network"]
+        if candidates and len(blocked) == len(problems) and blocked:
+            log(f"error: all {len(blocked)} candidate download(s) failed at the "
+                f"network layer, so this is an egress problem rather than a "
+                f"site with no usable logo.")
+            log(f"  first failure: {blocked[0][1]}")
+            log(f"  reason: {blocked[0][2]}")
+            log("Run with --doctor to confirm, or supply the file manually "
+                "with --client-logo on prepare_client_deck.py.")
+            return 5
+        log(f"error: no decodable logo candidate found "
+            f"({len(candidates)} candidate(s) examined, "
+            f"{len(problems)} rejected)")
+        for kind, url, why in problems[:5]:
+            log(f"  {kind:8} {url[:70]}  {why[:60]}")
         return 3
 
     best = max(scored, key=lambda e: e["score"])

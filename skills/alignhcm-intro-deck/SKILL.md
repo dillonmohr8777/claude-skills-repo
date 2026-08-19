@@ -18,6 +18,30 @@ prospect has lived through. Reordering it breaks the argument.
 python3 scripts/build_intro_deck.py --spec <prospect>.json --out-dir <folder>
 ```
 
+## Two claims it will not let you make
+
+**A contested company fact.** Align's April 2026 RFP response and its August
+2026 company bio disagree about headquarters, team size, and whether any
+delivery happens outside North America. The deck therefore states offices
+rather than a headquarters, a certified team rather than a headcount, and a
+verified rating rather than a review count. Each of those is true under every
+source. Reading a disputed value instead fails the build and prints the
+disagreement; `--allow-contested` overrides it deliberately.
+
+**That delivery is fully onshore.** Align's own RFP answer discloses team
+members in the Philippines. Any wording to the contrary fails the build,
+whatever the spec says. The banned phrases are listed in
+`scripts/_core/company-facts.md`.
+
+## SmartCare tiers come from a file, and cannot be mixed
+
+`references/smartcare-tiers.md` holds the table the deck renders, so a ruling
+reaches every deck without a code change. Two vocabularies are live at Align
+right now, the catalog's Essentials/Accelerate/Transform and the client decks'
+Optimize/Optimize Plus, and one August 2026 client proposal shipped both at
+once. A table drawing from both fails the build. That reference explains the
+evidence and what has to be decided.
+
 ## The three sections that are actually yours to write
 
 Everything else is Align's standing story and is filled from
