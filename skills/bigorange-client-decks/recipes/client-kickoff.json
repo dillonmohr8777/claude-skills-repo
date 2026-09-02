@@ -1,0 +1,73 @@
+{
+  "name": "client-kickoff",
+  "title": "{{client.name}} kickoff",
+  "footer": "BigOrange.Marketing · {{client.name}} kickoff · {{date}}",
+  "defaultDraft": true,
+  "audience": "A newly signed BigOrange client at the first working session.",
+  "requires": ["client.name", "date", "presenter", "logo.path", "logo.verified"],
+  "slides": [
+    { "id": "cover", "block": "coverClient",
+      "eyebrow": "Kickoff",
+      "title": "{{vars.coverTitle}}",
+      "data": { "sub": "{{vars.coverSub}}", "date": "{{date}}" },
+      "notes": "Welcome. Say what today decides: owners, first sprint, and how we will measure." },
+
+    { "id": "team", "block": "columns", "eyebrow": "Who is in the room", "title": "Names, roles, and who to call",
+      "data": { "items": [
+        { "kicker": "BigOrange", "big": "{{vars.bigorangeLead}}", "body": "{{vars.bigorangeTeam}}" },
+        { "kicker": "{{client.name}}", "big": "{{vars.clientLead}}", "body": "{{vars.clientTeam}}" },
+        { "kicker": "Cadence", "big": "{{vars.cadence}}", "body": "{{vars.cadenceBody}}", "hot": true } ] },
+      "notes": "Confirm one accountable owner on each side. Write the names down." },
+
+    { "id": "heard", "block": "textBullets", "eyebrow": "What we heard", "title": "{{vars.heardTitle}}",
+      "data": { "intro": "{{vars.heardIntro}}", "bullets": "{{vars.heardBullets}}",
+        "card": { "kicker": "Correct us", "title": "This is a draft of your priorities", "body": "If any of this is wrong or missing, say so now. The plan on the next slides follows from this list." } },
+      "notes": "Read the bullets back and pause. Let them correct us." },
+
+    { "id": "scope", "block": "table", "eyebrow": "Scope", "title": "What we agreed to build",
+      "data": { "header": ["Milestone", "What ships", "Owner", "Due"], "rows": "{{vars.scopeRows}}", "colW": [2.6, 5.5, 2.0, 2.03],
+        "takeaway": "{{vars.scopeTakeaway}}" },
+      "notes": "Read the proposal back as milestones. Anything not on this table is a change request." },
+
+    { "id": "gates", "block": "flow", "eyebrow": "How work gets released", "title": "Draft, review, release, verify",
+      "data": { "items": [
+        { "title": "Draft", "body": "staged privately, never public" },
+        { "title": "Review", "body": "facts, images, permissions" },
+        { "title": "QA", "body": "mobile, speed, schema, links" },
+        { "title": "Release", "body": "named owner approves timing" },
+        { "title": "Verify", "body": "live check, indexing, events" } ],
+        "hotIndex": 3, "bar": "Nothing goes public without a named release owner on your side." },
+      "notes": "This is the safety rail. It is also why we need a reviewer named today." },
+
+    { "id": "measure", "block": "flow", "eyebrow": "Measurement", "title": "What we will report, and what we will not claim",
+      "data": { "items": [
+        { "title": "Discovery", "body": "queries and pages" },
+        { "title": "Engagement", "body": "useful next behavior" },
+        { "title": "Action", "body": "verified form, call, booking" },
+        { "title": "Qualification", "body": "your sales team labels fit" },
+        { "title": "Outcome", "body": "opportunity and revenue" } ],
+        "hotIndex": 3, "bar": "{{vars.measureBar}}" },
+      "notes": "Ask who will label leads accepted or not. Without that we cannot connect marketing to revenue." },
+
+    { "id": "access", "block": "grid", "eyebrow": "Access we need", "title": "Role-based, revocable, read-only first",
+      "data": { "cols": 3, "items": "{{vars.accessItems}}" },
+      "notes": "Never passwords in email. Role-based invitations only." },
+
+    { "id": "first30", "block": "timeline", "eyebrow": "First 30 days", "title": "{{vars.first30Title}}",
+      "data": { "items": [
+        { "label": "Week 1", "body": "{{vars.week1}}" },
+        { "label": "Week 2", "body": "{{vars.week2}}" },
+        { "label": "Week 3", "body": "{{vars.week3}}" },
+        { "label": "Week 4", "body": "{{vars.week4}}" } ],
+        "takeaway": "{{vars.first30Takeaway}}" },
+      "notes": "Keep it concrete. Each week has a visible output." },
+
+    { "id": "decisions", "block": "decisions", "eyebrow": "Decisions today", "title": "{{vars.decisionsTitle}}",
+      "data": { "items": "{{vars.decisions}}", "takeaway": "The goal is a named owner, a first sprint, and a measurement contract." },
+      "notes": "Close by assigning owners and the first dates." },
+
+    { "id": "next", "block": "closeDark", "mode": "dark", "eyebrow": "Thank you", "title": "Next touchpoint",
+      "data": { "title": "{{vars.closeTitle}}", "body": "{{vars.closeBody}}", "cta": "{{vars.closeCta}}", "contact": "{{presenter}}\nBigOrange.Marketing\nCincinnati, Ohio" },
+      "notes": "Confirm the next meeting date before anyone leaves." }
+  ]
+}

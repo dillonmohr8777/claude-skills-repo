@@ -1,0 +1,72 @@
+{
+  "recipe": "industry-pitch",
+  "date": "September 2026",
+  "presenter": "Margee Moore",
+  "sampleData": true,
+  "industry": "msp",
+  "vars": {
+    "industryLabel": "MSP",
+    "industryHubUrl": "https://bigorange.marketing/msp-it-services-marketing-agency/",
+    "coverTitle": "Get found on ChatGPT and Google search",
+    "coverSub": "Marketing for MSPs who can fix any server at 2am but can't explain in one sentence why a prospect should switch.",
+    "whoTitle": "Owners running sales, marketing and delivery at once",
+    "whoIntro": "Most MSPs under 25 employees have nobody in the marketing seat. That job usually falls to whoever already has the most jobs.",
+    "whoBullets": [
+      "Owner-operators at 5 to 50 person MSPs, wearing sales, marketing and delivery hats.",
+      "VPs of Sales at bigger shops, hired once the founder can't close every deal alone.",
+      "A marketing coordinator, if one exists. Most sub-25 person MSPs have nobody in the seat.",
+      "Worried about keeping current clients happy while finding new ones.",
+      "Worried whether ChatGPT and Google's AI answers mention them at all."
+    ],
+    "brokenTitle": "Here's where MSP marketing usually breaks",
+    "brokenItems": [
+      { "title": "The website", "body": "Built years ago, full of jargon that reads the same on every MSP site." },
+      { "title": "Proof", "body": "No client logos, no named case studies, no reviews above the fold." },
+      { "title": "Positioning", "body": "We do IT so you don't have to, said fifty different ways, no niche named." },
+      { "title": "Lead capture", "body": "A form and a phone number, nothing for someone not ready to call yet." },
+      { "title": "Sales handoff", "body": "Leads land in an inbox, not a CRM, so nothing gets nurtured or measured." },
+      { "title": "Attribution", "body": "The owner can't say which channel produced the last five signed clients." }
+    ],
+    "journeyTitle": "How your next client actually finds you",
+    "journeySteps": [
+      { "title": "Trigger", "body": "An outage, breach or bad renewal" },
+      { "title": "Research", "body": "Google and ChatGPT, no rep yet" },
+      { "title": "Proof check", "body": "Reviews, tenure, a similar story" },
+      { "title": "Compare", "body": "Three MSPs, one clear choice" },
+      { "title": "Decide", "body": "Contacts the one that proved it" }
+    ],
+    "journeyTakeaway": "61% of B2B buyers prefer research without a rep, and 73% avoid suppliers who send irrelevant outreach (Gartner, 2025).",
+    "playsTitle": "First plays for MSPs",
+    "playItems": [
+      { "title": "Named proof", "body": "Specific results, specific timeframes, no vague we grew their business." },
+      { "title": "A real niche", "body": "One specific pain named, not IT so you don't have to again." },
+      { "title": "AI visibility check", "body": "Does your name show up when ChatGPT is asked for a local MSP?" },
+      { "title": "A low-commitment step", "body": "A guide or assessment for someone who isn't ready to call." },
+      { "title": "CRM routing", "body": "Every lead tracked, nurtured and handed back to sales with context." },
+      { "title": "Attribution", "body": "A channel-to-client chain the owner can actually read." }
+    ],
+    "proofStats": [
+      { "v": "71%", "l": "of MSPs cite customer acquisition as their top challenge (Kaseya, 2026)", "hot": true },
+      { "v": "61%", "l": "of B2B buyers prefer rep-free research (Gartner, 2025)" },
+      { "v": "50+", "l": "five-star Google reviews (BigOrange)" }
+    ],
+    "proofTakeaway": "This is an industry-wide problem, not one we invented to sell you something.",
+    "plan1": "Audit the site, positioning and AI visibility; confirm what counts as a qualified lead.",
+    "plan2": "Fix the message, add named proof, and build a next step besides just call us.",
+    "plan3": "Route leads into HubSpot, connect sales feedback, and publish the first proof pages.",
+    "plan4": "Review the visibility-to-revenue chain together and decide what earns the next scope.",
+    "investmentTitle": "A bounded first engagement, then a scoped plan",
+    "investmentIntro": "No public pricing page exists on bigorange.marketing (checked 2026-09-02). Pricing is shared in the proposal, not guessed at here.",
+    "investmentBullets": [
+      "First engagement is scoped and bounded, not an open-ended retainer.",
+      "Pricing is shared in the proposal once we know your goals and current stack.",
+      "You approve every claim, badge and case study before it goes public.",
+      "We scope the next phase only after the first one proves out."
+    ],
+    "closeTitle": "Get marketing off your plate",
+    "closeBody": "One working session to map the plan, the timeline, and what we still need from you."
+  },
+  "slides": {
+    "proof": { "notes": "Sources: Kaseya, 'What the 2026 State of the MSP Report Reveals' (kaseya.com), fetched 2026-09-02. Gartner survey via Demand Gen Report, published 2025-07-01. BigOrange hub page, bigorange.marketing/msp-it-services-marketing-agency/, fetched 2026-09-02." }
+  }
+}

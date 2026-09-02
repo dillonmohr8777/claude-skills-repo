@@ -1,0 +1,72 @@
+{
+  "recipe": "industry-pitch",
+  "date": "September 2026",
+  "presenter": "Margee Moore",
+  "sampleData": true,
+  "industry": "home-builders",
+  "vars": {
+    "industryLabel": "Home Builders",
+    "industryHubUrl": "https://bigorange.marketing/marketing-agency-for-builders/",
+    "coverTitle": "Leads that match how your buyers decide",
+    "coverSub": "A modern website and marketing strategy for buyers who decide slowly, anxiously, and usually online.",
+    "whoTitle": "Custom, semi-custom and design-build teams",
+    "whoIntro": "Almost every builder we meet is the whole marketing department: an owner, a spouse who handles admin, or an office manager once the company scales.",
+    "whoBullets": [
+      "Custom builders: architect-driven homes, the highest trust bar and the longest sales cycle.",
+      "Semi-custom builders: a plan library with real flexibility, still selling on judgment.",
+      "Design-build firms: architecture and construction under one roof, twice the proof to carry.",
+      "Usually no dedicated marketer. The owner is also the estimator and the face of the company.",
+      "The shared worry: buyers who research quietly for months before ever calling."
+    ],
+    "brokenTitle": "Here's where builder marketing usually breaks",
+    "brokenItems": [
+      { "title": "The site", "body": "A generic homepage with five paths confuses visitors ads just sent you." },
+      { "title": "Proof", "body": "Galleries say we built this. They don't say here's how we think." },
+      { "title": "Local presence", "body": "Market pages swap in a city name instead of naming real communities." },
+      { "title": "Follow-up", "body": "Inquiries get thanks, we got your message instead of a real response window." },
+      { "title": "Measurement", "body": "Reporting stops at form fills instead of tracing into CRM and sales." },
+      { "title": "Technical health", "body": "A slow, broken mobile path undoes good proof before a buyer sees it." }
+    ],
+    "journeyTitle": "Five questions every buyer asks, in order",
+    "journeySteps": [
+      { "title": "Fit", "body": "Can you build what I want?" },
+      { "title": "Area", "body": "Do you work in my area?" },
+      { "title": "Process", "body": "What will this be like?" },
+      { "title": "Trust", "body": "Can I trust your team?" },
+      { "title": "Next step", "body": "What should I do next?" }
+    ],
+    "journeyTakeaway": "67% say responsiveness ties with price as the top factor, yet only 41% respond immediately after hours (NAHB/CallRail, 2026).",
+    "playsTitle": "First plays for builders",
+    "playItems": [
+      { "title": "Decision stories", "body": "Goal, constraint, choice, approved result. One story, many uses." },
+      { "title": "People pages", "body": "Current photos and short bios so a title becomes a relationship." },
+      { "title": "Real market pages", "body": "Communities served, project fit, honest local detail." },
+      { "title": "Attributed reviews", "body": "Exact approved language, named source, placed near the work it proves." },
+      { "title": "After-hours response", "body": "A named responder and a real window for the 9pm inquiry." },
+      { "title": "Search-to-sale tracing", "body": "Every inquiry tagged, followed into CRM acceptance and outcome." }
+    ],
+    "proofStats": [
+      { "v": "50+", "l": "five-star Google reviews", "hot": true },
+      { "v": "Certified", "l": "StoryBrand Guide" },
+      { "v": "4", "l": "industries served: builders, MSPs, manufacturers, landscapers" }
+    ],
+    "proofTakeaway": "We only present results we can source and date. No borrowed numbers.",
+    "plan1": "Audit the site, fix indexing and mobile speed, confirm what counts as a qualified inquiry.",
+    "plan2": "Draft project stories, people pages and real local market pages for your approval.",
+    "plan3": "Publish approved content, launch an after-hours response window and a review system.",
+    "plan4": "Review search-to-sale numbers together and decide what earns the next scope.",
+    "investmentTitle": "A bounded first engagement, then a scoped plan",
+    "investmentIntro": "No public pricing page exists on bigorange.marketing (checked 2026-09-02). Pricing is shared in the proposal, not guessed at here.",
+    "investmentBullets": [
+      "First engagement is scoped and bounded, not an open-ended retainer.",
+      "Pricing is shared in the proposal once we've confirmed goals and site access.",
+      "You approve every fact, photo and homeowner story before anything goes live.",
+      "We propose the next scope only after the first one earns it."
+    ],
+    "closeTitle": "Let's build the next 90 days",
+    "closeBody": "Bring your questions. We'll bring the plan, the timeline, and the list of what we still need from you."
+  },
+  "slides": {
+    "proof": { "notes": "Sources: bigorange.marketing/marketing-agency-for-builders/ (50+ reviews, StoryBrand Certified Guide, HubSpot Partner, Google Partner), fetched 2026-09-02." }
+  }
+}

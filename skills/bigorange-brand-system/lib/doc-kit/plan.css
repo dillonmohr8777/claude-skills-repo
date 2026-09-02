@@ -1,0 +1,80 @@
+/* Master plan additions */
+.pcover{background:var(--ink);color:#fff}
+.pcover .logo{position:absolute;left:.85in;top:.7in;height:.62in}
+.pcover .big{position:absolute;left:.78in;top:1.9in;font-family:var(--display);font-weight:900;font-size:62pt;line-height:.95;letter-spacing:-.04em;color:#fff;max-width:7in}
+.pcover .big em{font-style:normal;color:var(--orange)}
+.pcover .strip{position:absolute;left:.85in;right:.85in;top:6.15in;display:grid;grid-template-columns:repeat(5,1fr);gap:.18in;border-top:1px solid rgba(255,255,255,.22);padding-top:.28in}
+.pcover .strip .n{font-family:var(--display);font-weight:800;font-size:22pt;color:var(--orange);letter-spacing:-.03em;line-height:1}
+.pcover .strip .l{font-family:var(--data);font-size:7.6pt;line-height:1.35;color:#CFC8C0;margin-top:.06in}
+.pcover .foot{position:absolute;left:.85in;right:.85in;bottom:.75in;display:flex;justify-content:space-between;align-items:flex-end}
+.pcover .foot .p{font-family:var(--display);font-weight:700;font-size:9pt;letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.pcover .foot .p small{display:block;font-weight:500;letter-spacing:.14em;font-size:7pt;color:var(--orange);margin-bottom:.06in}
+.pcover .sq{position:absolute;right:0;top:0;width:2.6in;height:2.6in;background:var(--orange)}
+.pcover .sq2{position:absolute;right:2.6in;top:2.6in;width:.6in;height:.6in;background:var(--orange)}
+
+.purpose{background:var(--peel);padding:.3in .36in;margin:0 0 .3in;display:grid;grid-template-columns:1.1in 1fr;gap:.2in;align-items:start}
+.purpose .k{font-family:var(--display);font-weight:800;font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);padding-top:.05in}
+.purpose p{margin:0;font-size:11.4pt;line-height:1.5}
+
+.sec{page-break-before:always;break-before:page}
+.sec.first{page-break-before:auto;break-before:auto}
+.sechead{display:grid;grid-template-columns:1.05in 1fr;gap:.2in;align-items:end;margin:0 0 .28in;padding-bottom:.18in;border-bottom:2px solid var(--ink)}
+.sechead .n{font-family:var(--display);font-weight:900;font-size:54pt;line-height:.8;letter-spacing:-.05em;color:var(--orange)}
+.sechead .k{font-family:var(--display);font-weight:700;font-size:7.6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:.08in}
+.sechead h2{font-size:21pt;font-weight:800;letter-spacing:-.025em;line-height:1.05}
+.intro{font-size:11.6pt;line-height:1.5;color:var(--ink-2);margin:0 0 .26in;max-width:6.4in}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.14in;margin:.1in 0 .3in}
+.stat{background:var(--pith);padding:.2in .2in .18in;min-height:1.25in;position:relative}
+.stat.hot{background:var(--orange);color:#fff}
+.stat .v{font-family:var(--display);font-weight:800;font-size:30pt;letter-spacing:-.04em;line-height:1}
+.stat .l{font-family:var(--data);font-size:8pt;line-height:1.35;margin-top:.1in;color:var(--ink-2)}
+.stat.hot .l{color:#fff}
+.stat .l b{display:block;font-weight:600;color:inherit}
+
+ol.plain{padding-left:0;list-style:none;counter-reset:p}
+ol.plain li{counter-increment:p;position:relative;padding-left:.42in;margin:0 0 .12in;page-break-inside:avoid}
+ol.plain li::before{content:counter(p,decimal-leading-zero);position:absolute;left:0;top:.12em;font-family:var(--display);font-weight:800;font-size:9pt;color:var(--orange);letter-spacing:.03em}
+
+h3.sub{font-size:13pt;font-weight:800;margin:.3in 0 .1in;letter-spacing:-.02em}
+
+/* Layer list (page contract) */
+.layers{display:grid;grid-template-columns:1fr 1fr;gap:.12in .22in;margin:.12in 0 .2in}
+.layer{display:grid;grid-template-columns:.4in 1fr;gap:.1in;padding:.14in 0 .12in;border-top:1px solid var(--line);page-break-inside:avoid}
+.layer .n{font-family:var(--display);font-weight:900;font-size:15pt;color:var(--orange);letter-spacing:-.03em;line-height:1}
+.layer h4{font-family:var(--display);font-weight:700;font-size:9.6pt;margin:0 0 .04in}
+.layer p{font-family:var(--data);font-size:8.3pt;line-height:1.42;margin:0;color:var(--ink-2)}
+
+/* timeline */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:.12in;margin:.16in 0 .26in}
+.tl{background:var(--pith);padding:.18in .18in .16in;position:relative;page-break-inside:avoid}
+.tl:nth-child(1){background:var(--orange);color:#fff}
+.tl .w{font-family:var(--display);font-weight:800;font-size:9pt;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.08in}
+.tl .n{position:absolute;right:.14in;top:.1in;font-family:var(--display);font-weight:900;font-size:24pt;letter-spacing:-.04em;opacity:.35;line-height:1}
+.tl p{font-family:var(--data);font-size:8.2pt;line-height:1.42;margin:0 0 .08in}
+.tl .g{font-family:var(--display);font-weight:700;font-size:7pt;letter-spacing:.12em;text-transform:uppercase;margin-top:.06in;opacity:.85}
+.tl .gt{font-family:var(--data);font-size:8pt;line-height:1.4}
+
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(6,1fr);gap:.06in;margin:.14in 0 .26in}
+.chain .c{background:var(--ink);color:#fff;padding:.14in .12in .12in;min-height:1.6in;position:relative}
+.chain .c:nth-child(5){background:var(--orange)}
+.chain .c .n{font-family:var(--display);font-weight:900;font-size:16pt;letter-spacing:-.03em;line-height:1;color:var(--orange)}
+.chain .c:nth-child(5) .n{color:#fff}
+.chain .c h4{font-family:var(--display);font-weight:700;font-size:8pt;letter-spacing:.1em;text-transform:uppercase;margin:.08in 0 .06in;color:#fff}
+.chain .c p{font-family:var(--data);font-size:7.5pt;line-height:1.38;margin:0;color:#E3DCD3}
+.chain .c:nth-child(5) p{color:#fff}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:1fr 1fr;gap:.12in;margin:.16in 0 .3in}
+.dec{display:grid;grid-template-columns:.55in 1fr;gap:.12in;align-items:center;background:var(--pith);padding:.16in .18in;page-break-inside:avoid}
+.dec .n{font-family:var(--display);font-weight:900;font-size:24pt;color:var(--orange);letter-spacing:-.04em;line-height:1}
+.dec p{font-family:var(--display);font-weight:600;font-size:9.8pt;line-height:1.3;margin:0}
+.dec.wide{grid-column:1/-1;background:var(--ink);color:#fff}
+.dec.wide p{font-weight:500;font-family:var(--serif);font-size:10.6pt;line-height:1.5}
+.dec.wide .n{color:var(--orange)}
+
+.callout{border:2px solid var(--ink);padding:.2in .26in;margin:.2in 0 .28in;page-break-inside:avoid}
+.callout .k{font-family:var(--display);font-weight:800;font-size:7.6pt;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-bottom:.06in}
+.callout p{margin:0;font-size:10.4pt}
+.endnote{margin-top:.4in;font-family:var(--serif);font-style:italic;font-size:10.4pt;color:var(--mute);max-width:5.8in}

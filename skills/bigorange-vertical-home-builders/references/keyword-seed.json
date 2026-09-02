@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "researched": "2026-09-02",
+    "expires": "2026-12-01",
+    "note": "Ranking/status claims below are limited to what appears in the local growth-plan text (BigOrange-Complete-WordPress-SEO-AEO-GEO-Growth-Plan-2026-09-02.txt, Moz snapshot dated 2026-08-14) and the five blog deliverables (BLOG-01 through BLOG-05, dated 2026-09-02). Do not extend these ranked/unranked labels to any other client without a fresh pull.",
+    "source": "local:BigOrange-Complete-WordPress-SEO-AEO-GEO-Growth-Plan-2026-09-02.txt; local:BLOG-01..05"
+  },
+  "builder_lane_summary": {
+    "tracked_terms": 21,
+    "ranked": 17,
+    "positions_1_3": 13,
+    "positions_4_10": 1,
+    "positions_11_20": 3,
+    "unranked": 4,
+    "snapshot_date": "2026-08-14",
+    "snapshot_source": "Moz",
+    "source": "local:BigOrange-Complete-WordPress-SEO-AEO-GEO-Growth-Plan-2026-09-02.txt, section 02"
+  },
+  "clusters": {
+    "builder_commercial_hub": {
+      "description": "Commercial hub terms owned by the existing builder hub page. Exact per-keyword position not itemized in local text beyond the aggregate builder-lane summary above.",
+      "owner_page": "hub:/marketing-agency-for-builders/",
+      "items": [
+        {
+          "term": "marketing agency for builders",
+          "intent": "commercial",
+          "owner_page": "hub",
+          "status": "ranked (aggregate: 13 of 21 tracked builder-lane terms sit in positions 1-3)",
+          "source": "local:growth-plan section 02"
+        },
+        {
+          "term": "custom home builder marketing agency",
+          "intent": "commercial",
+          "owner_page": "hub",
+          "status": "ranked (aggregate builder-lane figure; exact position not itemized locally)",
+          "source": "local:growth-plan section 02"
+        },
+        {
+          "term": "home builder marketing agency",
+          "intent": "commercial",
+          "owner_page": "hub",
+          "status": "ranked (aggregate builder-lane figure; exact position not itemized locally)",
+          "source": "local:growth-plan section 02"
+        },
+        {
+          "term": "digital marketing for home builders",
+          "intent": "commercial",
+          "owner_page": "hub",
+          "status": "unverified - appears as an implied hub topic in BLOG deliverables, not itemized as a tracked Moz term in local text",
+          "source": "local:BLOG-01..05 implementation-target line (\"Implementation target: https://bigorange.marketing/marketing-agency-for-builders/\")"
+        }
+      ]
+    },
+    "blog_primary_queries": [
+      {
+        "id": "BLOG-01",
+        "primary_query": "marketing ideas for homebuilders",
+        "proposed_slug": "/home-builder-marketing-ideas/",
+        "intent": "informational",
+        "owner_page": "blog:BLOG-01",
+        "status": "page-two / unranked gap the article is written to close (local text: \"four exact unranked gaps and one page-two opportunity\")",
+        "source": "local:BLOG-01 header; local:growth-plan section 05"
+      },
+      {
+        "id": "BLOG-02",
+        "primary_query": "advertising for builders",
+        "proposed_slug": "/home-builder-advertising/",
+        "intent": "informational",
+        "owner_page": "blog:BLOG-02",
+        "status": "unranked gap the article is written to close",
+        "source": "local:BLOG-02 header; local:growth-plan section 05"
+      },
+      {
+        "id": "BLOG-03",
+        "primary_query": "home builder marketing automation",
+        "proposed_slug": "/home-builder-marketing-automation-follow-up/",
+        "intent": "informational",
+        "owner_page": "blog:BLOG-03",
+        "status": "unranked gap the article is written to close",
+        "source": "local:BLOG-03 header; local:growth-plan section 05"
+      },
+      {
+        "id": "BLOG-04",
+        "primary_query": "home builder marketing solutions",
+        "proposed_slug": "/choose-home-builder-marketing-solutions/",
+        "intent": "informational",
+        "owner_page": "blog:BLOG-04",
+        "status": "unranked gap the article is written to close",
+        "source": "local:BLOG-04 header; local:growth-plan section 05"
+      },
+      {
+        "id": "BLOG-05",
+        "primary_query": "custom home builder marketing agency",
+        "proposed_slug": "/when-hire-custom-home-builder-marketing-agency/",
+        "intent": "commercial/informational",
+        "owner_page": "blog:BLOG-05",
+        "status": "page-two opportunity (this is the one of the five explicitly flagged as page-two rather than fully unranked, per local text: \"one page-two opportunity\")",
+        "source": "local:BLOG-05 header; local:growth-plan section 05"
+      }
+    ],
+    "planning_questions": {
+      "description": "Buyer-hesitation questions named directly in BLOG-01 item 6 as expensive, call-avoiding questions worth answering one at a time. Treat each as a future supporting-article seed, not a currently tracked keyword.",
+      "owner_page": "blog cluster (future supporting articles)",
+      "items": [
+        { "question": "Do I need land before contacting a builder?", "intent": "informational, pre-first-call", "status": "unranked / not yet a published article", "source": "local:BLOG-01 item 6" },
+        { "question": "When should an architect be involved?", "intent": "informational, pre-first-call", "status": "unranked / not yet a published article", "source": "local:BLOG-01 item 6" },
+        { "question": "What changes the investment most?", "intent": "informational, pre-first-call", "status": "unranked / not yet a published article", "source": "local:BLOG-01 item 6" },
+        { "question": "How are selections and changes handled?", "intent": "informational, pre-first-call", "status": "unranked / not yet a published article", "source": "local:BLOG-01 item 6" },
+        { "question": "How long does planning take before construction?", "intent": "informational, pre-first-call", "status": "unranked / not yet a published article", "source": "local:BLOG-01 item 6" }
+      ]
+    },
+    "local_modifier_pattern": {
+      "description": "Local market-page pattern from BLOG-01 item 5. Not itemized keywords - a page-construction rule for creating one market page per real service area.",
+      "pattern": "[builder service or type] + [community/market name]",
+      "requirements": [
+        "communities served, named specifically",
+        "project types that actually fit that market",
+        "local planning considerations the team can responsibly discuss",
+        "approved nearby project proof",
+        "the correct next step / CTA"
+      ],
+      "caution": "Google: local ranking depends on relevance, distance, and prominence - completing business information and gathering reviews can help; nobody can buy or request a better local rank.",
+      "owner_page": "one dedicated market page per real, staffed service area",
+      "source": "local:BLOG-01 item 5; https://support.google.com/business/answer/7091"
+    }
+  }
+}

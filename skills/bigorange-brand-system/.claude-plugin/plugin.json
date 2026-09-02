@@ -1,0 +1,7 @@
+{
+  "name": "bigorange-brand-system",
+  "version": "1.0.0",
+  "description": "BigOrange.Marketing brand production system: exact logo, per-surface tokens, pptxgenjs deck kit, PDF doc kit, linter and validator.",
+  "author": { "name": "Dillon Mohr" },
+  "skills": ["./"]
+}

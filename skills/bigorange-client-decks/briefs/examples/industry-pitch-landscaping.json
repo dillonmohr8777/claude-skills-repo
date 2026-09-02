@@ -1,0 +1,72 @@
+{
+  "recipe": "industry-pitch",
+  "date": "September 2026",
+  "presenter": "Margee Moore",
+  "sampleData": true,
+  "industry": "landscaping",
+  "vars": {
+    "industryLabel": "Landscaping",
+    "industryHubUrl": "https://bigorange.marketing/landscaping-marketing-services/",
+    "coverTitle": "Keep your crew busy without the phone chase",
+    "coverSub": "A proven landscaping marketing process built to keep your pipeline full and your people busy.",
+    "whoTitle": "Design-build, maintenance, hardscape and commercial crews",
+    "whoIntro": "Four business shapes hide under landscaping company. Each one worries about the same thing in a different order: keeping the pipeline full without babysitting the phone.",
+    "whoBullets": [
+      "Design-build firms: patios and full overhauls, selling on trust and portfolio over weeks or months.",
+      "Maintenance and lawn care companies: living on route density and retention, not one-off wins.",
+      "Hardscape specialists: selling to homeowners and referral partners at the same time.",
+      "Commercial grounds crews: selling to property managers on an RFP-driven renewal clock.",
+      "All four want the same thing: proof the work is worth calling back about."
+    ],
+    "brokenTitle": "Here's where landscaping marketing usually breaks",
+    "brokenItems": [
+      { "title": "Google Business Profile", "body": "Thin or unclaimed in spirit: wrong hours, no recent photos, no replies." },
+      { "title": "The website", "body": "A logo and a form nobody checks. No proof above the fold." },
+      { "title": "Review engine", "body": "Great work, zero systematic ask while the yard still looks amazing." },
+      { "title": "Photo proof", "body": "Before/afters live on a phone and never reach the site or GBP." },
+      { "title": "Quoting and follow-up", "body": "No callback for two days, the homeowner already booked someone else." },
+      { "title": "Measurement", "body": "The owner can't say which channel brought which job." }
+    ],
+    "journeyTitle": "How a homeowner actually finds you",
+    "journeySteps": [
+      { "title": "Worry", "body": "A dead lawn, a bad view, at 9pm" },
+      { "title": "Search", "body": "Landscaper near [suburb]" },
+      { "title": "Reviews", "body": "97% read reviews first" },
+      { "title": "Compare", "body": "Recent photos, real before/afters" },
+      { "title": "Call", "body": "The fastest reply usually wins" }
+    ],
+    "journeyTakeaway": "81% of homeowners research online before hiring a landscaping company (BigOrange).",
+    "playsTitle": "First plays for landscaping",
+    "playItems": [
+      { "title": "Claim the GBP", "body": "Complete categories, fresh photos, correct seasonal hours." },
+      { "title": "A site that converts", "body": "Proof above the fold and one obvious next step." },
+      { "title": "Same-night review ask", "body": "Text the homeowner while the yard still looks amazing." },
+      { "title": "A photo pipeline", "body": "Before/afters built into the job checklist, not a phone gallery." },
+      { "title": "Faster follow-up", "body": "Quotes answered before the homeowner books someone else." },
+      { "title": "Source tracking", "body": "Ad and SEO spend tied to jobs actually closed." }
+    ],
+    "proofStats": [
+      { "v": "81%", "l": "of homeowners research online before hiring (BigOrange)", "hot": true },
+      { "v": "3x", "l": "more leads with a strong online presence (BigOrange)" },
+      { "v": "97%", "l": "of consumers read reviews before choosing (BrightLocal, 2026)" }
+    ],
+    "proofTakeaway": "BigOrange's own claimed figures, cited with source and date, not independently re-verified this pass.",
+    "plan1": "Audit the Google Business Profile, site and review flow; confirm the season you're in.",
+    "plan2": "Fix GBP categories, hours and photos; rebuild the site to answer, not just look nice.",
+    "plan3": "Launch a same-night review ask and a photo pipeline built into the job checklist.",
+    "plan4": "Review estimate-to-close numbers by source and decide what scales into next season.",
+    "investmentTitle": "A bounded first engagement, then a scoped plan",
+    "investmentIntro": "No public pricing page exists on bigorange.marketing (checked 2026-09-02). Pricing is shared in the proposal, not guessed at here.",
+    "investmentBullets": [
+      "First engagement is scoped and bounded, not an open-ended retainer.",
+      "Pricing is shared in the proposal once we know your season and current setup.",
+      "You approve every job photo and homeowner story before it goes public.",
+      "We propose the next scope only after the first one earns it."
+    ],
+    "closeTitle": "Let's fill next season's pipeline",
+    "closeBody": "One working session to map the plan around your actual season, timeline and crew capacity."
+  },
+  "slides": {
+    "proof": { "notes": "Sources: BigOrange landscaping hub page, bigorange.marketing/landscaping-marketing-services/, fetched 2026-09-02 (81% research, 3x leads claims). BrightLocal Local Consumer Review Survey 2026, brightlocal.com, fetched 2026-09-02 (97% read reviews)." }
+  }
+}

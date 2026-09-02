@@ -1,0 +1,48 @@
+{
+  "recipe": "leadership-review",
+  "date": "September 3, 2026",
+  "presenter": "Dillon Mohr",
+  "sampleData": false,
+  "vars": {
+    "reviewTitle": "BigOrange Thursday WordPress growth review",
+    "coverTitle": "WordPress growth, made operational.",
+    "coverSub": "A 370 URL technical plan, a 24 asset authority system, five new builder blogs, and the release controls that turn content into qualified demand.",
+    "agreementTitle": "What the paid pilot actually asked for",
+    "agreementItems": [
+      { "kicker": "Milestone 1", "big": "15 hours", "body": "Discovery, audit, keyword and content strategy, architecture, priorities and implementation planning." },
+      { "kicker": "Milestone 2", "big": "20 hours", "body": "One pillar page, two supporting articles, technical SEO and WordPress implementation support." },
+      { "kicker": "Commercial frame", "big": "$1,050 total", "body": "35 hours at $30 per hour. Phase 2 social, downloadable and webinar production remained a future scope, not part of the paid pilot." } ],
+    "stateTitle": "One system: crawlability, answers, proof and conversion",
+    "stateStats": [ { "v": "370", "l": "published URLs", "hot": true }, { "v": "299", "l": "posts" }, { "v": "71", "l": "pages" }, { "v": "349", "l": "URLs in sitemap" } ],
+    "stateCard": { "kicker": "Private review boundary", "title": "Nothing new is public yet", "body": "The new blogs and collateral are staged for private review. Existing public content stays untouched until a named owner approves facts, images, metadata, links, schema and release timing." },
+    "stateTakeaway": "Current public builder hub remains unchanged.",
+    "evidenceTitle": "Where site health is leaking authority",
+    "evidenceStats": [ { "v": "8", "l": "P0 priorities", "hot": true }, { "v": "38", "l": "P1 priorities" }, { "v": "21", "l": "pages missing from sitemap" }, { "v": "15", "l": "published nofollow pages" } ],
+    "evidenceCard": { "kicker": "Highest-impact fixes", "title": "Correct signals before scaling content", "body": "Fix the homepage “Stategic” typo across meta, Open Graph and schema. Reduce the AI services page from four H1s to one. Review nofollow page by page. Repair sitemap eligibility. Re-test the builder hub mobile critical path after media and script work." },
+    "evidenceTakeaway": "These affect interpretation, discovery, rendering or distribution.",
+    "priorityTitle": "The builder hub has a performance problem, not a cosmetic one",
+    "priorityNumbers": [ { "v": "32", "l": "mobile performance sample" }, { "v": "~36s", "l": "sample largest contentful paint" } ],
+    "priorityBody": "Re-measure after image sizing, format, preload, font, third-party script and critical CSS work. A single sample is a diagnostic baseline, not a permanent score.",
+    "contractTitle": "The page contract: ten layers, one accountable owner",
+    "contractItems": [
+      { "title": "Intent", "body": "query family + job" }, { "title": "Structure", "body": "one H1 + direct answer" }, { "title": "Proof", "body": "author + approved evidence" }, { "title": "Metadata", "body": "title + canonical + robots" }, { "title": "AEO", "body": "definitions + concise answers" },
+      { "title": "GEO", "body": "entities + sources + context" }, { "title": "Schema", "body": "only what content supports" }, { "title": "Media", "body": "size + alt + permissions" }, { "title": "Links", "body": "parent + siblings + action" }, { "title": "Measurement", "body": "search to sales truth", "hot": true } ],
+    "workstreamsTitle": "Five separate blogs, each owning one verified gap",
+    "workstreamItems": [
+      { "title": "11 ideas that build trust", "body": "marketing ideas for homebuilders" },
+      { "title": "Where to spend + measure", "body": "advertising for builders" },
+      { "title": "7 follow-ups worth automating", "body": "home builder marketing automation" },
+      { "title": "Choose a system, not tactics", "body": "home builder marketing solutions" },
+      { "title": "When to hire + how to judge", "body": "custom home builder marketing agency" },
+      { "title": "Technical repair sprint", "body": "typo, H1s, nofollow, sitemap, hub speed", "hot": true } ],
+    "rolloutTitle": "Repair first. Release in waves. Learn before scaling.",
+    "rolloutItems": [
+      { "label": "Days 1 to 14", "body": "Fix P0/P1 + approve facts and imagery" },
+      { "label": "Days 15 to 30", "body": "Release first two + verify events and indexing" },
+      { "label": "Days 31 to 60", "body": "Release remaining three + strengthen proof" },
+      { "label": "Days 61 to 90", "body": "Review query ownership + qualified demand" } ],
+    "rolloutTakeaway": "12-month scale: expand only where Search Console, client questions and sales feedback justify the next asset.",
+    "decisionsTitle": "Seven decisions that unlock the work",
+    "decisions": ["Approve the five topics and keyword ownership", "Name the factual reviewer", "Approve or replace image briefs", "Assign the technical repair sprint", "Choose the first two releases", "Confirm web-to-CRM measurement", "Decide whether to scope Phase 2"]
+  }
+}

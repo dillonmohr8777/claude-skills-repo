@@ -1,0 +1,97 @@
+{
+  "vertical": "manufacturing",
+  "researched": "2026-09-02",
+  "note": "All volumes are unverified_volume, no search volume numbers were invented or pulled from a keyword tool. Pull real volumes with keywords_search_volume before using these in a live plan.",
+  "local_modifier_pattern": "{seed} + in {city/region} | {seed} manufacturer near me | {city/region} {seed} supplier | {seed} + {material or tolerance spec}",
+  "clusters": [
+    {
+      "cluster": "core commercial",
+      "intent": "commercial",
+      "owner_page_type": "capability / service page",
+      "queries": [
+        "custom [process, e.g. CNC machining] manufacturer",
+        "contract manufacturer for [product type]",
+        "[material] fabrication company",
+        "precision machining services",
+        "custom metal fabrication supplier"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "local commercial",
+      "intent": "commercial",
+      "owner_page_type": "local capability page (city/region)",
+      "queries": [
+        "manufacturer near me",
+        "machine shop in [city]",
+        "sheet metal fabrication [city]",
+        "industrial supplier [region]",
+        "[process] shop near [city]"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "planning questions",
+      "intent": "informational, top-of-funnel",
+      "owner_page_type": "blog / guide",
+      "queries": [
+        "how to choose a contract manufacturer",
+        "what to look for in a machine shop",
+        "how to source a custom part",
+        "how does RFQ process work in manufacturing",
+        "in-house vs outsourced manufacturing"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "comparison / evaluation",
+      "intent": "commercial, mid-funnel",
+      "owner_page_type": "comparison / guide page",
+      "queries": [
+        "[Process A] vs [Process B] manufacturing",
+        "domestic vs overseas manufacturing sourcing",
+        "how to evaluate a new supplier manufacturing",
+        "questions to ask a contract manufacturer",
+        "[Competitor shop] alternatives"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "spec / capability-specific",
+      "intent": "commercial, high-intent",
+      "owner_page_type": "capability page with spec detail",
+      "queries": [
+        "[material] machining tolerance [tolerance spec]",
+        "ISO 9001 certified manufacturer [process]",
+        "AS9100 certified machine shop",
+        "low volume production run manufacturer",
+        "prototype to production manufacturer"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "industry-vertical specific",
+      "intent": "commercial",
+      "owner_page_type": "industry-specific capability page",
+      "queries": [
+        "aerospace parts manufacturer",
+        "medical device contract manufacturer",
+        "automotive supplier certified manufacturer",
+        "defense manufacturing supplier"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "AI search / directory visibility (emerging)",
+      "intent": "informational + brand-defense",
+      "owner_page_type": "blog / thought leadership",
+      "queries": [
+        "does ChatGPT recommend manufacturers",
+        "how buyers find suppliers with AI search",
+        "AI search optimization for manufacturers",
+        "getting found on Thomasnet and Google together"
+      ],
+      "volume": "unverified_volume"
+    }
+  ]
+}

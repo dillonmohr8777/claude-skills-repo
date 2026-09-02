@@ -1,0 +1,94 @@
+{
+  "researched": "2026-09-02",
+  "note": "All volume figures below are unverified_volume placeholders, no keyword tool was queried for this file. Pull real search volume per target market from a keyword tool (Abency keywords_search_volume, or equivalent) before using any number from this file in front of a client.",
+  "clusters": [
+    {
+      "cluster": "commercial",
+      "example_terms": [
+        "commercial landscaping services",
+        "commercial grounds maintenance company",
+        "HOA landscaping company",
+        "property management landscaping vendor",
+        "commercial snow removal contract"
+      ],
+      "intent": "buyer-committee research; often RFP-adjacent, later-funnel than residential",
+      "owner_page_type": "dedicated commercial/B2B service page, separate from residential service pages",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "service-specific: hardscape",
+      "example_terms": [
+        "paver patio installation",
+        "retaining wall contractor",
+        "outdoor kitchen builder",
+        "fire pit installation cost",
+        "hardscape design near me"
+      ],
+      "intent": "high-consideration, high-ticket; often research-heavy before first contact",
+      "owner_page_type": "individual hardscape service page with photo gallery and project cost ranges",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "service-specific: lighting",
+      "example_terms": [
+        "landscape lighting installation",
+        "outdoor lighting company",
+        "low voltage landscape lighting cost",
+        "holiday lighting installation service"
+      ],
+      "intent": "mix of aesthetic upgrade research and seasonal (holiday) transactional intent",
+      "owner_page_type": "individual lighting service page; separate seasonal landing page for holiday lighting",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "service-specific: irrigation",
+      "example_terms": [
+        "sprinkler system installation",
+        "irrigation repair near me",
+        "sprinkler winterization service",
+        "drip irrigation installation cost"
+      ],
+      "intent": "mix of new-install research and urgent repair (broken sprinkler head, no water pressure)",
+      "owner_page_type": "individual irrigation service page + a dedicated repair/emergency page for transactional urgency terms",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "service-specific: maintenance",
+      "example_terms": [
+        "lawn mowing service near me",
+        "lawn care company",
+        "weekly lawn maintenance cost",
+        "fertilization and weed control service",
+        "spring cleanup landscaping"
+      ],
+      "intent": "recurring-purchase intent; high local-modifier density; strong seasonal spikes",
+      "owner_page_type": "maintenance service page with clear recurring-plan pricing tiers or a get-a-quote flow",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "planning questions",
+      "example_terms": [
+        "how much does landscaping cost",
+        "best time of year to landscape",
+        "how often should you aerate your lawn",
+        "what to ask a landscaper before hiring",
+        "landscaping ideas for small backyard"
+      ],
+      "intent": "early-funnel, informational; homeowner still deciding whether/when to act, not yet comparing vendors",
+      "owner_page_type": "blog/guide content that funnels to a service page CTA, not a service page itself",
+      "unverified_volume": true
+    },
+    {
+      "cluster": "local modifier pattern",
+      "example_terms": [
+        "landscaper in [city]",
+        "landscaping company near [neighborhood]",
+        "[service] + [city]",
+        "best landscaper [city] reviews"
+      ],
+      "intent": "late-funnel, comparison and vendor-selection intent; reviews and proximity matter most here",
+      "owner_page_type": "location/service-area page per named city or neighborhood the business actually serves, plus the Google Business Profile itself as the primary ranking surface",
+      "unverified_volume": true
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "monthly-performance",
+  "title": "{{client.name}} performance {{periodLabel}}",
+  "footer": "BigOrange.Marketing · {{client.name}} · {{periodLabel}}",
+  "defaultDraft": true,
+  "audience": "An existing BigOrange client at the monthly review. Reuses the client-report data contract: kpis, charts, campaigns, wins, actions, summary.",
+  "requires": ["client.name", "periodLabel", "date", "presenter", "metrics.kpis", "metrics.summary"],
+  "dataContract": "metrics = { kpis:[{label,value,delta,deltaGoodWhenDown}], charts:[{title,labels[],values[],prefix}], campaigns:[{name,status,statusLabel,spend,results,note}], wins:[], actions:[], summary:'', sources:[] }. sampleData must be true until every figure is verified from a granted source.",
+  "slides": [
+    { "id": "cover", "block": "coverClient", "eyebrow": "Monthly review",
+      "title": "{{periodLabel}} in plain terms",
+      "data": { "sub": "{{metrics.summary}}", "date": "{{date}}" },
+      "notes": "Lead with the summary sentence. Then the one number that changed the most." },
+
+    { "id": "kpis", "block": "twoUp", "eyebrow": "Headline numbers", "title": "What moved this month",
+      "data": { "stats": "{{vars.kpiStats}}", "cardDark": true,
+        "card": { "kicker": "Reporting dates and sources", "title": "{{vars.sourcesTitle}}", "body": "{{vars.sourcesBody}}" },
+        "takeaway": "{{vars.kpiTakeaway}}" },
+      "notes": "Every stat here maps to metrics.kpis. If a source is not granted, the tile stays flagged and the draft banner stays on." },
+
+    { "id": "trend", "block": "chart", "eyebrow": "Trend", "title": "{{vars.chartTitle}}",
+      "data": { "type": "line", "labels": "{{vars.chartLabels}}", "series": "{{vars.chartSeries}}",
+        "card": { "kicker": "Read it with us", "title": "{{vars.chartReadTitle}}", "body": "{{vars.chartReadBody}}" } },
+      "notes": "Native chart. Explain the shape, not the points." },
+
+    { "id": "campaigns", "block": "table", "eyebrow": "Work in flight", "title": "Campaigns and pages, with status",
+      "data": { "header": ["Item", "Status", "Spend", "Results", "Note"], "rows": "{{vars.campaignRows}}", "colW": [3.0, 1.4, 1.3, 2.6, 3.83],
+        "takeaway": "{{vars.campaignsTakeaway}}" },
+      "notes": "Status vocabulary: live, watch, blocked, paused. Same as the HTML report." },
+
+    { "id": "chain", "block": "flow", "eyebrow": "From clicks to accepted leads", "title": "Where the chain held and where it broke",
+      "data": { "items": [
+        { "title": "Discovery", "body": "{{vars.chainDiscovery}}" },
+        { "title": "Engagement", "body": "{{vars.chainEngagement}}" },
+        { "title": "Action", "body": "{{vars.chainAction}}" },
+        { "title": "Qualification", "body": "{{vars.chainQualification}}" },
+        { "title": "Outcome", "body": "{{vars.chainOutcome}}" } ],
+        "hotIndex": 4, "bar": "{{vars.chainBar}}" },
+      "notes": "If qualification or outcome is empty, say so. It means sales feedback is missing, not that marketing failed." },
+
+    { "id": "wins", "block": "textBullets", "eyebrow": "Wins", "title": "Three things that worked",
+      "data": { "bullets": "{{metrics.wins}}",
+        "card": { "kicker": "Why it matters", "title": "{{vars.winsCardTitle}}", "body": "{{vars.winsCardBody}}" } },
+      "notes": "Credit the client's team where they supplied facts, permissions or fast approvals." },
+
+    { "id": "actions", "block": "decisions", "eyebrow": "Next month", "title": "What we do next, and what we need from you",
+      "data": { "items": "{{metrics.actions}}", "takeaway": "{{vars.actionsTakeaway}}" },
+      "notes": "End with owners and dates, not a wish list." },
+
+    { "id": "next", "block": "closeDark", "mode": "dark", "eyebrow": "Thank you", "title": "Next review",
+      "data": { "title": "{{vars.closeTitle}}", "body": "{{vars.closeBody}}", "cta": "{{vars.closeCta}}", "contact": "{{presenter}}\nBigOrange.Marketing\nCincinnati, Ohio" },
+      "notes": "Confirm the next review date." }
+  ]
+}

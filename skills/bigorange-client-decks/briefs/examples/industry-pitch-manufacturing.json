@@ -1,0 +1,72 @@
+{
+  "recipe": "industry-pitch",
+  "date": "September 2026",
+  "presenter": "Margee Moore",
+  "sampleData": true,
+  "industry": "manufacturing",
+  "vars": {
+    "industryLabel": "Manufacturing",
+    "industryHubUrl": "https://bigorange.marketing/manufacturing-services-marketing-agency/",
+    "coverTitle": "Marketing that helps buyers find what you build",
+    "coverSub": "Thorough, thoughtful inbound marketing for shops that make things, not brochures.",
+    "whoTitle": "Owners, GMs and the marketing department of one",
+    "whoIntro": "You're proud of the shop floor. The frustration is that pride doesn't show up when an engineer searches for what you build.",
+    "whoBullets": [
+      "Owners and GMs at small-to-midsize, often multi-generation manufacturers.",
+      "VPs of Sales at bigger shops, usually first to say the website looks like 2012.",
+      "A marketing manager, if one exists, juggling trade shows and a Thomasnet listing.",
+      "Skeptical of any marketing spend they can't trace to a purchase order.",
+      "Assuming deals only come from trade shows or an existing relationship."
+    ],
+    "brokenTitle": "Here's where manufacturing marketing usually breaks",
+    "brokenItems": [
+      { "title": "The website", "body": "Built like a brochure, not built to answer can this shop do the job." },
+      { "title": "Proof", "body": "Few or no case studies with a real number attached to a real deal." },
+      { "title": "Positioning", "body": "Quality, reliability, on-time delivery, said by every shop in the directory." },
+      { "title": "Lead capture", "body": "An RFQ form with no context, no phone number, no quick spec question." },
+      { "title": "Sales handoff", "body": "RFQs land in a shared inbox, nobody tracks what turned into a shipped part." },
+      { "title": "Attribution", "body": "No link between sponsoring a trade show and closing the account." }
+    ],
+    "journeyTitle": "How your next customer is already searching",
+    "journeySteps": [
+      { "title": "Trigger", "body": "A part, spec or deadline to fill" },
+      { "title": "Search", "body": "A material, tolerance or cert term" },
+      { "title": "Screen", "body": "Capability pages, not a PDF" },
+      { "title": "Shortlist", "body": "Proof: certs, named results" },
+      { "title": "RFQ", "body": "A quick question, then a quote" }
+    ],
+    "journeyTakeaway": "Thomasnet reports 1.4M monthly buyers actively sourcing suppliers online (business.thomasnet.com, 2026).",
+    "playsTitle": "First plays for manufacturers",
+    "playItems": [
+      { "title": "Capability pages", "body": "Specs, tolerances and materials, findable, not buried in a PDF." },
+      { "title": "Named case studies", "body": "A specific dollar figure tied to a specific deal, like BigOrange's own." },
+      { "title": "Certification pages", "body": "Checkable facts function as proof the way client logos do elsewhere." },
+      { "title": "A real RFQ flow", "body": "A path for a quick spec question, not just a full quote request." },
+      { "title": "CRM tagging", "body": "Every inbound RFQ tagged by source from the first click." },
+      { "title": "Attribution", "body": "A chain from spec search to closed account the owner can read." }
+    ],
+    "proofStats": [
+      { "v": "$150K", "l": "deal sourced organically through search (BigOrange)", "hot": true },
+      { "v": "1 day", "l": "to a sales-qualified lead after launch (BigOrange)" },
+      { "v": "50+", "l": "five-star Google reviews (BigOrange)" }
+    ],
+    "proofTakeaway": "Named results from BigOrange's own manufacturing work, cited with the date fetched.",
+    "plan1": "Audit capabilities, the RFQ flow, and the search terms your buyers actually use.",
+    "plan2": "Turn PDFs into findable capability pages naming certs, tolerances and materials.",
+    "plan3": "Publish the first case study and route every RFQ into a CRM tagged by source.",
+    "plan4": "Review RFQ volume and quality together and decide what earns the next scope.",
+    "investmentTitle": "A bounded first engagement, then a scoped plan",
+    "investmentIntro": "No public pricing page exists on bigorange.marketing (checked 2026-09-02). Pricing is shared in the proposal, not guessed at here.",
+    "investmentBullets": [
+      "First engagement is scoped and bounded, not an open-ended retainer.",
+      "Pricing is shared in the proposal once we've confirmed capabilities and access.",
+      "You approve every certification and capability claim before it publishes.",
+      "We propose the next scope only after the first one earns it."
+    ],
+    "closeTitle": "Let's find your next $150K deal",
+    "closeBody": "One working session to map the capability pages, the RFQ flow and the first case study."
+  },
+  "slides": {
+    "proof": { "notes": "Sources: BigOrange manufacturing hub page, bigorange.marketing/manufacturing-services-marketing-agency/, fetched 2026-09-02 ($150K organic deal, sales-qualified lead day after launch, 50+ reviews)." }
+  }
+}

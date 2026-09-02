@@ -1,0 +1,366 @@
+{
+  "source_file": "assets/templates/BigOrange-Primary-Deck-Reference.pptx",
+  "authority_mode": "painted-slide-system",
+  "theme": {
+    "theme_part": "ppt/theme/theme1.xml",
+    "colour_scheme_name": "Office",
+    "font_scheme_name": "Office",
+    "colours": {
+      "dk1": {
+        "label": "Text/Background - Dark 1",
+        "value": "#000000"
+      },
+      "lt1": {
+        "label": "Text/Background - Light 1",
+        "value": "#FFFFFF"
+      },
+      "dk2": {
+        "label": "Text/Background - Dark 2",
+        "value": "#44546A"
+      },
+      "lt2": {
+        "label": "Text/Background - Light 2",
+        "value": "#E7E6E6"
+      },
+      "accent1": {
+        "label": "Accent 1",
+        "value": "#4472C4"
+      },
+      "accent2": {
+        "label": "Accent 2",
+        "value": "#ED7D31"
+      },
+      "accent3": {
+        "label": "Accent 3",
+        "value": "#A5A5A5"
+      },
+      "accent4": {
+        "label": "Accent 4",
+        "value": "#FFC000"
+      },
+      "accent5": {
+        "label": "Accent 5",
+        "value": "#5B9BD5"
+      },
+      "accent6": {
+        "label": "Accent 6",
+        "value": "#70AD47"
+      },
+      "hlink": {
+        "label": "Hyperlink",
+        "value": "#0563C1"
+      },
+      "folHlink": {
+        "label": "Followed hyperlink",
+        "value": "#954F72"
+      }
+    },
+    "fonts": {
+      "headings": {
+        "typeface": "Calibri Light",
+        "panose": "020F0302020204030204"
+      },
+      "body": {
+        "typeface": "Calibri",
+        "panose": "020F0502020204030204"
+      }
+    }
+  },
+  "geometry": {
+    "cx_emu": 12192000,
+    "cy_emu": 6858000,
+    "width_in": 13.333,
+    "height_in": 7.5,
+    "width_px_at_96dpi": 1280,
+    "height_px_at_96dpi": 720,
+    "aspect": "16:9"
+  },
+  "layouts": [
+    {
+      "part": "ppt/slideLayouts/slideLayout1.xml",
+      "name": "DEFAULT",
+      "type": null,
+      "placeholders": []
+    }
+  ],
+  "used_colours": [
+    [
+      "#FF7C00",
+      155
+    ],
+    [
+      "#121212",
+      107
+    ],
+    [
+      "#F6F1EA",
+      84
+    ],
+    [
+      "#FFFFFF",
+      63
+    ],
+    [
+      "#2B2B2B",
+      50
+    ],
+    [
+      "#6E6A66",
+      17
+    ],
+    [
+      "#EDE7E0",
+      13
+    ],
+    [
+      "#CFC8C0",
+      4
+    ],
+    [
+      "#FFF3E8",
+      2
+    ]
+  ],
+  "used_fonts": [
+    [
+      "Montserrat",
+      576
+    ],
+    [
+      "Arial",
+      213
+    ]
+  ],
+  "pictures": [
+    {
+      "slide": "ppt/slides/slide1.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-white.png",
+      "target": "../media/image-1-1.png",
+      "x_emu": 548640,
+      "y_emu": 502920,
+      "width_emu": 1623060,
+      "height_emu": 548640
+    },
+    {
+      "slide": "ppt/slides/slide10.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-10-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide11.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-11-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide11.xml",
+      "name": "Image 1",
+      "description": "preencoded.png",
+      "target": "../media/image-11-2.png",
+      "x_emu": 960120,
+      "y_emu": 2898648,
+      "width_emu": 329184,
+      "height_emu": 329184
+    },
+    {
+      "slide": "ppt/slides/slide11.xml",
+      "name": "Image 2",
+      "description": "preencoded.png",
+      "target": "../media/image-11-3.png",
+      "x_emu": 6583680,
+      "y_emu": 2898648,
+      "width_emu": 329184,
+      "height_emu": 329184
+    },
+    {
+      "slide": "ppt/slides/slide11.xml",
+      "name": "Image 3",
+      "description": "preencoded.png",
+      "target": "../media/image-11-4.png",
+      "x_emu": 960120,
+      "y_emu": 4709160,
+      "width_emu": 329184,
+      "height_emu": 329184
+    },
+    {
+      "slide": "ppt/slides/slide11.xml",
+      "name": "Image 4",
+      "description": "preencoded.png",
+      "target": "../media/image-11-5.png",
+      "x_emu": 6583680,
+      "y_emu": 4709160,
+      "width_emu": 329184,
+      "height_emu": 329184
+    },
+    {
+      "slide": "ppt/slides/slide12.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-12-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide12.xml",
+      "name": "Image 1",
+      "description": "preencoded.png",
+      "target": "../media/image-12-2.png",
+      "x_emu": 548640,
+      "y_emu": 5349240,
+      "width_emu": 457200,
+      "height_emu": 457200
+    },
+    {
+      "slide": "ppt/slides/slide13.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-13-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide14.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-14-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide15.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-white.png",
+      "target": "../media/image-15-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide2.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-2-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide3.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-3-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide4.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-4-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide4.xml",
+      "name": "Image 1",
+      "description": "preencoded.png",
+      "target": "../media/image-4-2.png",
+      "x_emu": 548640,
+      "y_emu": 4663440,
+      "width_emu": 457200,
+      "height_emu": 457200
+    },
+    {
+      "slide": "ppt/slides/slide5.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-5-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide5.xml",
+      "name": "Image 1",
+      "description": "preencoded.png",
+      "target": "../media/image-5-2.png",
+      "x_emu": 548640,
+      "y_emu": 4663440,
+      "width_emu": 457200,
+      "height_emu": 457200
+    },
+    {
+      "slide": "ppt/slides/slide6.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-white.png",
+      "target": "../media/image-6-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide6.xml",
+      "name": "Image 1",
+      "description": "preencoded.png",
+      "target": "../media/image-6-2.png",
+      "x_emu": 7818120,
+      "y_emu": 2560320,
+      "width_emu": 502920,
+      "height_emu": 502920
+    },
+    {
+      "slide": "ppt/slides/slide7.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-7-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide8.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-8-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    },
+    {
+      "slide": "ppt/slides/slide9.xml",
+      "name": "Image 0",
+      "description": "assets/bigorange-logo-orange.png",
+      "target": "../media/image-9-1.png",
+      "x_emu": 548640,
+      "y_emu": 384048,
+      "width_emu": 1133856,
+      "height_emu": 384048
+    }
+  ]
+}

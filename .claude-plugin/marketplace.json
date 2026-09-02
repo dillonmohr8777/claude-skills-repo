@@ -1,15 +1,71 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "alignhcm-tools",
+  "name": "dillon-brand-tools",
   "owner": {
     "name": "Dillon Mohr"
   },
-  "description": "Approved Claude Code tools for producing exact Align HCM and SmartCare branded work.",
+  "description": "Approved Claude Code tools for producing exact Align HCM, SmartCare and BigOrange.Marketing branded work.",
   "plugins": [
     {
       "name": "alignhcm-brand-system",
       "source": "./skills/alignhcm-brand-system",
       "description": "Exact Align HCM and SmartCare brand production system with a bundled PowerPoint reference, approved logo artwork, deterministic client co-branding, and multi-surface rules.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-brand-system",
+      "source": "./skills/bigorange-brand-system",
+      "description": "Exact BigOrange.Marketing brand production system: bundled logo artwork, per-surface tokens, pptxgenjs deck kit, PDF document kit, linter and deck validator.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-client-decks",
+      "source": "./skills/bigorange-client-decks",
+      "description": "BigOrange deck engine: industry pitch, client kickoff, monthly performance and leadership review recipes built from JSON briefs.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-client-radar",
+      "source": "./skills/bigorange-client-radar",
+      "description": "Read-only discovery of BigOrange clients from the public site and WordPress REST, with new-client events.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-vertical-home-builders",
+      "source": "./skills/bigorange-vertical-home-builders",
+      "description": "BigOrange custom home builder playbook: sourced industry brief, deck narrative, keyword seed, content angles, audit checklist.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-vertical-msp",
+      "source": "./skills/bigorange-vertical-msp",
+      "description": "BigOrange IT and MSP playbook.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-vertical-manufacturing",
+      "source": "./skills/bigorange-vertical-manufacturing",
+      "description": "BigOrange manufacturing playbook.",
+      "author": {
+        "name": "Dillon Mohr"
+      }
+    },
+    {
+      "name": "bigorange-vertical-landscaping",
+      "source": "./skills/bigorange-vertical-landscaping",
+      "description": "BigOrange landscaping playbook.",
       "author": {
         "name": "Dillon Mohr"
       }

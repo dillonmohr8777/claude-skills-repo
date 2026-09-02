@@ -1,0 +1,99 @@
+{
+  "vertical": "msp-it-services",
+  "researched": "2026-09-02",
+  "note": "All volumes are unverified_volume, no search volume numbers were invented or pulled from a keyword tool. Pull real volumes with keywords_search_volume before using these in a live plan.",
+  "local_modifier_pattern": "{seed} + in {city} | {seed} near me | {city} {seed} | {seed} for {niche industry, e.g. healthcare/law firms/dental}",
+  "clusters": [
+    {
+      "cluster": "core commercial",
+      "intent": "commercial",
+      "owner_page_type": "service page",
+      "queries": [
+        "managed IT services provider",
+        "MSP for small business",
+        "outsourced IT support company",
+        "24/7 IT support company",
+        "IT support for [industry]"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "local commercial",
+      "intent": "commercial",
+      "owner_page_type": "local service page (city/region)",
+      "queries": [
+        "managed IT services near me",
+        "IT support company in [city]",
+        "best MSP in [city]",
+        "computer support company [city]",
+        "network support [city]"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "planning questions",
+      "intent": "informational, top-of-funnel",
+      "owner_page_type": "blog / guide",
+      "queries": [
+        "how much does managed IT services cost",
+        "what does an MSP do",
+        "signs your IT company is failing you",
+        "how to switch IT providers without downtime",
+        "how often should a business update its IT security",
+        "what is proactive IT monitoring"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "comparison / evaluation",
+      "intent": "commercial, mid-funnel",
+      "owner_page_type": "comparison / guide page",
+      "queries": [
+        "managed IT services vs in-house IT",
+        "break-fix vs managed services",
+        "how to choose an MSP",
+        "MSP vs MSSP",
+        "[Competitor MSP] alternatives",
+        "questions to ask an IT services provider"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "niche/vertical-specific",
+      "intent": "commercial",
+      "owner_page_type": "industry-specific service page",
+      "queries": [
+        "HIPAA compliant IT services",
+        "IT support for law firms",
+        "IT support for dental offices",
+        "managed IT for financial services",
+        "compliance-focused MSP"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "security-adjacent (rising)",
+      "intent": "commercial + informational mix",
+      "owner_page_type": "service page + blog",
+      "queries": [
+        "cybersecurity for small business",
+        "ransomware protection for small business",
+        "managed detection and response provider",
+        "how to prevent a data breach small business"
+      ],
+      "volume": "unverified_volume"
+    },
+    {
+      "cluster": "AI search / emerging",
+      "intent": "informational + brand-defense",
+      "owner_page_type": "blog / thought leadership",
+      "queries": [
+        "does ChatGPT recommend IT companies",
+        "AI search optimization for MSPs",
+        "how to get found by AI assistants",
+        "answer engine optimization for IT services"
+      ],
+      "volume": "unverified_volume"
+    }
+  ]
+}

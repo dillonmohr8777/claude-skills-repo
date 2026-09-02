@@ -1,0 +1,81 @@
+{
+  "name": "industry-pitch",
+  "title": "BigOrange {{vars.industryLabel}} pitch",
+  "footer": "BigOrange.Marketing · {{vars.industryLabel}} · {{date}}",
+  "defaultDraft": true,
+  "audience": "A prospect in one of BigOrange's four industries (MSP, manufacturing, landscaping, home builders).",
+  "requires": ["vars.industryLabel", "vars.industryHubUrl", "date", "presenter"],
+  "slides": [
+    { "id": "cover", "block": "coverDark", "mode": "dark",
+      "eyebrow": "{{vars.industryLabel}} marketing",
+      "title": "{{vars.coverTitle}}",
+      "data": { "sub": "{{vars.coverSub}}", "date": "{{date}}", "badge": "Prepared by {{presenter}}" },
+      "notes": "Open with their world, not ours. One sentence on why we asked for the meeting, then hand the room the agenda.\n\n[Sources]\n{{vars.industryHubUrl}}\n[/Sources]" },
+
+    { "id": "who", "block": "textBullets", "eyebrow": "Who we help", "title": "{{vars.whoTitle}}",
+      "data": { "intro": "{{vars.whoIntro}}", "bullets": "{{vars.whoBullets}}",
+        "card": { "kicker": "Why BigOrange", "title": "Guides, not heroes", "body": "Certified StoryBrand Guide. HubSpot Partner. Google Partner. Women-owned, Cincinnati-based, and we show our work." } },
+      "notes": "Name the buyer types we see most. Ask which one they are." },
+
+    { "id": "broken", "block": "grid", "eyebrow": "What usually breaks", "title": "{{vars.brokenTitle}}",
+      "data": { "cols": 3, "items": "{{vars.brokenItems}}" },
+      "notes": "Each card is a pattern from the vertical brief. Ask which two they recognize." },
+
+    { "id": "journey", "block": "flow", "eyebrow": "Their buyer's journey", "title": "{{vars.journeyTitle}}",
+      "data": { "light": true, "items": "{{vars.journeySteps}}", "takeaway": "{{vars.journeyTakeaway}}" },
+      "notes": "Walk one real buyer through the steps. Where does a prospect stall today?" },
+
+    { "id": "method", "block": "features", "eyebrow": "The BigOrange method", "title": "Message, findability, proof, follow-up",
+      "data": { "items": [
+        { "icon": "FiMessageSquare", "kicker": "StoryBrand messaging", "title": "Say it so a busy buyer gets it", "body": "One clear message, the customer as the hero, and a next step that feels like help." },
+        { "icon": "FiSearch", "kicker": "SEO, AEO and GEO", "title": "Get found by people and by AI answers", "body": "Technical health first, then pages that answer real questions and can be cited." },
+        { "icon": "FiAward", "kicker": "Proof", "title": "Show the work, with permission", "body": "Approved projects, named reviews, and numbers with a source and a date." },
+        { "icon": "FiRepeat", "kicker": "HubSpot and follow-up", "title": "No lead left sitting", "body": "Routing, useful nurture, and sales feedback so marketing and sales agree on what a good lead is." } ] },
+      "notes": "This is constant across industries. Keep it to 60 seconds; the vertical slides carry the specifics." },
+
+    { "id": "plays", "block": "grid", "eyebrow": "First plays for {{vars.industryLabel}}", "title": "{{vars.playsTitle}}",
+      "data": { "cols": 3, "items": "{{vars.playItems}}" },
+      "notes": "Three to six concrete plays from the vertical brief. Say which one we would start with and why." },
+
+    { "id": "proof", "block": "twoUp", "eyebrow": "Proof", "title": "What we can already show",
+      "data": { "stats": "{{vars.proofStats}}", "cardDark": true,
+        "card": { "kicker": "How we judge proof", "title": "A number needs a source and a date", "body": "We only present results we can attribute. Anything estimated stays labeled as an estimate until it is verified. That protects you as much as it protects us." },
+        "takeaway": "{{vars.proofTakeaway}}" },
+      "notes": "Only verified proof goes on this slide. If a stat is not verified for this industry, leave it out; do not borrow another client's number." },
+
+    { "id": "measure", "block": "flow", "eyebrow": "Measurement", "title": "From search to a signed deal, in one chain",
+      "data": { "items": [
+        { "title": "Discovery", "body": "query and landing page" },
+        { "title": "Engagement", "body": "useful next behavior" },
+        { "title": "Action", "body": "verified call, form or booking" },
+        { "title": "Qualification", "body": "sales says yes or no, and why" },
+        { "title": "Outcome", "body": "opportunity and revenue" } ],
+        "hotIndex": 4, "bar": "Search Console  +  analytics  +  verified events  +  CRM source  +  sales feedback" },
+      "notes": "Rankings are a leading signal. We keep the chain intact so reporting survives a sales conversation." },
+
+    { "id": "plan", "block": "timeline", "eyebrow": "First 90 days", "title": "Fix the foundation, then release in waves",
+      "data": { "items": [
+        { "label": "Days 1 to 14", "body": "{{vars.plan1}}" },
+        { "label": "Days 15 to 30", "body": "{{vars.plan2}}" },
+        { "label": "Days 31 to 60", "body": "{{vars.plan3}}" },
+        { "label": "Days 61 to 90", "body": "{{vars.plan4}}" } ],
+        "takeaway": "Every phase ends with a review and a decision, not a bigger idea list." },
+      "notes": "Set expectations: the first two weeks are repairs and approvals, not launches." },
+
+    { "id": "team", "block": "columns", "eyebrow": "Who you would work with", "title": "A small team that answers the phone",
+      "data": { "items": [
+        { "kicker": "Strategy and messaging", "big": "StoryBrand Guide", "body": "Positioning, page plans, and the words on the page." },
+        { "kicker": "Web, SEO and AI search", "big": "Build and measure", "body": "WordPress production, technical health, schema, analytics and reporting." },
+        { "kicker": "Your part", "big": "Facts and approvals", "body": "Project permissions, review sign-off, and sales feedback so we can prove what worked.", "hot": true } ] },
+      "notes": "Be explicit about what we need from them. It is the reason most engagements stall." },
+
+    { "id": "investment", "block": "textBullets", "eyebrow": "Investment", "title": "{{vars.investmentTitle}}",
+      "data": { "intro": "{{vars.investmentIntro}}", "bullets": "{{vars.investmentBullets}}",
+        "card": { "kicker": "Scope discipline", "title": "Bounded first engagement", "body": "Confirm scope and access, audit, define the priority page or journey, build, stage privately, review, publish only what is approved, verify the live result." } },
+      "notes": "No public pricing page exists on bigorange.marketing (checked 2026-09-02). Use the proposal figure or a starting-at pointer; never invent a number." },
+
+    { "id": "next", "block": "closeDark", "mode": "dark", "eyebrow": "Next step", "title": "Let's start with a working session",
+      "data": { "title": "{{vars.closeTitle}}", "body": "{{vars.closeBody}}", "cta": "Book a time: bigorange.marketing/book-appointment", "contact": "{{presenter}}\nBigOrange.Marketing\nCincinnati, Ohio" },
+      "notes": "Ask for the working session, not the contract. Name the date." }
+  ]
+}

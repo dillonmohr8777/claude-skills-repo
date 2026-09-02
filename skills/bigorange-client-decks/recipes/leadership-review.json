@@ -1,0 +1,67 @@
+{
+  "name": "leadership-review",
+  "title": "{{vars.reviewTitle}}",
+  "footer": "BigOrange.Marketing · Leadership review · {{date}}",
+  "defaultDraft": true,
+  "audience": "BigOrange leadership (or a client's leadership) reviewing an audit, growth plan, or release decision. Generalized from the 2026-09-03 Thursday WordPress growth review.",
+  "requires": ["date", "presenter", "vars.reviewTitle", "vars.decisions"],
+  "slides": [
+    { "id": "cover", "block": "coverDark", "mode": "dark", "eyebrow": "Leadership review",
+      "title": "{{vars.coverTitle}}",
+      "data": { "sub": "{{vars.coverSub}}", "date": "{{date}}", "badge": "Prepared by {{presenter}}" },
+      "notes": "Open with the decision this session exists to make." },
+
+    { "id": "agreement", "block": "columns", "eyebrow": "Where we started", "title": "{{vars.agreementTitle}}",
+      "data": { "items": "{{vars.agreementItems}}" },
+      "notes": "Re-anchor the room in the agreed scope before discussing anything new." },
+
+    { "id": "state", "block": "twoUp", "eyebrow": "Current state", "title": "{{vars.stateTitle}}",
+      "data": { "stats": "{{vars.stateStats}}", "cardDark": true, "card": "{{vars.stateCard}}", "takeaway": "{{vars.stateTakeaway}}" },
+      "notes": "Numbers first, then the boundary: what is public and what is not." },
+
+    { "id": "evidence", "block": "twoUp", "eyebrow": "Evidence", "title": "{{vars.evidenceTitle}}",
+      "data": { "stats": "{{vars.evidenceStats}}", "cardDark": true, "card": "{{vars.evidenceCard}}", "takeaway": "{{vars.evidenceTakeaway}}" },
+      "notes": "Every figure here has a source and a date in the notes." },
+
+    { "id": "priority", "block": "bigNumbers", "mode": "dark", "eyebrow": "Top priority", "title": "{{vars.priorityTitle}}",
+      "data": { "items": "{{vars.priorityNumbers}}", "body": "{{vars.priorityBody}}" },
+      "notes": "Keep the language disciplined: sample, then remeasure." },
+
+    { "id": "contract", "block": "grid", "eyebrow": "The standard", "title": "{{vars.contractTitle}}",
+      "data": { "cols": 5, "items": "{{vars.contractItems}}" },
+      "notes": "This is the universal release contract. Wording varies by template." },
+
+    { "id": "workstreams", "block": "grid", "eyebrow": "Workstreams", "title": "{{vars.workstreamsTitle}}",
+      "data": { "cols": 3, "items": "{{vars.workstreamItems}}" },
+      "notes": "Each card is one owned piece of work with a visible output." },
+
+    { "id": "release", "block": "flow", "eyebrow": "Release control", "title": "Draft, review, release, verify",
+      "data": { "items": [
+        { "title": "Draft", "body": "staged privately" },
+        { "title": "Review", "body": "facts, links, images, permissions" },
+        { "title": "SEO QA", "body": "meta, canonical, robots, one H1" },
+        { "title": "Render QA", "body": "mobile, keyboard, forms, speed" },
+        { "title": "Release", "body": "approved timing and owner" },
+        { "title": "Verify", "body": "schema, sitemap, URL inspection" } ],
+        "hotIndex": 4, "bar": "No draft enters the sitemap. Nothing goes public without a named release owner." },
+      "notes": "Emphasize reversible drafts and explicit approval." },
+
+    { "id": "measure", "block": "flow", "eyebrow": "Measurement", "title": "Rankings only matter when they reach sales truth",
+      "data": { "items": [
+        { "title": "Discovery", "body": "query and landing page" },
+        { "title": "Engagement", "body": "useful next behavior" },
+        { "title": "Action", "body": "verified hand raise" },
+        { "title": "Qualification", "body": "sales acceptance" },
+        { "title": "Outcome", "body": "opportunity and revenue" } ],
+        "hotIndex": 4, "bar": "Search Console  +  analytics  +  verified events  +  CRM source  +  sales feedback" },
+      "notes": "Do not equate a rank or a view with revenue." },
+
+    { "id": "rollout", "block": "timeline", "eyebrow": "Rollout", "title": "{{vars.rolloutTitle}}",
+      "data": { "items": "{{vars.rolloutItems}}", "takeaway": "{{vars.rolloutTakeaway}}" },
+      "notes": "The cadence is deliberately controlled so the team can learn and protect what already works." },
+
+    { "id": "decisions", "block": "decisions", "mode": "dark", "eyebrow": "Close", "title": "{{vars.decisionsTitle}}",
+      "data": { "items": "{{vars.decisions}}", "takeaway": "The goal is a named owner, a release sequence and a measurement contract. Not a longer idea list." },
+      "notes": "Close by assigning owners and the first dates." }
+  ]
+}
