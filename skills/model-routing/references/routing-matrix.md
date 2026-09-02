@@ -36,6 +36,11 @@ the bottom and keep the *logic*, not the prices, as the durable part.
   cheap. A parallel multi-agent mode was discussed — validate it exists and measure it before relying on
   it; the episode's own takeaway was that subagent coordination is where real runs lose time.
 - **Claude family** — Fable/Opus (heavy), Sonnet (balanced), Haiku (fast).
+  - **Fable 5.1 (2026-09-01):** same $10/$50 as Fable 5, cache read $0.25/M, default effort `high`.
+    Anthropic's own guidance is start with Opus 5 and escalate only when it falls short. Run Fable
+    5.1 at `medium` effort (roughly Fable 5 quality, far fewer tokens); `low` beats Opus on
+    cost-per-task for mechanical work. Pin subagent models in settings, not in CLAUDE.md prose.
+    Source: dillon-os `12_Brain/06_Research/2026-09-01 - Fable 5.1 launch signal sweep`.
 - The commander is **model-agnostic**: Sol/Codex holds L0 on the 64GB machine; Claude holds it in cloud/
   local sessions. Route the *role*, not the vendor.
 
