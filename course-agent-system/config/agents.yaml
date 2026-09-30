@@ -1,0 +1,52 @@
+# Per-agent model tier + sampling parameters.
+# Tiers: deep (Opus 4.7), balanced (Sonnet 4.6), fast (Haiku 4.5).
+# Override here without touching code.
+
+curriculum_architect:
+  tier: deep
+  temperature: 0.5
+
+lesson_script:
+  tier: balanced
+  temperature: 0.7
+
+slide_content:
+  tier: fast
+  temperature: 0.5
+
+quiz_worksheet:
+  tier: fast
+  temperature: 0.4
+
+qa:
+  tier: balanced
+  temperature: 0.2
+
+# Future agents (not yet implemented in MVP):
+opportunity_research:
+  tier: balanced
+  temperature: 0.5
+
+topic_scoring:
+  tier: balanced
+  temperature: 0.3
+
+landing_page:
+  tier: deep
+  temperature: 0.7
+
+publishing_prep:
+  tier: balanced
+  temperature: 0.7
+
+course_packaging:
+  tier: fast
+  temperature: 0.2
+
+optimization:
+  tier: deep
+  temperature: 0.4
+
+project_manager:
+  tier: fast
+  temperature: 0.1

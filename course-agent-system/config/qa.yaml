@@ -1,0 +1,69 @@
+# QA strictness rubrics. Set per-stage thresholds here.
+# Strictness levels:
+#   lenient: pass unless ≥1 blocker
+#   normal:  pass unless ≥1 blocker OR ≥3 warns
+#   strict:  pass unless ≥1 blocker OR ≥1 warn
+
+defaults:
+  strictness: normal
+  block_on_verify_markers: true
+  block_on_placeholders: true
+  allowed_placeholders:
+    - "[INSTRUCTOR_BIO]"
+    - "[TESTIMONIAL_PLACEHOLDER]"
+
+stages:
+  outline:
+    strictness: strict
+    require_bloom_verbs: true
+    max_runtime_drift_pct: 20
+
+  lesson:
+    strictness: normal
+    required_beats:
+      - Hook
+      - Promise
+      - Teach 1
+      - Teach 2
+      - Teach 3
+      - Common mistake
+      - Mini-exercise
+      - Recap
+      - Transition
+    min_words: 600
+    max_words: 2200
+
+  slide:
+    strictness: lenient
+    max_bullet_words: 7
+    max_bullets_per_slide: 5
+
+  quiz:
+    strictness: normal
+    min_mcq: 3
+
+  landing:
+    strictness: strict
+    required_sections:
+      - Headline
+      - Subhead
+      - Pain agitation
+      - Introducing
+      - What you'll learn
+      - Who this is for
+      - Curriculum preview
+      - Pricing
+      - FAQ
+      - CTA
+
+  launch:
+    strictness: normal
+    required_assets:
+      - email_sequence
+      - social_posts
+      - youtube_promo
+      - affiliate_brief
+      - thumbnail_prompts
+
+  package:
+    strictness: strict

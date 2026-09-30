@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "outline.schema.json",
+  "title": "Course Outline",
+  "type": "object",
+  "required": ["course_id", "title", "audience", "outcome_statement", "learner_journey", "modules"],
+  "properties": {
+    "course_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "title": { "type": "string" },
+    "audience": { "type": "string" },
+    "outcome_statement": { "type": "string", "minLength": 16 },
+    "learner_journey": { "type": "string", "minLength": 50 },
+    "voice_reference": { "type": "string" },
+    "estimated_runtime_minutes": { "type": "integer", "minimum": 60 },
+    "price_usd": { "type": "integer", "minimum": 9 },
+    "modules": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["id", "index", "title", "stage_purpose", "lessons", "capstone_exercise"],
+        "properties": {
+          "id": { "type": "string" },
+          "index": { "type": "integer", "minimum": 1 },
+          "title": { "type": "string" },
+          "stage_purpose": { "type": "string" },
+          "capstone_exercise": { "type": "string" },
+          "lessons": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 8,
+            "items": { "$ref": "#/$defs/lesson_node" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "lesson_node": {
+      "type": "object",
+      "required": ["id", "title", "objective", "key_concepts", "runtime_minutes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+        "title": { "type": "string" },
+        "objective": { "type": "string" },
+        "key_concepts": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": { "type": "string" }
+        },
+        "runtime_minutes": { "type": "integer", "minimum": 3, "maximum": 20 },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

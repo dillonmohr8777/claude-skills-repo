@@ -1,0 +1,19 @@
+.env
+.env.local
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.DS_Store
+node_modules/
+.next/
+dist/
+build/
+
+# Course outputs (kept in git for the first course, ignored thereafter
+# when the volume gets large. Drop this line if you want everything tracked.)
+# courses/*/lessons/
+# outputs/
+logs/

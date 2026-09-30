@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "quiz.schema.json",
+  "title": "Quiz and Worksheet",
+  "type": "object",
+  "required": ["quiz"],
+  "properties": {
+    "quiz": {
+      "type": "object",
+      "required": ["lesson_id", "mcq", "short_answer"],
+      "properties": {
+        "lesson_id": { "type": "string" },
+        "mcq": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["stem", "options", "correct_index", "explanations"],
+            "properties": {
+              "stem": { "type": "string" },
+              "options": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": { "type": "string" }
+              },
+              "correct_index": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "explanations": {
+                "type": "object",
+                "required": ["correct"],
+                "properties": {
+                  "correct": { "type": "string" },
+                  "distractors": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "short_answer": {
+          "type": "object",
+          "required": ["prompt", "rubric"],
+          "properties": {
+            "prompt": { "type": "string" },
+            "rubric": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "worksheet": {
+      "type": "object",
+      "required": ["module_id", "title", "instructions", "tasks", "deliverable", "rubric"],
+      "properties": {
+        "module_id": { "type": "string" },
+        "title": { "type": "string" },
+        "instructions": { "type": "string" },
+        "tasks": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["task", "time_estimate_min"],
+            "properties": {
+              "task": { "type": "string" },
+              "time_estimate_min": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "deliverable": { "type": "string" },
+        "rubric": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["criterion", "levels"],
+            "properties": {
+              "criterion": { "type": "string" },
+              "levels": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 4,
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

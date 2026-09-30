@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa_result.schema.json",
+  "title": "QA Agent Result",
+  "type": "object",
+  "required": ["passed", "stage", "issues", "summary"],
+  "properties": {
+    "passed": { "type": "boolean" },
+    "stage": { "type": "string" },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "rule", "message"],
+        "properties": {
+          "severity": { "enum": ["blocker", "warn", "nit"] },
+          "location": { "type": "string" },
+          "rule": { "type": "string" },
+          "message": { "type": "string" },
+          "fix_hint": { "type": "string" }
+        }
+      }
+    },
+    "summary": { "type": "string" }
+  }
+}
