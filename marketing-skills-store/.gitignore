@@ -1,0 +1,9 @@
+# Generated zip output — regenerable, don't commit
+gumroad-prep/dist/
+
+# Cover image working files (commit final, not workings)
+gumroad-prep/covers-wip/
+
+# Personal notes
+.notes/
+*.local.md
