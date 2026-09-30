@@ -142,11 +142,16 @@ SURFACES = {
     },
 }
 
-# Values that are affirmatively wrong wherever they appear, with the reason.
+# Values rejected for new Align work, with the reason. This linter only ever
+# runs against work being produced now, so each of these is an error here even
+# where the value survives as historical evidence in an old file.
 KNOWN_BAD = {
     "#E8760A": "Not present in any Align repo. Sourced from the `cool-data-elements` "
                "account skill, which was never reconciled against production.",
     "#414042": "Same origin as #E8760A. Align's dark is a navy family, not neutral grey.",
+    "#E8832A": "Historical documentation evidence only -- it ships in no audited "
+               "Align file. Owner verdict 2026-08-13: not approved for new work. "
+               "Use the approved orange for the surface you named.",
 }
 
 HEX_RE = re.compile(r"#([0-9A-Fa-f]{6})\b")

@@ -118,6 +118,8 @@ allowed `cool-data-elements` to generate unverified gray/orange documents.
 |---|---|
 | `#E8760A` | Appears in zero production files across the eight Align repositories; came from an unreconciled generic skill. |
 | `#414042` | Same origin. Align's dark family is navy, not neutral gray. |
+| `#E8832A` | Historical documentation evidence only; no shipped file in the audited repositories uses it. Owner verdict 2026-08-13: not approved for new work on any surface. |
 
-`#E8832A` remains historical documentation evidence but is not approved for a
-new output surface because no shipped file in the audited repositories uses it.
+All three are errors in `brand_lint.py` and `validate_client_deck.py`. `#E8832A`
+may still be read in old documentation as evidence of what was once written
+down; it may not be painted into anything new.
