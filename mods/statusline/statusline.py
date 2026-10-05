@@ -7,8 +7,24 @@ import json, os, re, subprocess, sys, time
 HOME = os.path.expanduser("~")
 REGISTRY = HOME + "/code/client-operations-canonical/registry/clients.json"
 CACHE = HOME + "/.claude/cache/momobot.status"
-OR, GR, DIM, RST = "\033[38;2;255;107;53m", "\033[38;2;154;160;166m", "\033[2m", "\033[0m"
-GREEN, RED = "\033[38;2;61;220;132m", "\033[38;2;230;80;80m"
+# Claude Code's own ultracode/ultrathink rainbow (dark theme rgb values, from the CLI bundle)
+RED, ORANGE, YELLOW, GREEN = (235, 95, 87), (245, 139, 87), (250, 195, 95), (145, 200, 130)
+BLUE, INDIGO, VIOLET = (130, 170, 220), (155, 130, 200), (200, 130, 180)
+GRAY = (154, 160, 166)
+RAINBOW = [RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET]
+PLAIN = bool(os.environ.get("NO_COLOR"))
+TRUE = os.environ.get("COLORTERM", "") in ("truecolor", "24bit")
+RST = "" if PLAIN else "\033[0m"
+
+def c(rgb, text, bold=False):
+    if PLAIN:
+        return text
+    if TRUE:
+        code = f"38;2;{rgb[0]};{rgb[1]};{rgb[2]}"
+    else:
+        q = lambda v: round(v / 255 * 5)
+        code = f"38;5;{16 + 36 * q(rgb[0]) + 6 * q(rgb[1]) + q(rgb[2])}"
+    return f"\033[{'1;' if bold else ''}{code}m{text}\033[0m"
 
 def g(d, *path):
     for p in path:
@@ -73,24 +89,26 @@ def main():
     pct = g(j, "context_window", "used_percentage")
     cost = g(j, "cost", "total_cost_usd") or 0
 
-    head = f"{OR}{model}{RST}"
+    head = c(RED, model, True)
     if isinstance(effort, str) and effort:
-        head += f"{GR} {effort}{RST}"
+        head += " " + c(ORANGE, effort)
     if fast:
-        head += f"{OR} fast{RST}"
+        head += " " + c(YELLOW, "fast", True)
     parts = [head]
     if branch:
-        parts.append(f"{GR}{branch[:20]}{RST}")
+        parts.append(c(GREEN, branch[:20]))
     if pct is not None:
         n = max(0, min(8, round(pct / 12.5)))
-        parts.append(f"{OR}{'▰' * n}{DIM}{'▱' * (8 - n)}{RST}{GR} {round(pct)}%{RST}")
-    parts.append(f"{GR}${cost:.2f}{RST}")
+        bar = "".join(c(RAINBOW[i * 7 // 8], "▰") for i in range(n)) + c(GRAY, "▱" * (8 - n))
+        parts.append(bar + " " + c(BLUE, f"{round(pct)}%"))
+    spend = RED if cost >= 15 else ORANGE if cost >= 5 else YELLOW if cost >= 1 else GREEN
+    parts.append(c(spend, f"${cost:.2f}"))
     cl = client_for(f"{cwd} {branch}")
     if cl:
-        parts.append(f"{OR}◆ {cl[:16]}{RST}")
+        parts.append(c(INDIGO, "◆ " + cl[:16], True))
     m = momo()
     if m:
-        parts.append(f"{GREEN if m == 'up' else RED}momo {m}{RST}")
-    print(f"{GR} │ {RST}".join(parts), end="")
+        parts.append(c(GREEN if m == "up" else RED, "momo " + m, True))
+    print(c(GRAY, " │ ").join(parts), end="")
 
 main()

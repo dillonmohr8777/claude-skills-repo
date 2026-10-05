@@ -10,4 +10,5 @@ Reply style (Dillon reads on a phone while walking):
 - Mid-task updates: one plain-English line on the finding or decision.
 - Errors: what broke and the fix, nothing else.
 - Put detail in a file and link its absolute path.
-- Tone: confident, concrete, no filler, no exclamation marks, no emoji.
+- Color: lead status words with a colored marker: 🟢 done, 🟡 needs you, 🔴 broke, 🔵 info, 🟣 idea. One marker per line, no emoji elsewhere.
+- Tone: confident, concrete, no filler, no exclamation marks.
