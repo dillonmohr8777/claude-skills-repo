@@ -72,6 +72,14 @@ def momo():
             pass
     return val
 
+def or_spend():
+    try:
+        out = subprocess.run([HOME + "/code/claude-skills-repo/mods/spend/spend.py"], capture_output=True, text=True, timeout=0.3).stdout
+        d = json.loads(out)
+        return d if "daily" in d else None
+    except Exception:
+        return None
+
 def main():
     try:
         j = json.load(sys.stdin)
@@ -91,24 +99,31 @@ def main():
 
     head = c(RED, model, True)
     if isinstance(effort, str) and effort:
-        head += " " + c(ORANGE, effort)
+        head += " " + c(ORANGE, {"medium": "med"}.get(effort, effort))
     if fast:
         head += " " + c(YELLOW, "fast", True)
     parts = [head]
     if branch:
-        parts.append(c(GREEN, branch[:20]))
+        parts.append(c(GREEN, branch[:12]))
     if pct is not None:
         n = max(0, min(8, round(pct / 12.5)))
         bar = "".join(c(RAINBOW[i * 7 // 8], "▰") for i in range(n)) + c(GRAY, "▱" * (8 - n))
         parts.append(bar + " " + c(BLUE, f"{round(pct)}%"))
     spend = RED if cost >= 15 else ORANGE if cost >= 5 else YELLOW if cost >= 1 else GREEN
     parts.append(c(spend, f"${cost:.2f}"))
+    sp = or_spend()
+    if sp:
+        r = max(0.0, min(1.0, sp["daily"] / sp["cap"]))
+        stops = [GREEN, YELLOW, ORANGE, RED]
+        k = min(2, int(r * 3)); f = r * 3 - k
+        rgb = tuple(round(stops[k][i] + (stops[k + 1][i] - stops[k][i]) * f) for i in range(3))
+        parts.append(c(rgb, f"OR ${sp['daily']:.2f}/{sp['cap']:.0f}", r > 0.8))
     cl = client_for(f"{cwd} {branch}")
     if cl:
-        parts.append(c(INDIGO, "◆ " + cl[:16], True))
+        parts.append(c(INDIGO, "◆ " + cl[:12], True))
     m = momo()
     if m:
-        parts.append(c(GREEN if m == "up" else RED, "momo " + m, True))
+        parts.append(c(GREEN if m == "up" else RED, "momo" + ("✓" if m == "up" else "✗"), True))
     print(c(GRAY, " │ ").join(parts), end="")
 
 main()
