@@ -12,7 +12,7 @@ RED, ORANGE, YELLOW, GREEN = (235, 95, 87), (245, 139, 87), (250, 195, 95), (145
 BLUE, INDIGO, VIOLET = (130, 170, 220), (155, 130, 200), (200, 130, 180)
 GRAY = (154, 160, 166)
 RAINBOW = [RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET]
-PLAIN = bool(os.environ.get("NO_COLOR"))
+PLAIN = bool(os.environ.get("NO_COLOR")) and not os.environ.get("CLAUDE_MODS_FORCE_COLOR")  # Claude Code exports NO_COLOR to tools; Dillon wants color
 TRUE = os.environ.get("COLORTERM", "") in ("truecolor", "24bit")
 RST = "" if PLAIN else "\033[0m"
 

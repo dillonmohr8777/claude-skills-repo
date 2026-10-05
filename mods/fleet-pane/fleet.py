@@ -52,7 +52,7 @@ if __name__ == "__main__":
     d = get()
     if "--json" in sys.argv:
         print(json.dumps(d)); sys.exit()
-    P = os.environ.get("NO_COLOR")
+    P = os.environ.get("NO_COLOR") and not os.environ.get("CLAUDE_MODS_FORCE_COLOR")
     rb = [(235,95,87),(245,139,87),(250,195,95),(145,200,130),(130,170,220),(155,130,200),(200,130,180)]
     col = lambda c, t, b=False: t if P else f"\033[{'1;' if b else ''}38;2;{c[0]};{c[1]};{c[2]}m{t}\033[0m"
     dot = lambda s: col((145,200,130) if s in ("up","running") else (235,95,87) if s in ("down","failed") else (154,160,166), "●")
