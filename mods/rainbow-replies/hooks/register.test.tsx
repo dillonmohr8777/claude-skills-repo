@@ -5,7 +5,7 @@ const REPLY = '🟢 Done and **verified**: https://example.com/a\n- first bullet
 
 test('only marker lines get color, bullets stay plain', () => {
   const r = rows(REPLY)
-  expect(r[0]).toMatchObject({ kind: 'color', color: '#91C882' })
+  expect(r[0]).toMatchObject({ kind: 'color', color: '#A99BF5' })
   expect(r[1]).toMatchObject({ kind: 'md' })
   expect(r[1].text).toContain('first bullet')
   expect(r[1].text).toContain('🔴 inside a fence')
@@ -38,11 +38,11 @@ test('replies without markers keep the default drawing', async ($, on) => {
 })
 
 test('step bar colors by kind of step', () => {
-  expect(stepColor('Bash', false)).toBe('#F58B57')
-  expect(stepColor('Edit', false)).toBe('#91C882')
-  expect(stepColor('Read', false)).toBe('#82AADC')
-  expect(stepColor('Agent', false)).toBe('#C882B4')
-  expect(stepColor('mcp__slack__read', false)).toBe('#9B82C8')
+  expect(stepColor('Bash', false)).toBe('#A99BF5')
+  expect(stepColor('Edit', false)).toBe('#A99BF5')
+  expect(stepColor('Read', false)).toBe('#6E66A0')
+  expect(stepColor('Agent', false)).toBe('#FFFFFF')
+  expect(stepColor('mcp__slack__read', false)).toBe('#8A84A8')
   expect(stepColor('Bash', true)).toBe('#EB5F57')
 })
 

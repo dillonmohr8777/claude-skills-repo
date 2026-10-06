@@ -1,12 +1,12 @@
 import type { Register } from 'claude-code'
 
-// Ultracode rainbow, same hex as the status line.
+// Ultracode slider look: lavender family, red only when something broke.
 const COLOR: Record<string, string> = {
-  '🟢': '#91C882',
-  '🟡': '#FAC35F',
+  '🟢': '#A99BF5',
+  '🟡': '#D6CFFF',
   '🔴': '#EB5F57',
-  '🔵': '#82AADC',
-  '🟣': '#C882B4',
+  '🔵': '#A99BF5',
+  '🟣': '#D6CFFF',
 }
 const MARKER = /^\s*(🟢|🟡|🔴|🔵|🟣)/u
 // [label](url) | bare url | `code` | **bold**
@@ -40,11 +40,11 @@ export function rows(text: string): Row[] {
 // Thin bar beside each work step: one muted color per kind of step.
 export function stepColor(tool: string, failed: boolean): string {
   if (failed) return '#EB5F57'
-  if (tool === 'Bash') return '#F58B57'
-  if (/^(Edit|Write|NotebookEdit)$/.test(tool)) return '#91C882'
-  if (/^(Read|Grep|Glob|ToolSearch|WebSearch|WebFetch)$/.test(tool)) return '#82AADC'
-  if (/^(Agent|Skill|Workflow|SendMessage)$/.test(tool)) return '#C882B4'
-  return '#9B82C8'
+  if (tool === 'Bash') return '#A99BF5'
+  if (/^(Edit|Write|NotebookEdit)$/.test(tool)) return '#D6CFFF'
+  if (/^(Read|Grep|Glob|ToolSearch|WebSearch|WebFetch)$/.test(tool)) return '#6E66A0'
+  if (/^(Agent|Skill|Workflow|SendMessage)$/.test(tool)) return '#FFFFFF'
+  return '#8A84A8'
 }
 
 export const register: Register = on => {
