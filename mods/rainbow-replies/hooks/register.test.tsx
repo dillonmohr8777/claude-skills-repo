@@ -39,7 +39,7 @@ test('replies without markers keep the default drawing', async ($, on) => {
 
 test('step bar colors by kind of step', () => {
   expect(stepColor('Bash', false)).toBe('#A99BF5')
-  expect(stepColor('Edit', false)).toBe('#A99BF5')
+  expect(stepColor('Edit', false)).toBe('#D6CFFF')
   expect(stepColor('Read', false)).toBe('#6E66A0')
   expect(stepColor('Agent', false)).toBe('#FFFFFF')
   expect(stepColor('mcp__slack__read', false)).toBe('#8A84A8')
