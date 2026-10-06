@@ -1,0 +1,5 @@
+{
+  "name": "swarm-map",
+  "version": "0.1.0",
+  "description": "/swarm opens a live tree of subagents: who spawned whom, status, tool-call count and what each is doing. A status pin counts the live ones."
+}
