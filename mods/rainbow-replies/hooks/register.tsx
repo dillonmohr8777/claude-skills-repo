@@ -37,7 +37,31 @@ export function rows(text: string): Row[] {
   return out.filter(r => r.kind === 'color' || r.text.trim())
 }
 
+// Thin bar beside each work step: one muted color per kind of step.
+export function stepColor(tool: string, failed: boolean): string {
+  if (failed) return '#EB5F57'
+  if (tool === 'Bash') return '#F58B57'
+  if (/^(Edit|Write|NotebookEdit)$/.test(tool)) return '#91C882'
+  if (/^(Read|Grep|Glob|ToolSearch|WebSearch|WebFetch)$/.test(tool)) return '#82AADC'
+  if (/^(Agent|Skill|Workflow|SendMessage)$/.test(tool)) return '#C882B4'
+  return '#9B82C8'
+}
+
 export const register: Register = on => {
+  on('ui.render', { component: 'ToolUse' }, async ($, e, next) => {
+    const drawn = await next(e)
+    if (!drawn) return drawn
+    const { Box, Text } = $.ui.resolve(e)
+    return (
+      <Box flexDirection="row">
+        <Text color={stepColor(e.props.tool, e.props.isErrored)}>▎</Text>
+        <Box flexDirection="column" flexGrow={1}>
+          {drawn}
+        </Box>
+      </Box>
+    )
+  })
+
   on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
     if (!MARKER.test(e.props.text) && !/\n\s*(🟢|🟡|🔴|🔵|🟣)/u.test(e.props.text)) return next(e)
     const { Box, Text, Link, Markdown } = $.ui.resolve(e)

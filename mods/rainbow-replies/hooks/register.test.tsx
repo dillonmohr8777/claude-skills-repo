@@ -1,5 +1,5 @@
 import { test, expect } from 'claude-code/testing'
-import { rows, split } from './register'
+import { rows, split, stepColor } from './register'
 
 const REPLY = '🟢 Done and **verified**: https://example.com/a\n- first bullet\n- second\nplain `code` line\n```\n🔴 inside a fence\n```\n🔴 Broke'
 
@@ -35,4 +35,26 @@ test('replies without markers keep the default drawing', async ($, on) => {
   const ui = await $.ui.mount({ plugin: 'rainbow-replies', surface: 'terminal', component: 'AssistantMessage', props: { text: 'just text', isFirstOfReply: true } })
   expect(await ui.find({ type: 'Text', text: /engine drawing/ })).toBeDefined()
   await ui.unmount()
+})
+
+test('step bar colors by kind of step', () => {
+  expect(stepColor('Bash', false)).toBe('#F58B57')
+  expect(stepColor('Edit', false)).toBe('#91C882')
+  expect(stepColor('Read', false)).toBe('#82AADC')
+  expect(stepColor('Agent', false)).toBe('#C882B4')
+  expect(stepColor('mcp__slack__read', false)).toBe('#9B82C8')
+  expect(stepColor('Bash', true)).toBe('#EB5F57')
+})
+
+test('step bar wraps the normal tool row on terminal and desktop', async ($, on) => {
+  on('ui.render', { component: 'ToolUse' }, ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>Bash(ls -la)</Text>
+  })
+  for (const surface of ['terminal', 'desktop'] as const) {
+    const ui = await $.ui.mount({ plugin: 'rainbow-replies', surface, component: 'ToolUse', props: { tool_use_id: 't1', tool: 'Bash', input: { command: 'ls' }, isRunning: false, isErrored: false, isInterrupted: false } })
+    expect(await ui.find({ type: 'Text', text: /Bash\(ls -la\)/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: '▎' })).toBeDefined()
+    await ui.unmount()
+  }
 })
