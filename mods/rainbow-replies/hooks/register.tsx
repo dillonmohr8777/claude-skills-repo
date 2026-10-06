@@ -9,27 +9,26 @@ const COLOR: Record<string, string> = {
   '🟣': '#C882B4',
 }
 const MARKER = /^\s*(🟢|🟡|🔴|🔵|🟣)/u
-const BULLET = /^\s*[-*] (.*)$/
 // [label](url) | bare url | `code` | **bold**
 const INLINE = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s)]+)|`([^`]+)`|\*\*([^*]+)\*\*/g
 
-type Row = { kind: 'color'; text: string; color: string; bullet: boolean } | { kind: 'md'; text: string }
+type Row = { kind: 'color'; text: string; color: string } | { kind: 'md'; text: string }
+
+// Only the lead phrase gets color: marker through the first '.', ':' or '?' that ends a clause.
+export function split(line: string): [string, string] {
+  const m = /^(.*?[.:?])(\s|$)/u.exec(line)
+  return m ? [m[1], line.slice(m[1].length)] : [line, '']
+}
 
 export function rows(text: string): Row[] {
   const out: Row[] = []
-  let color: string | null = null
   let fenced = false
   for (const line of text.split('\n')) {
     if (line.trimStart().startsWith('```')) fenced = !fenced
     const m = fenced ? null : MARKER.exec(line)
-    const b = fenced ? null : BULLET.exec(line)
     if (m) {
-      color = COLOR[m[1]]
-      out.push({ kind: 'color', text: line.trim(), color, bullet: false })
-    } else if (b && color) {
-      out.push({ kind: 'color', text: b[1], color, bullet: true })
+      out.push({ kind: 'color', text: line.trim(), color: COLOR[m[1]] })
     } else {
-      if (line.trim()) color = null // blank lines keep the color for the bullets below
       const last = out[out.length - 1]
       if (last?.kind === 'md') last.text += '\n' + line
       else out.push({ kind: 'md', text: line })
@@ -65,9 +64,11 @@ export const register: Register = on => {
           r.kind === 'md' ? (
             <Markdown key={`md-${n}`} text={r.text} />
           ) : (
-            <Text key={`line-${n}`} color={r.color}>
-              {r.bullet ? '  • ' : ''}
-              {inline(r.text, `line-${n}`)}
+            <Text key={`line-${n}`}>
+              <Text color={r.color} bold>
+                {inline(split(r.text)[0], `head-${n}`)}
+              </Text>
+              {inline(split(r.text)[1], `tail-${n}`)}
             </Text>
           ),
         )}

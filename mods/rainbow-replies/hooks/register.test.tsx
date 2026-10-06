@@ -1,15 +1,21 @@
 import { test, expect } from 'claude-code/testing'
-import { rows } from './register'
+import { rows, split } from './register'
 
 const REPLY = '🟢 Done and **verified**: https://example.com/a\n- first bullet\n- second\nplain `code` line\n```\n🔴 inside a fence\n```\n🔴 Broke'
 
-test('marker lines and their bullets get the marker color', () => {
+test('only marker lines get color, bullets stay plain', () => {
   const r = rows(REPLY)
-  expect(r[0]).toMatchObject({ kind: 'color', color: '#91C882', bullet: false })
-  expect(r[1]).toMatchObject({ kind: 'color', color: '#91C882', bullet: true, text: 'first bullet' })
-  expect(r[3]).toMatchObject({ kind: 'md' })
-  expect(r[3].text).toContain('🔴 inside a fence')
-  expect(r[4]).toMatchObject({ kind: 'color', color: '#EB5F57' })
+  expect(r[0]).toMatchObject({ kind: 'color', color: '#91C882' })
+  expect(r[1]).toMatchObject({ kind: 'md' })
+  expect(r[1].text).toContain('first bullet')
+  expect(r[1].text).toContain('🔴 inside a fence')
+  expect(r[2]).toMatchObject({ kind: 'color', color: '#EB5F57' })
+})
+
+test('color stops at the end of the lead phrase', () => {
+  expect(split('🔴 Hit No right now. It is about to post.')).toEqual(['🔴 Hit No right now.', ' It is about to post.'])
+  expect(split('🟢 Your mods page: https://x.y/z')).toEqual(['🟢 Your mods page:', ' https://x.y/z'])
+  expect(split('🔵 no stop here')).toEqual(['🔵 no stop here', ''])
 })
 
 test('draws on terminal and desktop without refusal', async $ => {
