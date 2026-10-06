@@ -12,6 +12,9 @@ RED, ORANGE, YELLOW, GREEN = (235, 95, 87), (245, 139, 87), (250, 195, 95), (145
 BLUE, INDIGO, VIOLET = (130, 170, 220), (155, 130, 200), (200, 130, 180)
 GRAY = (154, 160, 166)
 RAINBOW = [RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET]
+# Ultracode effort-slider look (Dillon, Oct 6): one lavender family, dots brightening to white. Red only for trouble.
+DIM, MUTE, LAV, BRIGHT, WHITE = (88, 84, 108), (138, 132, 168), (169, 155, 245), (214, 207, 255), (255, 255, 255)
+RAMP = [(92, 86, 130), (112, 102, 170), (134, 120, 205), (152, 138, 230), (169, 155, 245), (192, 182, 252), (224, 219, 255), WHITE]
 PLAIN = bool(os.environ.get("NO_COLOR")) and not os.environ.get("CLAUDE_MODS_FORCE_COLOR")  # Claude Code exports NO_COLOR to tools; Dillon wants color
 TRUE = os.environ.get("COLORTERM", "") in ("truecolor", "24bit")
 RST = "" if PLAIN else "\033[0m"
@@ -97,33 +100,33 @@ def main():
     pct = g(j, "context_window", "used_percentage")
     cost = g(j, "cost", "total_cost_usd") or 0
 
-    head = c(RED, model, True)
+    head = c(LAV, model, True)
     if isinstance(effort, str) and effort:
-        head += " " + c(ORANGE, {"medium": "med"}.get(effort, effort))
+        head += " " + c(BRIGHT, {"medium": "med"}.get(effort, effort))
     if fast:
-        head += " " + c(YELLOW, "fast", True)
+        head += " " + c(WHITE, "fast", True)
     parts = [head]
     if branch:
-        parts.append(c(GREEN, branch[:12]))
+        parts.append(c(MUTE, branch[:12]))
     if pct is not None:
         n = max(0, min(8, round(pct / 12.5)))
-        bar = "".join(c(RAINBOW[i * 7 // 8], "▰") for i in range(n)) + c(GRAY, "▱" * (8 - n))
-        parts.append(bar + " " + c(BLUE, f"{round(pct)}%"))
-    spend = RED if cost >= 15 else ORANGE if cost >= 5 else YELLOW if cost >= 1 else GREEN
+        bar = "".join(c(RAMP[i], "●") for i in range(n)) + c(DIM, "·" * (8 - n))
+        parts.append(bar + " " + c(LAV, f"{round(pct)}%"))
+    spend = RED if cost >= 15 else BRIGHT if cost >= 5 else MUTE
     parts.append(c(spend, f"${cost:.2f}"))
     sp = or_spend()
     if sp:
         r = max(0.0, min(1.0, sp["daily"] / sp["cap"]))
-        stops = [GREEN, YELLOW, ORANGE, RED]
+        stops = [MUTE, LAV, BRIGHT, RED]
         k = min(2, int(r * 3)); f = r * 3 - k
         rgb = tuple(round(stops[k][i] + (stops[k + 1][i] - stops[k][i]) * f) for i in range(3))
         parts.append(c(rgb, f"OR ${sp['daily']:.2f}/{sp['cap']:.0f}", r > 0.8))
     cl = client_for(f"{cwd} {branch}")
     if cl:
-        parts.append(c(INDIGO, "◆ " + cl[:12], True))
+        parts.append(c(BRIGHT, "◆ " + cl[:12], True))
     m = momo()
     if m:
-        parts.append(c(GREEN if m == "up" else RED, "momo" + ("✓" if m == "up" else "✗"), True))
-    print(c(GRAY, " │ ").join(parts), end="")
+        parts.append(c(LAV if m == "up" else RED, "momo" + ("✓" if m == "up" else "✗"), True))
+    print(c(DIM, " │ ").join(parts), end="")
 
 main()
