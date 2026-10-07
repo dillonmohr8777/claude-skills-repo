@@ -1,0 +1,1 @@
+{ "name": "fleet-pane", "version": "0.1.0", "description": "Read-only live pane: services, launchd jobs, tmux. Open with /fleet", "types": "./types/index.d.ts" }

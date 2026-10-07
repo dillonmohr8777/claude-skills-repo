@@ -1,0 +1,13 @@
+{
+  "name": "quota-meter",
+  "version": "0.1.0",
+  "description": "Pins your 7-day plan usage against Dillon's weekly cap (default 20%) with pace and a toast when it nears or passes the cap. Reads the engine's own rate-limit figures, never guesses.",
+  "userConfig": {
+    "weeklyCapPercent": {
+      "type": "number",
+      "title": "Weekly cap (%)",
+      "description": "The share of the 7-day plan limit you want to stay under.",
+      "default": 20
+    }
+  }
+}

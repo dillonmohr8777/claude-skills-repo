@@ -1,0 +1,1 @@
+{ "name": "clawd-buddy", "version": "0.1.0", "description": "Clawd sits above the prompt and keeps typing: fast while Claude works, slow while idle", "types": "./types/index.d.ts" }
