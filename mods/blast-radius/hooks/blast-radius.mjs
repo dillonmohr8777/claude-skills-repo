@@ -18,8 +18,16 @@
 
 const PANE_ID = "blast-radius";
 const POLL_SECONDS = "0.25";
-const HOLD_LIMIT_MS = 10 * 60 * 1000;
+// Dillon change 2026-10-07: 3 minutes, not 10. A hold that long with nobody at the
+// terminal cost an hour of a disk-recovery session; the deny message already tells
+// Claude not to retry, so a shorter wait loses nothing.
+const HOLD_LIMIT_MS = 3 * 60 * 1000;
 const LIST_MAX = 10;
+// Dillon change 2026-10-07: a standing approval from the phone. `blast-approve 2h`
+// writes an expiry (unix seconds) to this file; while it is in the future, risky
+// commands run with a toast instead of a hold. `blast-approve off` removes it.
+// Read through `bash -c` so ~ expands: the hook sandbox has no `process`.
+const APPROVE_FILE = "~/.claude/blast-radius-approve";
 
 // The call being held, or null. One at a time: Bash calls in a turn run in order.
 let held = null;
@@ -36,6 +44,11 @@ export function register(on) {
   on("tool.call", { tool: "Bash" }, async ($, e, next) => {
     const risk = classify(String(e.command ?? ""));
     if (risk === null || !isInteractive) {
+      return next(e);
+    }
+    const approvedUntil = await standingApproval($);
+    if (approvedUntil !== null) {
+      $.ui.toast(`Blast Radius: pre-approved until ${approvedUntil}, running ${risk.label}`);
       return next(e);
     }
     // One hold at a time. If another risky call is already held (a subagent's,
@@ -128,6 +141,21 @@ export function register(on) {
     }
     return draw($.ui.resolve(e), held);
   });
+}
+
+/** "HH:MM" while ~/.claude/blast-radius-approve holds a future unix-seconds expiry, else null. */
+async function standingApproval($) {
+  try {
+    const run = await $.process.run(["bash", "-c", `cat ${APPROVE_FILE} 2>/dev/null`], { timeoutMs: 2000 });
+    const expiry = Number.parseInt(String(run.stdout ?? "").trim(), 10);
+    if (!Number.isFinite(expiry) || expiry * 1000 <= Date.now()) {
+      return null;
+    }
+    const d = new Date(expiry * 1000);
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  } catch {
+    return null; // no file, or unreadable: hold as usual
+  }
 }
 
 // ---- What counts as risky -------------------------------------------------

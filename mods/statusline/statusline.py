@@ -127,6 +127,13 @@ def main():
     m = momo()
     if m:
         parts.append(c(LAV if m == "up" else RED, "momo" + ("✓" if m == "up" else "✗"), True))
+    # Disk chip (2026-10-07, after the 0-byte morning): written by com.dillon.disk-guard
+    # three times a day as "ok 51G" / "low 12G". Red only when low. Silent if missing.
+    try:
+        state, free = open(HOME + "/.claude/cache/disk.status").read().split()
+        parts.append(c(RED if state == "low" else MUTE, "disk " + free, state == "low"))
+    except Exception:
+        pass
     print(c(DIM, " │ ").join(parts), end="")
 
 main()
