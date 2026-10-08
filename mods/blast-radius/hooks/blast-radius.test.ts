@@ -1,7 +1,7 @@
 import { test, expect } from 'claude-code/testing'
 
 // Dillon change: a headless run (claude -p, launchd loops) has nobody to press Proceed,
-// so a risky command passes straight through instead of stalling for the 10 minute hold.
+// so a risky command passes straight through instead of stalling for the 3 minute hold.
 test('headless session lets rm -rf through without holding it', async ($, on) => {
   on('session.start', (_$, e) => ({ cwd: e.cwd }))
   on('tool.call', () => ({ result: { stdout: 'ran', stderr: '', interrupted: false } }) as never)
@@ -41,3 +41,17 @@ test('expired approval file does not count', async ($, on) => {
   const ran = await $.tool.call({ tool: 'Bash', command: 'rm -rf build', tool_use_id: 't3' } as never)
   expect(String(ran.deny ?? '')).toContain('Blast Radius held this command')
 })
+
+for (const invalid of ['', '9999999999junk', 'Infinity', '999999999999999999', '9999999999', String(Math.floor(Date.now() / 1000) + 12 * 3600 + 60)]) {
+  test(`malformed approval ${invalid} does not count`, async ($, on) => {
+    on('session.start', (_$, e) => ({ cwd: e.cwd }))
+    on('process.run', (_$, e) => {
+      const argv = (e as { argv?: string[] }).argv ?? []
+      const stdout = argv[0] === 'bash' && String(argv[2]).includes('blast-radius-approve') ? invalid : ''
+      return { value: { exitCode: 0, stdout, stderr: '', isStdoutTruncated: false, isStderrTruncated: false } } as never
+    })
+    await $.session.start({ cwd: '/tmp', surface: null, isInteractive: true })
+    const ran = await $.tool.call({ tool: 'Bash', command: 'rm -rf build', tool_use_id: 'invalid' } as never)
+    expect(String(ran.deny ?? '')).toContain('Blast Radius held this command')
+  })
+}

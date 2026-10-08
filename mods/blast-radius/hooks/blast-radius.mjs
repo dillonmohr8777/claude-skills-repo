@@ -28,6 +28,8 @@ const LIST_MAX = 10;
 // commands run with a toast instead of a hold. `blast-approve off` removes it.
 // Read through `bash -c` so ~ expands: the hook sandbox has no `process`.
 const APPROVE_FILE = "~/.claude/blast-radius-approve";
+// Match blast-approve: approval must expire within the next 12 hours.
+const APPROVAL_LIMIT_MS = 12 * 60 * 60 * 1000;
 
 // The call being held, or null. One at a time: Bash calls in a turn run in order.
 let held = null;
@@ -119,7 +121,7 @@ export function register(on) {
     }
     const why = {
       cancel: "the user pressed Cancel",
-      timeout: "no answer within 10 minutes",
+      timeout: "no answer within 3 minutes",
       interrupted: "the turn was interrupted",
       error: "Blast Radius hit an error while holding it",
     }[decision] ?? "no answer was recorded";
@@ -147,8 +149,13 @@ export function register(on) {
 async function standingApproval($) {
   try {
     const run = await $.process.run(["bash", "-c", `cat ${APPROVE_FILE} 2>/dev/null`], { timeoutMs: 2000 });
-    const expiry = Number.parseInt(String(run.stdout ?? "").trim(), 10);
-    if (!Number.isFinite(expiry) || expiry * 1000 <= Date.now()) {
+    const raw = String(run.stdout ?? "").trim();
+    if (run.exitCode !== 0 || run.isStdoutTruncated || !/^\d+$/.test(raw)) {
+      return null;
+    }
+    const expiry = Number(raw);
+    const remainingMs = expiry * 1000 - Date.now();
+    if (!Number.isSafeInteger(expiry) || remainingMs <= 0 || remainingMs > APPROVAL_LIMIT_MS) {
       return null;
     }
     const d = new Date(expiry * 1000);

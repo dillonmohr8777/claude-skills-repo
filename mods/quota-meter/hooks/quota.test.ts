@@ -39,8 +39,8 @@ test('line carries usage, cap, pace, 5h and reset', () => {
 test('a rate-limit measurement pins the line and toasts once on crossing the cap', async ($, on) => {
   const status: Array<string | undefined> = []
   const toasts: string[] = []
-  on('ui.status', ($$, e) => (status.push(e.text), undefined as never))
-  on('ui.toast', ($$, e) => (toasts.push(e.text), undefined as never))
+  on('ui.status', ($$, e) => (status.push(e.text), { value: undefined }))
+  on('ui.toast', ($$, e) => (toasts.push(e.text), { value: undefined }))
   mock.clock(on, { now: NOW })
   on('session.measure', ($$, e) => ({ changed: e.changed }))
   const context = { window: 200000 } as never
