@@ -6,7 +6,7 @@ import json, os, re, subprocess, sys, time
 
 HOME = os.path.expanduser("~")
 REGISTRY = HOME + "/code/client-operations-canonical/registry/clients.json"
-CACHE = HOME + "/.claude/cache/momobot.status"
+CACHE = HOME + "/.claude/cache/momobot-readiness.status"
 # Claude Code's own ultracode/ultrathink rainbow (dark theme rgb values, from the CLI bundle)
 RED, ORANGE, YELLOW, GREEN = (235, 95, 87), (245, 139, 87), (250, 195, 95), (145, 200, 130)
 BLUE, INDIGO, VIOLET = (130, 170, 220), (155, 130, 200), (200, 130, 180)
@@ -68,8 +68,7 @@ def momo():
     if age > 30:  # refresh detached; never wait on it
         try:
             os.makedirs(os.path.dirname(CACHE), exist_ok=True)
-            subprocess.Popen(["sh", "-c",
-                f'curl -s -m 1 http://127.0.0.1:3434/api/health | grep -q ready && echo up > {CACHE}.t || echo down > {CACHE}.t; mv {CACHE}.t {CACHE}'],
+            subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "momo_health.py")],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
         except Exception:
             pass
