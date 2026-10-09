@@ -38,6 +38,16 @@ Give reasoning enough output room within the task ceiling: hidden reasoning may 
 
 For an actual supplied code edit, use the approved Morph apply route with the instruction, original code, and update snippet. Check the unchanged original hash, inspect the returned diff, apply the reviewed draft, and run the acceptance check. The editor does not become the planner or verifier. Markdown guidance can be edited directly.
 
+## Cost routing for long runs
+
+For the host's adopted Sonnet-first policy, start ordinary tool-enabled implementation with Sonnet and one effort level per session. Keep Haiku high for suitable private source-fed assists and Spark for approved public/synthetic assists. At turn 6, inspect compilation, the first relevant test, and the changed files against the declared acceptance check.
+
+On a failed check, preserve the failing evidence and start a new stronger session from a focused `handoff.md` bounded to 20K tokens rather than switching the current session's model or copying its transcript. A separately scoped frontier peer review remains available for consequential architecture or critique. Keep privacy, ownership, quiet hours and the existing authorization ceiling across the handoff; escalation is not an automatic failed-call retry or a budget increase.
+
+Keep stable instructions and tools before dynamic context. Inspect recorded cache usage and investigate an unexpected zero cache read; absent cache telemetry is unavailable, and a cold first request may be expected. Decide from observed cost per accepted result, not a universal model ranking. Report the largest observed cost leak first, with at most two numbers per line and a log source. Missing current prices, an unparseable required log, or production-key work blocks that routing analysis; external actions retain their own approval gates.
+
+See [cost-routing.md](references/cost-routing.md) for the handoff contract and provenance. This is an operator-adopted policy adapted from a public third-party research prompt, not an official Anthropic routing recommendation or proof of a fixed cache saving.
+
 ## Use impartial frontier peers
 
 For consequential architecture, gap analysis, or independent critique, involve a capable frontier peer from the other harness when available and authorized. Codex and Claude may each lead the bounded part that fits their tools and evidence. The coordinating model does not win disagreements by default.
