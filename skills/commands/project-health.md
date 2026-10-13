@@ -1,6 +1,6 @@
 ---
 name: project-health
-description: Portfolio health dashboard and risk matrix analysis. Usage: /project-health <dashboard|risk> [options]
+description: "Portfolio health dashboard and risk matrix analysis. Usage: /project-health <dashboard|risk> [options]"
 ---
 
 # /project-health

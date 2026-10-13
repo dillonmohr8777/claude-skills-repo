@@ -1,1 +1,1 @@
-../../../commands/okr.md
+../commands/okr.md

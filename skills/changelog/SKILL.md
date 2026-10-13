@@ -1,1 +1,1 @@
-../../../commands/changelog.md
+../commands/changelog.md

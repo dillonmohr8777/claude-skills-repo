@@ -1,1 +1,1 @@
-../../../commands/prd.md
+../commands/prd.md

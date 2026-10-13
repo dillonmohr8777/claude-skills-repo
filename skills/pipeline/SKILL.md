@@ -1,1 +1,1 @@
-../../../commands/pipeline.md
+../commands/pipeline.md

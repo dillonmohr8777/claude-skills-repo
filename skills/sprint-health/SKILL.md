@@ -1,1 +1,1 @@
-../../../commands/sprint-health.md
+../commands/sprint-health.md

@@ -1,1 +1,1 @@
-../../../commands/persona.md
+../commands/persona.md

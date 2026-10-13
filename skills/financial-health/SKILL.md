@@ -1,1 +1,1 @@
-../../../commands/financial-health.md
+../commands/financial-health.md

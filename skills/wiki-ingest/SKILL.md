@@ -1,1 +1,1 @@
-../../../commands/wiki-ingest.md
+../commands/wiki-ingest.md

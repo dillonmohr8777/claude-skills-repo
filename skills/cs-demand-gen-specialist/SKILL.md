@@ -1,1 +1,1 @@
-../../../agents/marketing/cs-demand-gen-specialist.md
+../agents/marketing/cs-demand-gen-specialist.md

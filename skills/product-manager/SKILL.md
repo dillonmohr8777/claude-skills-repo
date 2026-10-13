@@ -1,1 +1,1 @@
-../../../agents/personas/product-manager.md
+../agents/personas/product-manager.md

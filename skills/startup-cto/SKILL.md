@@ -1,1 +1,1 @@
-../../../agents/personas/startup-cto.md
+../agents/personas/startup-cto.md

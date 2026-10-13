@@ -1,1 +1,1 @@
-../../../commands/tc.md
+../commands/tc.md

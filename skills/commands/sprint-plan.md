@@ -1,6 +1,6 @@
 ---
 name: sprint-plan
-description: Sprint planning shortcut. Usage: /sprint-plan <goal> [capacity]
+description: "Sprint planning shortcut. Usage: /sprint-plan <goal> [capacity]"
 ---
 
 # /sprint-plan

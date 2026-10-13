@@ -1,1 +1,1 @@
-../../../commands/rice.md
+../commands/rice.md

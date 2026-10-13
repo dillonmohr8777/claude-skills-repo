@@ -1,1 +1,1 @@
-../../../agents/product/cs-ux-researcher.md
+../agents/product/cs-ux-researcher.md

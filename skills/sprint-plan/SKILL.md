@@ -1,1 +1,1 @@
-../../../commands/sprint-plan.md
+../commands/sprint-plan.md

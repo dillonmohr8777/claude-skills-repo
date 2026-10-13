@@ -1,1 +1,1 @@
-../../../agents/project-management/cs-project-manager.md
+../agents/project-management/cs-project-manager.md

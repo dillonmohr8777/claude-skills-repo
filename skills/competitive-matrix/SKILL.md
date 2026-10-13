@@ -1,1 +1,1 @@
-../../../commands/competitive-matrix.md
+../commands/competitive-matrix.md
