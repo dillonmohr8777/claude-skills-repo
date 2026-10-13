@@ -80,6 +80,27 @@ Google Ads and Meta by hand through the Browserbase live view, then release the 
 Set `BB_CONTEXT_ID` to that context. If a target lands on a login page later, the agent
 reports `needs_login` for that target and moves on. It never types credentials.
 
+## Running on GitHub Actions
+
+`.github/workflows/browserbase-agents.yml` runs one agent per run. Start it from
+**Actions → Browserbase agents → Run workflow** and pick the agent.
+
+- **Secrets to add** (Settings → Secrets and variables → Actions → New repository secret):
+  `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID`, `BB_CONTEXT_ID`, `TARGETS_JSON` (the whole
+  contents of your `targets.local.json`) and `ARTIFACT_PASSPHRASE`. `LEADS_CSV` (CSV text) is
+  optional, for `lead_enrich`.
+- **Quiet hours:** runs that start between 01:30 and 09:30 ET skip themselves.
+- **The repo is public**, so Actions logs and artifacts can be read by any GitHub user. The
+  log shows only the one-line summary. `out/` is uploaded as `out.tar.gz.gpg`, encrypted with
+  `ARTIFACT_PASSPHRASE`, and kept for 14 days. Without that secret, the upload step fails
+  rather than publish plain output. To decrypt it after downloading:
+
+  ```bash
+  gpg -d out.tar.gz.gpg | tar xzf -
+  ```
+
+- **Schedule:** the `schedule:` block is commented out. Uncomment it once the secrets are in.
+
 ## Receipts
 
 Everything lands in `out/<agent>/<YYYY-MM-DD>/` (gitignored):

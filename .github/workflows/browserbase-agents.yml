@@ -1,0 +1,112 @@
+name: Browserbase agents
+
+# Runs one read-only agent from browserbase-agents/ on demand.
+# This repo is public: Actions logs and artifacts are readable by any GitHub user, so
+# agent output stays out of the log and out/ is uploaded only as an encrypted archive.
+on:
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: Agent to run
+        required: true
+        type: choice
+        options: [lp_qa, gbp_watch, listing_audit, lead_enrich, ad_ui_check]
+  # Enable after the repo secrets are added. Scheduled runs use lp_qa (see AGENT below).
+  # schedule:
+  #   - cron: "47 13 * * 1-5"  # 09:47 EDT / 08:47 EST, weekdays
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browserbase-agents-${{ inputs.agent || 'lp_qa' }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: browserbase-agents
+    env:
+      AGENT: ${{ inputs.agent || 'lp_qa' }}
+    steps:
+      - name: Quiet-hours guard (skip 01:30-09:30 ET)
+        id: quiet
+        working-directory: .
+        run: |
+          now=$(TZ=America/New_York date +%H%M)
+          if [ "$((10#$now))" -ge 130 ] && [ "$((10#$now))" -lt 930 ]; then
+            echo "Quiet hours ($now ET); skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        if: steps.quiet.outputs.skip != 'true'
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        if: steps.quiet.outputs.skip != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        if: steps.quiet.outputs.skip != 'true'
+        # connect_over_cdp only needs the Playwright driver, not a local browser.
+        run: pip install -r requirements.txt
+
+      - name: Write targets from secrets
+        if: steps.quiet.outputs.skip != 'true'
+        env:
+          TARGETS_JSON: ${{ secrets.TARGETS_JSON }}
+          LEADS_CSV: ${{ secrets.LEADS_CSV }}
+        run: |
+          if [ -z "$TARGETS_JSON" ]; then echo "::error::TARGETS_JSON secret is not set"; exit 1; fi
+          printf '%s' "$TARGETS_JSON" > targets.local.json
+          python -m json.tool targets.local.json > /dev/null || { echo "::error::TARGETS_JSON is not valid JSON"; exit 1; }
+          if [ -n "$LEADS_CSV" ]; then printf '%s\n' "$LEADS_CSV" > leads.local.csv; fi
+
+      - name: Run agent
+        if: steps.quiet.outputs.skip != 'true'
+        env:
+          BROWSERBASE_API_KEY: ${{ secrets.BROWSERBASE_API_KEY }}
+          BROWSERBASE_PROJECT_ID: ${{ secrets.BROWSERBASE_PROJECT_ID }}
+          BB_CONTEXT_ID: ${{ secrets.BB_CONTEXT_ID }}
+        # Full output (target names, errors) goes to out/run.log; the public log gets
+        # only the one-line summary, which carries counts and no target names.
+        # --max-minutes 12 leaves time to release the session before the 15-minute timeout.
+        run: |
+          mkdir -p out
+          set +e
+          python "${AGENT}.py" --max-minutes 12 > out/run.log 2>&1
+          code=$?
+          set -e
+          tail -n 1 out/run.log | sed -E 's#receipt .*/(receipt-[0-9]+\.json)#receipt \1#'
+          exit $code
+
+      - name: Encrypt output
+        if: always() && steps.quiet.outputs.skip != 'true'
+        env:
+          ARTIFACT_PASSPHRASE: ${{ secrets.ARTIFACT_PASSPHRASE }}
+        run: |
+          if [ ! -d out ]; then echo "no output"; exit 0; fi
+          if [ -z "$ARTIFACT_PASSPHRASE" ]; then
+            echo "::error::ARTIFACT_PASSPHRASE is not set; refusing to upload unencrypted output"
+            exit 1
+          fi
+          tar czf out.tar.gz out
+          printf '%s' "$ARTIFACT_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-fd 0 --symmetric --cipher-algo AES256 -o out.tar.gz.gpg out.tar.gz
+          rm -rf out out.tar.gz targets.local.json leads.local.csv
+
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: always() && steps.quiet.outputs.skip != 'true'
+        with:
+          name: ${{ env.AGENT }}-${{ github.run_id }}
+          path: browserbase-agents/out.tar.gz.gpg
+          retention-days: 14
+          if-no-files-found: ignore
