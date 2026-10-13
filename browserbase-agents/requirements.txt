@@ -1,0 +1,4 @@
+playwright>=1.48,<2
+# dev / tests
+pytest>=8
+ruff>=0.6

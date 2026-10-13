@@ -1,0 +1,12 @@
+# Real targets and leads live only on Dillon's Mac
+targets.local.json
+leads.local.csv
+*.local.*
+.env
+# Run output and the kill switch
+out/
+STOP
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
