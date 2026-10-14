@@ -42,6 +42,9 @@ python -m playwright install chromium
 | `BROWSERBASE_PROJECT_ID` | yes | Browserbase project |
 | `BB_CONTEXT_ID` | for `ad_ui_check` | Persistent context that holds your Google / Meta login (`persist: true`) |
 | `BB_LOCAL_CHROMIUM` | no | Chromium executable for `--local` runs |
+| `BB_SESSION_TIMEOUT` | no | Session timeout in seconds (default 300; Browserbase's project default is 3 hours) |
+| `BB_PROXIES` | no | `1` turns the residential proxy on (default off; proxy traffic is the costly part) |
+| `BB_AGENT`, `BB_CLIENT` | no | `userMetadata` tags (with a random `run` id) so session cost splits by client |
 
 Never commit keys. On the Mac, `~/.local/bin/with-browserbase` injects them:
 
