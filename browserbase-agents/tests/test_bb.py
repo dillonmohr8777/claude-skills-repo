@@ -23,7 +23,14 @@ class FakeHTTP:
 
 def test_session_body_without_context():
     body = bb.session_body(ENV)
-    assert body == {"projectId": "proj-1", "browserSettings": {"solveCaptchas": True}, "proxies": True}
+    tags = body.pop("userMetadata")
+    assert body == {"projectId": "proj-1", "timeout": 300, "browserSettings": {"solveCaptchas": True}, "proxies": False}
+    assert set(tags) == {"agent", "client", "run"}
+
+
+def test_session_body_overrides_timeout_proxy_and_tags():
+    body = bb.session_body({**ENV, "BB_SESSION_TIMEOUT": "900", "BB_PROXIES": "1", "BB_CLIENT": "gt-clinic"})
+    assert body["timeout"] == 900 and body["proxies"] is True and body["userMetadata"]["client"] == "gt-clinic"
 
 
 def test_session_body_with_persistent_context():

@@ -17,6 +17,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import uuid
 from collections import Counter
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
@@ -73,15 +74,19 @@ def _require(env: dict, name: str) -> str:
 
 
 def session_body(env: dict) -> dict:
-    """Body for POST /v1/sessions. Adds a persistent context when BB_CONTEXT_ID is set."""
+    """Body for POST /v1/sessions. Adds a persistent context when BB_CONTEXT_ID is set.
+    BB_SESSION_TIMEOUT (default 300 s), BB_PROXIES=1, BB_AGENT and BB_CLIENT tune timeout, proxy and tags."""
     settings: dict[str, Any] = {"solveCaptchas": True}
     context_id = env.get("BB_CONTEXT_ID")
     if context_id:
         settings["context"] = {"id": context_id, "persist": True}
     return {
         "projectId": _require(env, "BROWSERBASE_PROJECT_ID"),
+        "timeout": int(env.get("BB_SESSION_TIMEOUT") or 300),  # explicit: the project default is 3 hours
         "browserSettings": settings,
-        "proxies": True,
+        "proxies": env.get("BB_PROXIES") == "1",  # proxy traffic is the costly part; opt in per run
+        "userMetadata": {"agent": env.get("BB_AGENT", "browserbase-agents"),
+                         "client": env.get("BB_CLIENT", "momentum-360"), "run": uuid.uuid4().hex[:8]},
     }
 
 
