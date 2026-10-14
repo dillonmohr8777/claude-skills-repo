@@ -1,0 +1,18 @@
+{
+  "_comment": "Fake targets for the public repo. Copy to targets.local.json (gitignored) and put real targets there.",
+  "ad_ui_check": [
+    {"name": "Example Co - Google Ads", "platform": "google_ads", "url": "https://ads.google.com/aw/overview?ocid=0000000000"},
+    {"name": "Example Co - Meta Ads", "platform": "meta_ads", "url": "https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=000000000000000"}
+  ],
+  "gbp_watch": [
+    {"name": "Example Bakery", "city": "Springfield, IL"},
+    {"name": "Example Plumbing", "city": "Riverton, WY"}
+  ],
+  "lp_qa": [
+    {"name": "Example home", "url": "https://example.com/"},
+    {"name": "Example landing page", "url": "https://example.com/landing"}
+  ],
+  "listing_audit": [
+    {"name": "Example Bakery", "address": "123 Main Street", "city": "Springfield, IL", "phone": "(555) 010-0100"}
+  ]
+}
