@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Generate tests, analyze coverage, and run TDD workflows. Usage: /tdd <generate|coverage|validate> [options]
+description: "Generate tests, analyze coverage, and run TDD workflows. Usage: /tdd <generate|coverage|validate> [options]"
 ---
 
 # /tdd

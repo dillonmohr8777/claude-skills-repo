@@ -1,1 +1,1 @@
-../../../agents/finance/cs-financial-analyst.md
+../agents/finance/cs-financial-analyst.md

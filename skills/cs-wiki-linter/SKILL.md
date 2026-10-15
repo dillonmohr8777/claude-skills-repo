@@ -1,1 +1,1 @@
-../../../agents/engineering/cs-wiki-linter.md
+../agents/engineering/cs-wiki-linter.md

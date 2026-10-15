@@ -1,1 +1,1 @@
-../../../commands/tdd.md
+../commands/tdd.md

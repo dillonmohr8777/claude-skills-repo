@@ -1,1 +1,1 @@
-../../../commands/focused-fix.md
+../commands/focused-fix.md

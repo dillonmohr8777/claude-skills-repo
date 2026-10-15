@@ -1,1 +1,1 @@
-../../../agents/product/cs-product-manager.md
+../agents/product/cs-product-manager.md

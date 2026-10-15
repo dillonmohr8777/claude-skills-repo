@@ -1,1 +1,1 @@
-../../../commands/wiki-init.md
+../commands/wiki-init.md

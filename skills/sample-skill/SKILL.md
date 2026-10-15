@@ -1,3 +1,8 @@
+---
+name: sample-skill
+description: "Reference BASIC-tier sample skill: word counts, character statistics and basic text transformations (uppercase, lowercase, title case)."
+---
+
 # Sample Text Processor
 
 ---

@@ -1,1 +1,1 @@
-../../../commands/retro.md
+../commands/retro.md

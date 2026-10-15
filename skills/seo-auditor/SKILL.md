@@ -1,1 +1,1 @@
-../../../commands/seo-auditor.md
+../commands/seo-auditor.md

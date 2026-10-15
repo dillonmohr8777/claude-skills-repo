@@ -1,1 +1,1 @@
-../../../agents/personas/solo-founder.md
+../agents/personas/solo-founder.md

@@ -1,1 +1,1 @@
-../../../agents/product/cs-product-strategist.md
+../agents/product/cs-product-strategist.md

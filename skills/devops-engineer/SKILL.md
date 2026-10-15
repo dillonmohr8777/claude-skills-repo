@@ -1,1 +1,1 @@
-../../../agents/personas/devops-engineer.md
+../agents/personas/devops-engineer.md

@@ -1,6 +1,6 @@
 ---
 name: prd
-description: Quick PRD generation command. Usage: /prd <feature-or-problem>
+description: "Quick PRD generation command. Usage: /prd <feature-or-problem>"
 ---
 
 # /prd

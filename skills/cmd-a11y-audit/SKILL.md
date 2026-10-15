@@ -1,1 +1,1 @@
-../../../commands/a11y-audit.md
+../commands/a11y-audit.md

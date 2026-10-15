@@ -1,1 +1,1 @@
-../../../commands/google-workspace.md
+../commands/google-workspace.md

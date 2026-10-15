@@ -1,1 +1,1 @@
-../../../commands/plugin-audit.md
+../commands/plugin-audit.md
